@@ -1,0 +1,528 @@
+{
+  "name": "dependi",
+  "displayName": "Dependi",
+  "description": "Empowers developers to efficiently manage dependencies and address vulnerabilities in Rust, Go, JavaScript, and Python projects.",
+  "version": "0.6.8",
+  "publisher": "fill-labs",
+  "author": {
+    "name": "Fill Labs",
+    "email": "info@dependi.io"
+  },
+  "license": "SEE LICENSE IN LICENSE",
+  "bugs": {
+    "url": "https://github.com/filllabs/dependi/issues",
+    "email": "info@dependi.io"
+  },
+  "homepage": "https://github.com/filllabs/dependi/blob/master/README.md",
+  "engines": {
+    "vscode": "^1.87.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/filllabs/dependi.git"
+  },
+  "preview": true,
+  "icon": "icon.png",
+  "keywords": [
+    "rust",
+    "python",
+    "go",
+    "golang",
+    "node",
+    "js",
+    "javascript",
+    "ts",
+    "typescript",
+    "crates",
+    "pypi",
+    "pip",
+    "npm",
+    "cargo",
+    "package",
+    "dependi",
+    "requirements",
+    "go.mod",
+    "dependency",
+    "version",
+    "vulnerability",
+    "security",
+    "update",
+    "toml"
+  ],
+  "categories": [
+    "Programming Languages",
+    "Visualization",
+    "Other"
+  ],
+  "pricing": "Free",
+  "activationEvents": [
+    "onLanguage:toml",
+    "workspaceContains:**/Cargo.toml",
+    "onLanguage:go.mod",
+    "workspaceContains:**/go.mod",
+    "onLanguage:package.json",
+    "workspaceContains:**/package.json",
+    "onLanguage:requirements.txt",
+    "workspaceContains:**/requirements.txt"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "toml",
+        "aliases": [
+          "TOML"
+        ],
+        "extensions": [
+          ".toml"
+        ],
+        "filenames": [
+          "Cargo.toml"
+        ]
+      },
+      {
+        "id": "go.mod",
+        "filenames": [
+          "go.mod"
+        ],
+        "aliases": [
+          "Go Module File"
+        ],
+        "extensions": [
+          ".mod"
+        ]
+      },
+      {
+        "id": "json",
+        "filenames": [
+          "package.json"
+        ],
+        "aliases": [
+          "Package JSON"
+        ],
+        "extensions": [
+          ".json"
+        ]
+      },
+      {
+        "id": "requirements.txt",
+        "filenames": [
+          "requirements.txt"
+        ],
+        "aliases": [
+          "TXT"
+        ],
+        "extensions": [
+          ".txt"
+        ]
+      }
+    ],
+    "commands": [
+      {
+        "command": "dependi.commands.replaceVersion",
+        "title": "Do not call manually ! Replace Version of the provided dependency",
+        "category": "Dependi"
+      },
+      {
+        "command": "dependi.commands.retry",
+        "title": "Retry to fetch dependencies",
+        "category": "Dependi"
+      },
+      {
+        "command": "dependi.commands.updateAll",
+        "title": "Update All dependencies to latest version",
+        "category": "Dependi"
+      },
+      {
+        "command": "dependi.commands.vulnerability.report",
+        "title": "Generate detailed vulnerability report",
+        "category": "Dependi"
+      }
+    ],
+    "configuration": [
+      {
+        "title": "General Settings",
+        "properties": {
+          "dependi.apiURL": {
+            "type": "string",
+            "scope": "resource",
+            "description": "The API URL for the index server.",
+            "format": "url",
+            "default": "https://index.dependi.io",
+            "order": 1
+          },
+          "dependi.apiKey": {
+            "type": "string",
+            "scope": "resource",
+            "default": "",
+            "description": "API key for accessing enhanced features.",
+            "order": 2
+          },
+          "dependi.rust.indexServerURL": {
+            "type": "string",
+            "scope": "resource",
+            "description": "The URL for the Rust package index server.",
+            "format": "url",
+            "default": "https://index.crates.io",
+            "order": 5
+          },
+          "dependi.rust.excludeUnstableVersions": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": true,
+            "description": "Exclude unstable versions from Rust package lists.",
+            "order": 6
+          },
+          "dependi.npm.indexServerURL": {
+            "type": "string",
+            "scope": "resource",
+            "description": "The URL for the NPM package index server.",
+            "format": "url",
+            "default": "https://registry.npmjs.org",
+            "order": 10
+          },
+          "dependi.npm.excludeUnstableVersions": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": true,
+            "description": "Exclude unstable versions from NPM package lists.",
+            "order": 11
+          },
+          "dependi.go.indexServerURL": {
+            "type": "string",
+            "scope": "resource",
+            "description": "The URL for the Go package index server.",
+            "format": "url",
+            "default": "https://proxy.golang.org",
+            "order": 15
+          },
+          "dependi.go.excludeUnstableVersions": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": true,
+            "description": "Exclude unstable versions from Go package lists.",
+            "order": 16
+          },
+          "dependi.python.indexServerURL": {
+            "type": "string",
+            "scope": "resource",
+            "description": "The URL for the Python package index server.",
+            "format": "url",
+            "default": "https://pypi.org/pypi",
+            "order": 20
+          },
+          "dependi.python.excludeUnstableVersions": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": true,
+            "description": "Exclude unstable versions from Python package lists.",
+            "order": 21
+          },
+          "dependi.vulnerability.enabled": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": true,
+            "description": "Enable checking for vulnerabilities in dependencies.",
+            "order": 25
+          },
+          "dependi.vulnerability.ghsa.enabled": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": false,
+            "description": "Include GitHub Security Advisory vulnerabilities in checks.",
+            "order": 26
+          },
+          "dependi.vulnerability.osvQueryURL.batch": {
+            "type": "string",
+            "scope": "resource",
+            "description": "The URL for batch querying vulnerabilities via OSV.",
+            "format": "url",
+            "default": "https://api.osv.dev/v1/querybatch",
+            "order": 27
+          },
+          "dependi.vulnerability.osvQueryURL.single": {
+            "type": "string",
+            "scope": "resource",
+            "description": "The URL for querying single vulnerabilities via OSV.",
+            "format": "url",
+            "default": "https://api.osv.dev/v1/query",
+            "order": 28
+          }
+        }
+      },
+      {
+        "title": "UI Decorations",
+        "properties": {
+          "dependi.decoration.position": {
+            "type": "string",
+            "default": "after",
+            "enum": [
+              "before",
+              "after"
+            ],
+            "scope": "resource",
+            "description": "Position of UI decorations relative to package names.",
+            "order": 1
+          },
+          "dependi.decoration.compatible.template": {
+            "type": "string",
+            "scope": "resource",
+            "default": "✅",
+            "description": "Decoration for compatible package versions.",
+            "order": 5
+          },
+          "dependi.decoration.compatible.style": {
+            "type": "object",
+            "default": null,
+            "order": 6,
+            "description": "Style for compatible version decorations.",
+            "properties": {
+              "after": {
+                "type": "object",
+                "default": null,
+                "scope": "resource",
+                "description": "Style for text after the package name.",
+                "properties": {
+                  "color": {
+                    "type": "string",
+                    "scope": "resource",
+                    "default": "#ffffffff",
+                    "format": "color",
+                    "description": "Text color."
+                  },
+                  "border": {
+                    "type": "string",
+                    "scope": "resource",
+                    "default": null,
+                    "description": "Text border."
+                  },
+                  "backgroundColor": {
+                    "type": "string",
+                    "scope": "resource",
+                    "default": "#00000000",
+                    "format": "color",
+                    "description": "Background color."
+                  }
+                }
+              },
+              "before": {
+                "type": "object",
+                "default": null,
+                "scope": "resource",
+                "description": "Style for text before the package name.",
+                "properties": {
+                  "color": {
+                    "type": "string",
+                    "scope": "resource",
+                    "default": "#ffffffff",
+                    "format": "color",
+                    "description": "Text color."
+                  },
+                  "border": {
+                    "type": "string",
+                    "scope": "resource",
+                    "default": null,
+                    "description": "Text border."
+                  },
+                  "backgroundColor": {
+                    "type": "string",
+                    "scope": "resource",
+                    "default": "#00000000",
+                    "format": "color",
+                    "description": "Background color."
+                  }
+                }
+              }
+            }
+          },
+          "dependi.decoration.incompatible.template": {
+            "type": "string",
+            "scope": "resource",
+            "default": "❌ ${version}",
+            "description": "Decoration for incompatible package versions.",
+            "order": 10
+          },
+          "dependi.decoration.incompatible.style": {
+            "type": "object",
+            "default": null,
+            "order": 11,
+            "description": "Style for incompatible version decorations.",
+            "properties": {
+              "after": {
+                "type": "object",
+                "default": null,
+                "scope": "resource",
+                "description": "Style for text after the package name.",
+                "properties": {
+                  "color": {
+                    "type": "string",
+                    "scope": "resource",
+                    "default": "#ffffffff",
+                    "format": "color",
+                    "description": "Text color."
+                  },
+                  "border": {
+                    "type": "string",
+                    "scope": "resource",
+                    "default": "",
+                    "description": "Text border."
+                  },
+                  "backgroundColor": {
+                    "type": "string",
+                    "scope": "resource",
+                    "default": "#00000000",
+                    "format": "color",
+                    "description": "Background color."
+                  }
+                }
+              },
+              "before": {
+                "type": "object",
+                "default": null,
+                "scope": "resource",
+                "description": "Style for text before the package name.",
+                "properties": {
+                  "color": {
+                    "type": "string",
+                    "scope": "resource",
+                    "default": "#ffffffff",
+                    "format": "color",
+                    "description": "Text color."
+                  },
+                  "border": {
+                    "type": "string",
+                    "scope": "resource",
+                    "default": "",
+                    "description": "Text border."
+                  },
+                  "backgroundColor": {
+                    "type": "string",
+                    "scope": "resource",
+                    "default": "#00000000",
+                    "format": "color",
+                    "description": "Background color."
+                  }
+                }
+              }
+            }
+          },
+          "dependi.decoration.error.template": {
+            "type": "string",
+            "scope": "resource",
+            "default": "❗️❗️❗️",
+            "description": "Decoration for error package versions.",
+            "order": 15
+          },
+          "dependi.decoration.error.style": {
+            "type": "object",
+            "default": null,
+            "order": 16,
+            "description": "Style for error version decorations.",
+            "properties": {
+              "after": {
+                "type": "object",
+                "default": null,
+                "scope": "resource",
+                "description": "Style for text after the package name.",
+                "properties": {
+                  "color": {
+                    "type": "string",
+                    "scope": "resource",
+                    "default": "#ffffffff",
+                    "format": "color",
+                    "description": "Text color."
+                  },
+                  "border": {
+                    "type": "string",
+                    "scope": "resource",
+                    "default": "",
+                    "description": "Text border."
+                  },
+                  "backgroundColor": {
+                    "type": "string",
+                    "scope": "resource",
+                    "default": "#00000000",
+                    "format": "color",
+                    "description": "Background color."
+                  }
+                }
+              },
+              "before": {
+                "type": "object",
+                "default": null,
+                "scope": "resource",
+                "description": "Style for text before the package name.",
+                "properties": {
+                  "color": {
+                    "type": "string",
+                    "scope": "resource",
+                    "default": "#ffffffff",
+                    "format": "color",
+                    "description": "Text color."
+                  },
+                  "border": {
+                    "type": "string",
+                    "scope": "resource",
+                    "default": "",
+                    "description": "Text border."
+                  },
+                  "backgroundColor": {
+                    "type": "string",
+                    "scope": "resource",
+                    "default": "#00000000",
+                    "format": "color",
+                    "description": "Background color."
+                  }
+                }
+              }
+            }
+          },
+          "dependi.decoration.vulnerability.template": {
+            "type": "string",
+            "scope": "resource",
+            "default": "🚨 ${count}",
+            "description": "Decoration for vulnerable package versions.",
+            "order": 20
+          }
+        }
+      }
+    ]
+  },
+  "main": "./out/main.js",
+  "scripts": {
+    "vscode:prepublish": "npm run esbuild-base -- --minify",
+    "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=out/main.js --external:vscode --format=cjs --platform=node --metafile=meta.json",
+    "esbuild": "npm run esbuild-base -- --sourcemap",
+    "esbuild-watch": "npm run esbuild-base -- --sourcemap --watch",
+    "test-compile": "tsc -p ./",
+    "build": "npm run esbuild",
+    "package": "npx vsce package -o ../builds"
+  },
+  "types": "vscode",
+  "devDependencies": {
+    "@types/glob": "8.1.0",
+    "@types/mocha": "10.0.7",
+    "@types/node": "20.14.8",
+    "@types/semver": "7.5.8",
+    "@types/vscode": "^1.87.0",
+    "@types/vscode-webview": "1.57.5",
+    "@typescript-eslint/eslint-plugin": "7.14.1",
+    "@typescript-eslint/parser": "7.14.1",
+    "@vscode/test-electron": "2.4.0",
+    "esbuild": "0.21.5",
+    "eslint": "9.5.0",
+    "glob": "10.4.2",
+    "mocha": "10.5.1",
+    "typescript": "5.5.2"
+  },
+  "dependencies": {
+    "@neuralegion/cvss": "1.2.2",
+    "fast-toml": "0.5.4",
+    "node-cache": "5.1.2",
+    "release-please": "16.12.0",
+    "semver": "7.6.2"
+  },
+  "extensionDependencies": [
+    "vscode.git",
+    "tamasfe.even-better-toml"
+  ]
+}

@@ -1,0 +1,11 @@
+out
+dist
+node_modules
+.vscode-test/
+*.vsix
+.DS_Store
+yarn.lock
+*.zip
+meta.json
+tmp
+builds

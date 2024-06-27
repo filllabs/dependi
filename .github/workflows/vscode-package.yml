@@ -1,0 +1,54 @@
+name: Test Build VSCode Extension
+on:
+  push:
+    paths:
+      - "vscode/**"
+      - ".github/workflows/vscode-package.yml"
+    branches:
+      - master
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  vscode-extension-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 18
+      - name: Install Dependencies
+        working-directory: ./vscode
+        run: npm install --save-exact --save-dev esbuild
+      - name: Package VS Code Extension
+        working-directory: ./vscode
+        run: npm run vscode:prepublish
+      - name: Package Extension
+        id: package-extension
+        uses: nhedger/package-vscode-extension@v1
+        with:
+          preRelease: true
+          extensionPath: vscode
+          packagePath: ../builds
+
+      - name: Upload Extension Artifact
+        uses: actions/upload-artifact@v4
+        id: artifact-upload
+        with:
+          name: vscode-extension
+          path: ${{ steps.package-extension.outputs.packagePath }}
+
+      - name: Send Download Link to Slack
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          payload: |
+            {
+              "text": "Download the latest VSCode extension here: ${{ steps.artifact-upload.outputs.artifact-url}}"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

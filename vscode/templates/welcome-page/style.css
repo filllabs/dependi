@@ -1,0 +1,79 @@
+body {
+  margin: 0 auto;
+  max-width: 1080px;
+  letter-spacing: 0.6px;
+}
+body img,
+video {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 0 40px 0;
+  border-bottom: 1px solid #808080;
+}
+
+.header h1 em {
+  font-size: 0.6em;
+  color: #808080;
+}
+
+.logo {
+  margin-right: 20px;
+}
+
+.logo img {
+  max-width: 100%;
+  height: auto;
+}
+
+.logo-header {
+  flex-grow: 1;
+}
+
+.logo-header h1 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.logo-header p {
+  font-size: 16px;
+}
+
+.features {
+  padding-top: 20px;
+  padding-bottom: 40px;
+  padding-right: 30px;
+  border-right: 0.5px solid #999;
+  flex: 3;
+}
+.changelog {
+  padding-left: 30px;
+  padding-top: 20px;
+  flex: 2;
+}
+
+.changelog h2 {
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 0.5px solid #999;
+}
+
+.changelog h3 {
+  margin-left: 10px;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.split {
+  display: flex;
+  position: relative;
+  margin: 12px 0;
+}
