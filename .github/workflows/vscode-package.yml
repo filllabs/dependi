@@ -5,7 +5,7 @@ on:
       - "vscode/**"
       - ".github/workflows/vscode-package.yml"
     branches:
-      - master
+      - main
   workflow_dispatch:
 
 concurrency:
