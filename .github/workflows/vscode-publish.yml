@@ -27,9 +27,8 @@ jobs:
       - name: Install Dependencies
         run: npm install --save-exact --save-dev esbuild
       - name: Publish VS Code Extension
-        uses: lannonbr/vsce-action@3.0.0
-        with:
-          args: "publish -p $VSCE_TOKEN"
+        run: |
+          "npx vsce publish -p $VSCE_TOKEN"
         env:
           VSCE_TOKEN: ${{ secrets.VSC_PAT }}
 
