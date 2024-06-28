@@ -10,6 +10,9 @@ on:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+defaults:
+  run:
+    working-directory: ./vscode
 jobs:
   vscode-extension-build:
     runs-on: ubuntu-latest
@@ -22,7 +25,6 @@ jobs:
         with:
           node-version: 18
       - name: Install Dependencies
-        working-directory: ./vscode
         run: npm install --save-exact --save-dev esbuild
       - name: Publish VS Code Extension
         uses: lannonbr/vsce-action@3.0.0
