@@ -28,7 +28,7 @@ jobs:
         run: npm install --save-exact --save-dev esbuild
       - name: Publish VS Code Extension
         run: |
-          npm -i -g vsce
+          npm install -g @vscode/vsce
           vsce publish -p $VSCE_TOKEN
         env:
           VSCE_TOKEN: ${{ secrets.VSC_PAT }}
