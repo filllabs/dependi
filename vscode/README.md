@@ -47,8 +47,44 @@ Dependi simplifies dependency management in Visual Studio Code, helping you to:
 
 For more information about the feature set [visit here](https://www.dependi.io/#features).
 
+## Configuration Options
+
+While Dependi works out-of-the-box without any configuration, we also offer a few customizable options:
+
+### Index
+
+- `dependi.apiURL`: The URL for the Dependi API server.
+- `dependi.apiKey`: API key for accessing enhanced features.
+- `dependi.rust.indexServerURL`: The URL for the Rust package index server.
+- `dependi.rust.excludeUnstableVersions`: Exclude unstable versions from Rust package lists.
+- `dependi.npm.indexServerURL`: The URL for the NPM package index server.
+- `dependi.npm.excludeUnstableVersions`: Exclude unstable versions from NPM package lists.
+- `dependi.go.indexServerURL`: The URL for the Go package index server.
+- `dependi.go.excludeUnstableVersions`: Exclude unstable versions from Go package lists.
+- `dependi.python.indexServerURL`: The URL for the Python package index server.
+- `dependi.python.excludeUnstableVersions`: Exclude unstable versions from Python package lists.
+- `dependi.vulnerability.enabled`: Enable checking for vulnerabilities in dependencies.
+- `dependi.vulnerability.ghsa.enabled`: Include GitHub Security Advisory vulnerabilities in checks.
+- `dependi.vulnerability.osvQueryURL.batch`: The URL for batch querying vulnerabilities via OSV.
+- `dependi.vulnerability.osvQueryURL.single`: The URL for querying single vulnerabilities via OSV.
+
+### Decorations
+
+- `dependi.decoration.position`: Position of UI decorations relative to package names.
+- `dependi.decoration.compatible.template`: Decoration for compatible package versions.
+- `dependi.decoration.compatible.style`: Style for compatible version decorations.
+- `dependi.decoration.incompatible.template`: Decoration for incompatible package versions.
+- `dependi.decoration.incompatible.style`: Style for incompatible version decorations.
+- `dependi.decoration.error.template`: Decoration for error package versions.
+- `dependi.decoration.error.style`: Style for error version decorations.
+- `dependi.decoration.vulnerability.template`: Decoration for vulnerable package versions.
+
+### Cargo.toml, go.mod, package.json and requirements.txt
+
+- `# dependi: disable-check`: Disable version check for this specific dependency.
+
+## Known Issues
+
+Any minor issues or glitches you encounter will automatically be resolved when you save your work.
+
 Help us simplify dependency management with Dependi, and let's make coding even more enjoyable! Together, we can achieve great things.
-
-## Commit Message Standart
-
-[Conventional commit standart](https://github.com/filllabs/dependi/blob/master/CONVENTIONAL_COMMITS.md)
