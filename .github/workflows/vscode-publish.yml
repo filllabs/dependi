@@ -1,0 +1,42 @@
+name: Test Build VSCode Extension
+on:
+  push:
+    tags:
+      - v*
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  vscode-extension-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 18
+      - name: Install Dependencies
+        working-directory: ./vscode
+        run: npm install --save-exact --save-dev esbuild
+      - name: Publish VS Code Extension
+        uses: lannonbr/vsce-action@3.0.0
+        with:
+          args: "publish -p $VSCE_TOKEN"
+        env:
+          VSCE_TOKEN: ${{ secrets.VSC_PAT }}
+
+      - name: Send Download Link to Slack
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          payload: |
+            {
+              "text": "VSCode extension deployed successfully!"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
