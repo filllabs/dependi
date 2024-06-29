@@ -49,6 +49,6 @@ For more information about the feature set [visit here](https://www.dependi.io/#
 
 Help us simplify dependency management with Dependi, and let's make coding even more enjoyable! Together, we can achieve great things.
 
-## Commit Message Standart
+## Commit Message Standard
 
-[Conventional commit standart](https://github.com/filllabs/dependi/blob/master/CONVENTIONAL_COMMITS.md)
+[Conventional commit standard](https://github.com/filllabs/dependi/blob/master/CONVENTIONAL_COMMITS.md)
