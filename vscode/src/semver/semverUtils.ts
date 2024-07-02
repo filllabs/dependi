@@ -1,4 +1,4 @@
-import { maxSatisfying, satisfies } from "semver";
+import { maxSatisfying, satisfies, valid, gt } from "semver";
 
 
 export function checkVersion(version: string = "0.0.0", versions: string[]): [boolean, string | null] {
@@ -7,5 +7,13 @@ export function checkVersion(version: string = "0.0.0", versions: string[]): [bo
   if (prefix > 47 && prefix < 58)
     v = "^" + v;
   const max = versions[0];
-  return [satisfies(max, v), maxSatisfying(versions, version)];
+  if (maxSatisfying(versions, v) === null) {
+    if (valid(v) === null) {
+      return [false, null];
+    }
+    if (gt(v, max)) {
+      return [true, v]
+    }
+  }
+  return [satisfies(max, v), maxSatisfying(versions, v)];
 }
