@@ -1,8 +1,8 @@
 import { commands, TextEditor, TextEditorEdit } from "vscode";
-import listener from "../../core/listeners/listener";
-import { Configs } from "../../config";
+import { Configs } from "../config";
+import listener from "../core/listeners/listener";
 
-export const reload = commands.registerTextEditorCommand(
+export const retry = commands.registerTextEditorCommand(
   Configs.RETRY,
   (editor: TextEditor, edit: TextEditorEdit, info) => {
     if (editor) {

@@ -11,6 +11,7 @@ import {
 import { replaceVersion } from "./commands/replacers/replaceVersion";
 import { updateAll } from "./commands/replacers/updateAll";
 import { generateVulnerabilityReport } from "./commands/report-generator/generateVulnerabilityReport";
+import { retry } from "./commands/retry";
 import { Settings } from "./config";
 import { setLanguage } from "./core/Language";
 import listener from "./core/listeners/listener";
@@ -21,6 +22,8 @@ import { ExtensionStorage } from "./storage";
 export function activate(context: ExtensionContext) {
 
   console.debug('Congratulations, your extension "dependi" is now active!');
+
+  // Add commands
 
   // Load settings and listen for changes
   Settings.load();
@@ -33,6 +36,8 @@ export function activate(context: ExtensionContext) {
   configure(context).finally(
     () => listener(window.activeTextEditor)
   );
+
+
 
   // Add listeners
   context.subscriptions.push(
@@ -53,8 +58,8 @@ export function activate(context: ExtensionContext) {
     }),
   );
 
-
-  // Add commands
+  console.debug("Adding commands");
+  context.subscriptions.push(retry);
   context.subscriptions.push(replaceVersion);
   context.subscriptions.push(updateAll);
   context.subscriptions.push(generateVulnerabilityReport(context));
