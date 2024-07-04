@@ -19,6 +19,8 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 - Fixed go.mod decorator bug ([#2](https://github.com/filllabs/dependi/pull/2))
 
+- Fixed retry command bug ([9f105dc](https://github.com/filllabs/dependi/commit/9f105dc347d66d33acf9e63c4c09d96206ae6e4c))
+
 ### Other Changes
 
 - Version info decorator placement can now be changed from extension settings.
