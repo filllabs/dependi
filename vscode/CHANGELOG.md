@@ -1,6 +1,29 @@
 # Change Log
 
 All notable changes to the "dependi" extension will be documented in this file.
+## 0.7.0
+
+### New Features
+
+- Language Support: Dependi now supports Go, JavaScript, and Python!
+
+- Vulnerability Report: A new feature for Pro users.
+
+### Improvements
+
+- Improved cache support.
+
+### Bug Fixes
+
+- General bug fixes.
+
+- Fixed go.mod decorator bug ([#2](https://github.com/filllabs/dependi/pull/2))
+
+- Fixed retry command bug ([9f105dc](https://github.com/filllabs/dependi/commit/9f105dc347d66d33acf9e63c4c09d96206ae6e4c))
+
+### Other Changes
+
+- Version info decorator placement can now be changed from extension settings.
 
 ## [0.6.4](https://github.com/filllabs/crates/compare/v0.6.3...v0.6.4) (2024-03-26)
 
