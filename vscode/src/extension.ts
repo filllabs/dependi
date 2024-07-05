@@ -50,6 +50,9 @@ export function activate(context: ExtensionContext) {
       }),
     // When the text document is changed, fetch + check dependencies
     workspace.onDidChangeTextDocument((e: TextDocumentChangeEvent) => {
+      if (e.document.fileName !== window.activeTextEditor?.document.fileName) {
+        return;
+      }
       console.debug("Text document changed");
       setLanguage(window.activeTextEditor?.document.fileName);
       if (!e.document.isDirty) {
