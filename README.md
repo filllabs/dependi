@@ -7,7 +7,7 @@ Dependi is a comprehensive dependency management extension that helps developers
 
 When you install Dependi in Visual Studio Code, 2 options are available :
 
-- Dependi Core: Provides essential dependency management for Rust, Go, JavaScript, and Python projects. Free to use with no subscription required.
+- Dependi Core: Provides essential dependency management for Rust, Go, JavaScript, TypeScript and Python projects. Free to use with no subscription required.
 
 - Dependi Pro: Offers many advanced features like detailed vulnerability reports, private repository support, and priority support... Easy subscription packages and free trials are available.
 
