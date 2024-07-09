@@ -1,6 +1,16 @@
 # Change Log
 
 All notable changes to the "dependi" extension will be documented in this file.
+## 0.7.1
+
+### Bug Fixes
+
+- Fixed issue with excessive fetching: optimize dependency check([699db85](https://github.com/filllabs/dependi/pull/5))
+
+### Other Changes
+
+- Updated README.md file
+
 ## 0.7.0
 
 ### New Features
