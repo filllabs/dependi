@@ -2,18 +2,14 @@
 
 Dependi is a comprehensive dependency management extension that helps developers write code faster and smarter by efficiently managing project dependencies. Formerly known as Crates the most loved and used dependency management extension for Rust. Dependi now supports multiple languages including Rust, Go, JavaScript, and Python.
 
-[Install](https://www.dependi.io/download) Dependi in Visual Studio Code and
-[Sign up](https://www.dependi.io/register) for Dependi Pro free trial.
+[Install](https://www.dependi.io/download) Dependi via VSCode or [Dependi.io](https://www.dependi.io)
+
 
 When you install Dependi in Visual Studio Code, 2 options are available :
 
 - Dependi Core: Provides essential dependency management for Rust, Go, JavaScript, TypeScript and Python projects. Free to use with no subscription required.
 
-- Dependi Pro: Offers many advanced features like detailed vulnerability reports, private repository support, and priority support... Easy subscription packages and free trials are available.
-
-## Why Dependi?
-
-Are you tired of manually managing your dependencies? Dependi is here to save the day! Whether you're a seasoned developer or just getting started, our extension is designed to make your life easier and your coding experience more enjoyable.
+- [Dependi Pro:](https://www.dependi.io) Offers many advanced features like detailed vulnerability reports, private repository support, and priority support... Easy subscription packages and [free trials](https://www.dependi.io/#pricing) are available.
 
 ## Key Features
 
