@@ -10,7 +10,7 @@ export class NpmListener extends JsonListener {
 		public fetcher: Fetcher,
 		public parser: Parser,
 	) {
-		super(fetcher, parser, Language.PHP)
+		super(fetcher, parser, Language.JS)
   }
 }
 
