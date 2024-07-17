@@ -4,7 +4,8 @@ export enum Language {
     Rust = 1,
     Golang = 2,
     JS = 3,
-    Python = 4
+    Python = 4,
+    PHP = 5,
 }
 export var CurrentLanguage: Language = Language.None;
 export var CurrentLanguageConfig: string = "";
@@ -28,6 +29,10 @@ export function setLanguage(file?: string) {
             CurrentLanguage = Language.JS;
             CurrentLanguageConfig = "npm";
             return Language.JS;
+        case "composer.json":
+            CurrentLanguage = Language.PHP;
+            CurrentLanguageConfig = "php";
+            return Language.PHP;
         case "requirements.txt":
             CurrentLanguage = Language.Python;
             CurrentLanguageConfig = "python";

@@ -11,6 +11,9 @@ export enum Configs {
   NPM_INDEX_SERVER_URL = `npm.indexServerURL`,
   NPM_IGNORE_UNSTABLES = `npm.excludeUnstableVersions`,
 
+  PHP_INDEX_SERVER_URL = `php.indexServerURL`,
+  PHP_IGNORE_UNSTABLES = `php.excludeUnstableVersions`,
+
   GO_INDEX_SERVER_URL = `go.indexServerURL`,
   GO_IGNORE_UNSTABLES = `go.excludeUnstableVersions`,
 
@@ -56,6 +59,10 @@ export const Settings = {
     ignoreUnstable: false
   },
   npm: {
+    index: "",
+    ignoreUnstable: false
+  },
+  php: {
     index: "",
     ignoreUnstable: false
   },
@@ -108,6 +115,9 @@ export const Settings = {
 
     this.npm.index = config.get<string>(Configs.NPM_INDEX_SERVER_URL) || "https://registry.npmjs.org";
     this.npm.ignoreUnstable = config.get<boolean>(Configs.NPM_IGNORE_UNSTABLES) || true;
+
+    this.php.index = config.get<string>(Configs.PHP_INDEX_SERVER_URL) || "https://repo.packagist.org";
+    this.php.ignoreUnstable = config.get<boolean>(Configs.PHP_IGNORE_UNSTABLES) || true;
 
     this.go.index = config.get<string>(Configs.GO_INDEX_SERVER_URL) || "https://proxy.golang.org";
     this.go.ignoreUnstable = config.get<boolean>(Configs.GO_IGNORE_UNSTABLES) || true;
