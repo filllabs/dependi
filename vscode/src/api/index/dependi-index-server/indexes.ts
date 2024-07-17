@@ -4,7 +4,6 @@ import { request } from ".";
 import { Configs } from "../../../config";
 import Dependency from "../../../core/Dependency";
 import { openDeviceLimitDialog, openPaymentRequiredDialog, openSettingsDialog } from "../../../ui/dialogs";
-import { filterNotSemverAndAbove100Versions } from "../../utils";
 import { Errors, getError } from "./errors";
 import { Language } from "./reports";
 
@@ -72,9 +71,6 @@ export async function getVersions(value: VersionsReq, options?: RequestInit) {
           if (matchingVersion && matchingVersion.Versions) {
             // Update the 'versions' field with VersionsResp's 'Versions'
             dep.versions = matchingVersion.Versions;
-            if (value.Language !== Language.Python) {
-              dep.versions = filterNotSemverAndAbove100Versions(dep.versions);
-            }
 
             if (matchingVersion.Vulns) {
               const vulnEntries = Object.entries(matchingVersion.Vulns);

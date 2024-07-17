@@ -1,7 +1,7 @@
 import * as https from 'https';
 import { CrateMetadatas } from '../crateMetadatas';
 import NodeCache from "node-cache";
-import { filterNotSemverAndAbove100Versions, getReqOptions } from "../utils";
+import { getReqOptions } from "../utils";
 
 const cache = new NodeCache({ stdTTL: 60 * 10 });
 
@@ -55,7 +55,6 @@ export const versions = (name: string, indexServerURL: string) => {
             versions: body_array.filter((e: any) => e.yanked === false).map((e: any) => e.vers),
             features: Object.keys(body_array.at(-1).features).filter(feature => feature !== "default")
           };
-          crate_metadatas.versions = filterNotSemverAndAbove100Versions(crate_metadatas.versions);
 
           cache.set(name, crate_metadatas);
         } catch (e) {
