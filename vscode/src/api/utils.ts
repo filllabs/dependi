@@ -51,15 +51,4 @@ export function getReqOptions(url: string): RequestOptions {
   return options;
 }
 
-export function filterNotSemverAndAbove100Versions(versions: string[]) {
-  return versions.filter((v) => {
-    try {
-      return semverMajor(v) < 100;
-    }
-    catch (e) {
-      return false;
-    }
-  }
-  );
-}
 

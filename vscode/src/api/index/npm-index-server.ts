@@ -1,7 +1,7 @@
 import * as https from "https";
 import NodeCache from "node-cache";
 import { CrateMetadatas } from "../crateMetadatas";
-import { filterNotSemverAndAbove100Versions, getReqOptions } from "../utils";
+import { getReqOptions } from "../utils";
 import { Settings } from "../../config";
 const cache = new NodeCache({ stdTTL: 60 * 10 });
 
@@ -59,7 +59,6 @@ export const versions = (
             versions: versions,
             features: [],
           };
-          crate_metadatas.versions = filterNotSemverAndAbove100Versions(crate_metadatas.versions);
           cache.set(cacheName, crate_metadatas);
         } catch (error) {
           console.error("Error parsing response:", error);

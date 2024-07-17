@@ -1,7 +1,7 @@
 import * as https from 'https';
 import NodeCache from "node-cache";
 import { CrateMetadatas } from '../crateMetadatas';
-import { filterNotSemverAndAbove100Versions, getReqOptions } from "../utils";
+import { getReqOptions } from "../utils";
 const cache = new NodeCache({ stdTTL: 60 * 10 });
 
 export const versions = (name: string, indexServerURL: string) => { // name eg: github.com/gorilla/mux
@@ -38,7 +38,6 @@ export const versions = (name: string, indexServerURL: string) => { // name eg: 
             versions: body,
             features: [] // proxy site does not provide any features data for versions.
           };
-          crate_metadatas.versions = filterNotSemverAndAbove100Versions(crate_metadatas.versions);
 
           cache.set(name, crate_metadatas);
         } catch (e) {
