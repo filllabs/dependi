@@ -34,7 +34,7 @@ jobs:
         with:
           preRelease: true
           extensionPath: vscode
-          packagePath: ../builds
+          packagePath: ../builds/dependi.vsix
 
       - name: Upload Extension Artifact
         uses: actions/upload-artifact@v4
