@@ -1,6 +1,12 @@
 # Change Log
 
 All notable changes to the "dependi" extension will be documented in this file.
+## 0.7.2
+
+### Other Changes
+
+- Removed the upper limit for version numbers. Now version numbers can be larger([#10](https://github.com/filllabs/dependi/issues/10))
+
 ## 0.7.1
 
 ### Bug Fixes

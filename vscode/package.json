@@ -2,7 +2,7 @@
   "name": "dependi",
   "displayName": "Dependi",
   "description": "Empowers developers to efficiently manage dependencies and address vulnerabilities in Rust, Go, JavaScript, and Python projects.",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "publisher": "fill-labs",
   "author": {
     "name": "Fill Labs",
@@ -21,7 +21,6 @@
     "type": "git",
     "url": "https://github.com/filllabs/dependi.git"
   },
-  "preview": true,
   "icon": "icon.png",
   "keywords": [
     "rust",
