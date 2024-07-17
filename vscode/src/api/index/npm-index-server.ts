@@ -17,7 +17,10 @@ export const versions = (
       resolve(cached);
       return;
     }
-    const url = `${indexServerURL}/${currentVersion ? `/-/package/${name}/dist-tags` : `/${name}`}`;
+    if (!indexServerURL.endsWith('/') {
+      indexServerURL += '/';
+    }
+    const url = `${indexServerURL}${currentVersion ? `-/package/${name}/dist-tags` : name}`;
     const options = getReqOptions(url);
     if (!currentVersion) {
       options.headers = {
