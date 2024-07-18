@@ -16,7 +16,12 @@ export async function getRepo(): Promise<{ repo: Repository }> {
     if (!repos || repos.length === 0) {
         throw new Error("No repository found");
     }
-    const repo = repos[0];
+    const activeEditor = window.activeTextEditor;
+    if (!activeEditor) {
+        throw new Error("Active editor not found");
+    }
+    const activeFilePath = activeEditor.document.uri.path
+    const repo = repos.find((repo) => activeFilePath.includes(repo.rootUri.path))!;
 
     return { repo };
 }
