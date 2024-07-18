@@ -4,7 +4,10 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 ## 0.7.4
 
+### New Features
+
 - PHP support added [PR #21](https://github.com/filllabs/dependi/pull/21)
+
 - Language specific enable/disable settings added [Issue #11](https://github.com/filllabs/dependi/issues/11)
 
 ## 0.7.3
@@ -46,9 +49,7 @@ All notable changes to the "dependi" extension will be documented in this file.
 ### Bug Fixes
 
 - General bug fixes.
-
 - Fixed go.mod decorator bug ([#2](https://github.com/filllabs/dependi/pull/2))
-
 - Fixed retry command bug ([9f105dc](https://github.com/filllabs/dependi/commit/9f105dc347d66d33acf9e63c4c09d96206ae6e4c))
 
 ### Other Changes
