@@ -1,6 +1,12 @@
 # Change Log
 
 All notable changes to the "dependi" extension will be documented in this file.
+
+## 0.7.4
+
+- PHP support added
+- Language specific enable/disable settings added
+
 ## 0.7.3
 
 ### Bug Fixes
