@@ -2,7 +2,7 @@ import {
   window,
 } from "vscode";
 import { ReportItem, VulnReq, getLangIdFromName, getVulnReport } from "../../api/index/dependi-index-server/reports";
-import { Settings } from "../../config";
+import { Configs, Settings } from "../../config";
 import Item from "../../core/Item";
 import { Parser } from "../../core/parsers/parser";
 import {
@@ -12,6 +12,8 @@ import {
   parseTextDocument,
 } from "./gitActions";
 import { parserInvoker } from "./utils";
+import { Errors, getError } from "../../api/index/dependi-index-server/errors";
+import { openDeviceLimitDialog, openPaymentRequiredDialog, openSettingsDialog } from "../../ui/dialogs";
 
 type ProgressStep = 'fetchingRepository' | 'parsingFile' | 'comparingFiles' | 'generatingReport' | 'creatingUI';
 
@@ -119,6 +121,27 @@ export async function generateMainReport(progress: any) {
     const reportResp = await getVulnReport(vulnRequest);
     if (!reportResp) {
       throw new Error("Failed to generate report");
+    }
+    if (reportResp.status !== 200) {
+      switch (getError(reportResp.error)) {
+        case Errors.DLR:
+          openDeviceLimitDialog();
+          return;
+        case Errors.PAYRQ:
+          openPaymentRequiredDialog();
+          return;
+        case Errors.UNAUTH:
+          openSettingsDialog(Configs.INDEX_SERVER_API_KEY, "Unauthorized, please check your api key.");
+          return;
+        case Errors.IVAK:
+          openSettingsDialog(Configs.INDEX_SERVER_API_KEY, "Invalid api key or api key not found. Please check your api key.");
+          return;
+        case Errors.UINA:
+          openSettingsDialog(Configs.INDEX_SERVER_API_KEY, "User is not active. Please check emails from us or visit dependi.io dashboard.");
+        default:
+          window.showErrorMessage(getError(reportResp.error));
+          return;
+      }
     }
 
     const reportHTML: string = reportResp.body || "";
