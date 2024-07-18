@@ -2,7 +2,6 @@
  * Listener for TOML files.
  * Filters active editor files according to the extension.
  */
-import * as vscode from 'vscode';
 import { TextEditor } from "vscode";
 import { ReplaceItem, status } from "../../commands/replacers/replace";
 import { Configs, Settings } from "../../config";
@@ -67,7 +66,8 @@ export default async function listener(editor: TextEditor | undefined): Promise<
         break;
       case Language.PHP:
         if (!Settings.php.enabled)
-          ignoreUnstablesKey = Configs.PHP_IGNORE_UNSTABLES;
+          return;
+        ignoreUnstablesKey = Configs.PHP_IGNORE_UNSTABLES;
         listener = new PhpListener(
           new PhpFetcher(Settings.php.index, ignoreUnstablesKey, Configs.PHP_INDEX_SERVER_URL),
           new PhpParser());
@@ -89,18 +89,12 @@ export default async function listener(editor: TextEditor | undefined): Promise<
       }
       if (!status.inProgress) {
         status.inProgress = true;
+        StatusBar.fetching("");
         StatusBar.show();
 
-        return vscode.window.withProgress({
-          location: vscode.ProgressLocation.Notification,
-          title: "Fetching dependency informations",
-          cancellable: false
-        }, async () => {
-          await listener?.parseAndDecorate(editor).finally(() => {
-            status.inProgress = false;
-          });
+        return listener?.parseAndDecorate(editor).finally(() => {
+          status.inProgress = false;
         });
-
       }
     }
   }

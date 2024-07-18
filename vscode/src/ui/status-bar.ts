@@ -1,7 +1,7 @@
 /**
  * A utility to manage Status Bar operations.
  */
-import { window, StatusBarAlignment, StatusBarItem } from "vscode";
+import { StatusBarAlignment, StatusBarItem, window } from "vscode";
 import { Configs } from "../config";
 
 type Type = "Error" | "Warning" | "Info" | "Loading";
@@ -16,7 +16,7 @@ interface StatusBarItemExt extends StatusBarItem {
 
 export const StatusBar: StatusBarItemExt = window.createStatusBarItem(
   StatusBarAlignment.Right,
-  0
+  -1000
 ) as StatusBarItemExt;
 StatusBar.setText = (t: Type, text?: string) => {
   switch (t) {
@@ -50,7 +50,6 @@ StatusBar.fetching = (indexServerURL: string) => {
   StatusBar.text = "$(sync~spin) Dependi";
   StatusBar.tooltip = "👀 Fetching " + indexServerURL.replace(/^https?:\/\//, '');
   StatusBar.command = Configs.RETRY;
-  window.setStatusBarMessage(`Dependi: "👀 Fetching " + ${indexServerURL.replace(/^https?:\/\//, '')}`, 2000);
 };
 export default {
   StatusBar,

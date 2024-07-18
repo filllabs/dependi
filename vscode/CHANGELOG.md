@@ -10,6 +10,8 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 - Language specific enable/disable settings added [Issue #11](https://github.com/filllabs/dependi/issues/11)
 
+- Fetching dependencies notification silenced to status bar spinner [Issue #34](https://github.com/filllabs/dependi/issues/34)
+
 ## 0.7.3
 
 ### Bug Fixes
