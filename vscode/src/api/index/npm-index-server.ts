@@ -1,8 +1,8 @@
 import * as https from "https";
 import NodeCache from "node-cache";
+import { Settings } from "../../config";
 import { CrateMetadatas } from "../crateMetadatas";
 import { getReqOptions } from "../utils";
-import { Settings } from "../../config";
 const cache = new NodeCache({ stdTTL: 60 * 10 });
 
 export const versions = (
@@ -17,7 +17,7 @@ export const versions = (
       resolve(cached);
       return;
     }
-    const url = `${indexServerURL}/${currentVersion ? `/-/package/${name}/dist-tags` : `/${name}`}`;
+    const url = `${indexServerURL}/${currentVersion ? `-/package/${name}/dist-tags` : `${name}`}`;
     const options = getReqOptions(url);
     if (!currentVersion) {
       options.headers = {
