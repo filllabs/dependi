@@ -4,8 +4,8 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 ## 0.7.4
 
-- PHP support added
-- Language specific enable/disable settings added
+- PHP support added [PR #21](https://github.com/filllabs/dependi/pull/21)
+- Language specific enable/disable settings added [Issue #11](https://github.com/filllabs/dependi/issues/11)
 
 ## 0.7.3
 
