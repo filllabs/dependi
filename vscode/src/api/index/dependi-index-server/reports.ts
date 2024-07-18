@@ -35,8 +35,8 @@ export enum Language {
   Rust,
   Golang,
   JS,
-  PHP,
   Python,
+  PHP,
 }
 
 const LanguageArray = [
