@@ -13,11 +13,13 @@ import { CratesFetcher } from "../fetchers/CratesFetcher";
 import { DependiFetcher } from "../fetchers/DependiFetcher";
 import { GoProxyFetcher } from "../fetchers/GoProxyFetcher";
 import { NpmFetcher } from "../fetchers/NpmFetcher";
+import { PhpFetcher } from "../fetchers/PhpFetcher";
 import { PypiFetcher } from "../fetchers/PypiFetcher";
 import { Fetcher } from "../fetchers/fetcher";
 import { CargoTomlParser } from "../parsers/CargoTomlParser";
 import { GoModParser } from "../parsers/GoModParser";
 import { NpmParser } from "../parsers/NpmParser";
+import { PhpParser } from "../parsers/PhpParser";
 import { PypiParser } from "../parsers/PypiParser";
 import { Parser } from "../parsers/parser";
 import { CargoTomlListener } from "./CargoTomlListener";
@@ -25,6 +27,7 @@ import { DependiListener } from "./DependiListener";
 import { GoModListener } from "./GoModListener";
 import { NpmListener } from "./NpmListener";
 import { PypiListener } from "./PypiListener";
+import { PhpListener } from './PhpListener';
 
 export interface Listener {
   fetcher: Fetcher;
@@ -55,6 +58,12 @@ export default async function listener(editor: TextEditor | undefined): Promise<
         listener = new NpmListener(
           new NpmFetcher(Settings.npm.index, ignoreUnstablesKey, Configs.NPM_INDEX_SERVER_URL),
           new NpmParser());
+        break;
+      case Language.PHP:
+        ignoreUnstablesKey = Configs.PHP_IGNORE_UNSTABLES;
+        listener = new PhpListener(
+          new PhpFetcher(Settings.php.index, ignoreUnstablesKey, Configs.PHP_INDEX_SERVER_URL),
+          new PhpParser());
         break;
       case Language.Python:
         ignoreUnstablesKey = Configs.PYTHON_IGNORE_UNSTABLES;

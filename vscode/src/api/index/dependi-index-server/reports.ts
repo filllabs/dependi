@@ -35,6 +35,7 @@ export enum Language {
   Rust,
   Golang,
   JS,
+  PHP,
   Python,
 }
 
@@ -42,6 +43,7 @@ const LanguageArray = [
   { ID: Language.Rust, Name: "Cargo.toml" },
   { ID: Language.Golang, Name: "go.mod" },
   { ID: Language.JS, Name: "package.json" },
+  { ID: Language.PHP, Name: "composer.json" },
   { ID: Language.Python, Name: "requirements.txt" },
 ];
 

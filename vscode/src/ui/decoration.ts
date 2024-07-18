@@ -126,13 +126,15 @@ function getLinks(lang: Language, key: string): string {
 
   switch (lang) {
     case Language.Rust:
-      return ` _( [View Crate](https://crates.io/crates/${cleanKey}) | [Check Reviews](https://web.crev.dev/rust-reviews/crate/${cleanKey}) )_`;
+      return ` _([View crate](https://crates.io/crates/${cleanKey}) | [Check reviews](https://web.crev.dev/rust-reviews/crate/${cleanKey}))_`;
     case Language.Golang:
-      return ` _( [View Module](https://pkg.go.dev/${cleanKey}) | [Check Docs](https://pkg.go.dev/${cleanKey}#section-documentation) )_`;
+      return ` _([View module](https://pkg.go.dev/${cleanKey}) | [Check docs](https://pkg.go.dev/${cleanKey}#section-documentation))_`;
     case Language.JS:
-      return ` _( [View Package](https://npmjs.com/package/${cleanKey}) )_`;
+      return ` _([View package](https://npmjs.com/package/${cleanKey}))_`;
+    case Language.PHP:
+      return ` _([View package](https://packagist.org/packages/${cleanKey}))_`;
     case Language.Python:
-      return ` _( [View Package](https://pypi.org/project/${cleanKey}) )_`;
+      return ` _([View package](https://pypi.org/project/${cleanKey}))_`;
     default:
       return '';
   }
@@ -146,6 +148,8 @@ function getDocsLink(lang: Language, key: string, version: string): string {
       return `[(docs)](https://pkg.go.dev/${key}@${version}#section-documentation)`;
     case Language.JS:
       return `[(docs)](https://npmjs.com/package/${key}/v/${version})`;
+    case Language.PHP:
+      return `[(docs)](https://packagist.org/packages/${key}#${version})`;
     case Language.Python:
       return `[(docs)](https://pypi.org/project/${key}/${version})`;
     default:
@@ -181,7 +185,7 @@ function appendVersions(hoverMessage: MarkdownString, versions: string[], item: 
 
     const isCurrent = version === maxSatisfying;
     const encoded = encodeURI(JSON.stringify(replaceData));
-    const docs = (i === 0 || isCurrent) ? getDocsLink(lang, item.key, version) : "";
+    const docs = (i === 0 || isCurrent) ? (' ' + getDocsLink(lang, item.key, version)) : "";
     const vulnText = v?.length ? decorationPreferences.vulnText.replace("${count}", `${v?.length}`) : "";
     const command = `${isCurrent ? "**" : ""}[${version}](command:${Configs.REPLACE_VERSIONS}?${encoded})${docs}${isCurrent ? "**" : ""}  ${vulnText}`;
     hoverMessage.appendMarkdown("\n * ");

@@ -36,6 +36,9 @@
     "pypi",
     "pip",
     "npm",
+    "php",
+    "packagist",
+    "composer",
     "cargo",
     "package",
     "dependi",
@@ -61,6 +64,8 @@
     "workspaceContains:**/go.mod",
     "onLanguage:package.json",
     "workspaceContains:**/package.json",
+    "onLanguage:composer.json",
+    "workspaceContains:**/composer.json",
     "onLanguage:requirements.txt",
     "workspaceContains:**/requirements.txt"
   ],
@@ -97,6 +102,18 @@
         ],
         "aliases": [
           "Package JSON"
+        ],
+        "extensions": [
+          ".json"
+        ]
+      },
+      {
+        "id": "json",
+        "filenames": [
+          "composer.json"
+        ],
+        "aliases": [
+          "Composer JSON"
         ],
         "extensions": [
           ".json"
@@ -185,6 +202,21 @@
             "default": true,
             "description": "Exclude unstable versions from NPM package lists.",
             "order": 11
+          },
+          "dependi.php.indexServerURL": {
+            "type": "string",
+            "scope": "resource",
+            "description": "The URL for the PHP package index server.",
+            "format": "url",
+            "default": "https://repo.packagist.org",
+            "order": 12
+          },
+          "dependi.php.excludeUnstableVersions": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": true,
+            "description": "Exclude unstable versions from PHP package lists.",
+            "order": 13
           },
           "dependi.go.indexServerURL": {
             "type": "string",
