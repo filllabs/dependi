@@ -1,6 +1,14 @@
 # Change Log
 
 All notable changes to the "dependi" extension will be documented in this file.
+## 0.7.3
+
+### Bug Fixes
+
+- Fixed vulnerability report generate command bug([#30](https://github.com/filllabs/dependi/pull/30))
+
+- Fixed duplicate slashes in npm registry url([#31](https://github.com/filllabs/dependi/pull/31) Thanks to [Opportunity](https://github.com/OpportunityLiu))
+
 ## 0.7.2
 
 ### Other Changes
