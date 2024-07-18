@@ -20,8 +20,8 @@ export async function getRepo(): Promise<{ repo: Repository }> {
     if (!activeEditor) {
         throw new Error("Active editor not found");
     }
-    const activeFilePath = activeEditor.document.uri.path
-    const repo = repos.find((repo) => activeFilePath.includes(repo.rootUri.path))!;
+    const activeFilePath = activeEditor.document.uri.fsPath;
+    const repo = repos.find((repo) => activeFilePath.includes(repo.rootUri.fsPath))!;
 
     return { repo };
 }
