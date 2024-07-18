@@ -26,8 +26,8 @@ import { CargoTomlListener } from "./CargoTomlListener";
 import { DependiListener } from "./DependiListener";
 import { GoModListener } from "./GoModListener";
 import { NpmListener } from "./NpmListener";
-import { PypiListener } from "./PypiListener";
 import { PhpListener } from './PhpListener';
+import { PypiListener } from "./PypiListener";
 
 export interface Listener {
   fetcher: Fetcher;
@@ -42,30 +42,39 @@ export default async function listener(editor: TextEditor | undefined): Promise<
     let ignoreUnstablesKey = "";
     switch (CurrentLanguage) {
       case Language.Rust:
+        if (!Settings.rust.enabled)
+          return;
         ignoreUnstablesKey = Configs.RUST_IGNORE_UNSTABLES;
         listener = new CargoTomlListener(
           new CratesFetcher(Settings.rust.index, ignoreUnstablesKey, Configs.RUST_INDEX_SERVER_URL),
           new CargoTomlParser());
         break;
       case Language.Golang:
+        if (!Settings.go.enabled)
+          return;
         ignoreUnstablesKey = Configs.GO_IGNORE_UNSTABLES;
         listener = new GoModListener(
           new GoProxyFetcher(Settings.go.index, ignoreUnstablesKey, Configs.GO_INDEX_SERVER_URL),
           new GoModParser());
         break;
       case Language.JS:
+        if (!Settings.npm.enabled)
+          return;
         ignoreUnstablesKey = Configs.NPM_IGNORE_UNSTABLES;
         listener = new NpmListener(
           new NpmFetcher(Settings.npm.index, ignoreUnstablesKey, Configs.NPM_INDEX_SERVER_URL),
           new NpmParser());
         break;
       case Language.PHP:
-        ignoreUnstablesKey = Configs.PHP_IGNORE_UNSTABLES;
+        if (!Settings.php.enabled)
+          ignoreUnstablesKey = Configs.PHP_IGNORE_UNSTABLES;
         listener = new PhpListener(
           new PhpFetcher(Settings.php.index, ignoreUnstablesKey, Configs.PHP_INDEX_SERVER_URL),
           new PhpParser());
         break;
       case Language.Python:
+        if (!Settings.python.enabled)
+          return;
         ignoreUnstablesKey = Configs.PYTHON_IGNORE_UNSTABLES;
         listener = new PypiListener(
           new PypiFetcher(Settings.python.index, ignoreUnstablesKey, Configs.PYTHON_INDEX_SERVER_URL),

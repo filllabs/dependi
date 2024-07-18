@@ -4,7 +4,6 @@ Dependi is a comprehensive dependency management extension that helps developers
 
 [Install](https://www.dependi.io/download) Dependi via VSCode or [Dependi.io](https://www.dependi.io)
 
-
 When you install Dependi in Visual Studio Code, 2 options are available :
 
 - Dependi Core: Provides essential dependency management for Rust, Go, JavaScript, TypeScript and Python projects. Free to use with no subscription required.
@@ -55,14 +54,21 @@ While Dependi works out-of-the-box without any configuration, we also offer a fe
 
 - `dependi.apiURL`: The URL for the Dependi API server.
 - `dependi.apiKey`: API key for accessing enhanced features.
+- `dependi.rust.enabled`: Enable Rust package management.
 - `dependi.rust.indexServerURL`: The URL for the Rust package index server.
 - `dependi.rust.excludeUnstableVersions`: Exclude unstable versions from Rust package lists.
+- `dependi.npm.enabled`: Enable NPM package management.
 - `dependi.npm.indexServerURL`: The URL for the NPM package index server.
 - `dependi.npm.excludeUnstableVersions`: Exclude unstable versions from NPM package lists.
+- `dependi.go.enabled`: Enable Go package management.
 - `dependi.go.indexServerURL`: The URL for the Go package index server.
 - `dependi.go.excludeUnstableVersions`: Exclude unstable versions from Go package lists.
+- `dependi.python.enabled`: Enable Python package management.
 - `dependi.python.indexServerURL`: The URL for the Python package index server.
 - `dependi.python.excludeUnstableVersions`: Exclude unstable versions from Python package lists.
+- `dependi.php.enabled`: Enable PHP package management.
+- `dependi.php.indexServerURL`: The URL for the PHP package index server.
+- `dependi.php.excludeUnstableVersions`: Exclude unstable versions from PHP package lists.
 - `dependi.vulnerability.enabled`: Enable checking for vulnerabilities in dependencies.
 - `dependi.vulnerability.ghsa.enabled`: Include GitHub Security Advisory vulnerabilities in checks.
 - `dependi.vulnerability.osvQueryURL.batch`: The URL for batch querying vulnerabilities via OSV.

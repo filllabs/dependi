@@ -173,6 +173,13 @@
             "description": "API key for accessing enhanced features.",
             "order": 2
           },
+          "dependi.rust.enabled": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": true,
+            "description": "Enable checking for Rust dependencies.",
+            "order": 4
+          },
           "dependi.rust.indexServerURL": {
             "type": "string",
             "scope": "resource",
@@ -187,6 +194,13 @@
             "default": true,
             "description": "Exclude unstable versions from Rust package lists.",
             "order": 6
+          },
+          "dependi.npm.enabled": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": true,
+            "description": "Enable checking for Npm dependencies.",
+            "order": 9
           },
           "dependi.npm.indexServerURL": {
             "type": "string",
@@ -203,20 +217,12 @@
             "description": "Exclude unstable versions from NPM package lists.",
             "order": 11
           },
-          "dependi.php.indexServerURL": {
-            "type": "string",
-            "scope": "resource",
-            "description": "The URL for the PHP package index server.",
-            "format": "url",
-            "default": "https://repo.packagist.org",
-            "order": 12
-          },
-          "dependi.php.excludeUnstableVersions": {
+          "dependi.go.enabled": {
             "type": "boolean",
             "scope": "resource",
             "default": true,
-            "description": "Exclude unstable versions from PHP package lists.",
-            "order": 13
+            "description": "Enable checking for Go dependencies.",
+            "order": 14
           },
           "dependi.go.indexServerURL": {
             "type": "string",
@@ -233,6 +239,13 @@
             "description": "Exclude unstable versions from Go package lists.",
             "order": 16
           },
+          "dependi.python.enabled": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": true,
+            "description": "Enable checking for Python dependencies.",
+            "order": 19
+          },
           "dependi.python.indexServerURL": {
             "type": "string",
             "scope": "resource",
@@ -247,6 +260,28 @@
             "default": true,
             "description": "Exclude unstable versions from Python package lists.",
             "order": 21
+          },
+          "dependi.php.enabled": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": true,
+            "description": "Enable checking for PHP dependencies.",
+            "order": 22
+          },
+          "dependi.php.indexServerURL": {
+            "type": "string",
+            "scope": "resource",
+            "description": "The URL for the PHP package index server.",
+            "format": "url",
+            "default": "https://repo.packagist.org",
+            "order": 23
+          },
+          "dependi.php.excludeUnstableVersions": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": true,
+            "description": "Exclude unstable versions from PHP package lists.",
+            "order": 24
           },
           "dependi.vulnerability.enabled": {
             "type": "boolean",
