@@ -14,7 +14,13 @@ export abstract class Fetcher {
       openSettingsDialog(urlKey, "Please set the URL for the fetcher");
       return;
     }
-    this.URL = url;
+    // delete double slashes in the URL
+    let clean_url = url.replace("///", "");
+    // delete trailing slashes in the URL
+    if (clean_url.endsWith("/")) {
+      clean_url = clean_url.slice(0, -1);
+    }
+    this.URL = clean_url;
     this.ignoreUnstable = this.ignoreUnstable;
   }
 }
