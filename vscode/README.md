@@ -57,18 +57,23 @@ While Dependi works out-of-the-box without any configuration, we also offer a fe
 - `dependi.rust.enabled`: Enable Rust package management.
 - `dependi.rust.indexServerURL`: The URL for the Rust package index server.
 - `dependi.rust.excludeUnstableVersions`: Exclude unstable versions from Rust package lists.
+- `dependi.rust.ignoreLinePattern`: Matches lines according to the position of `*`. For example: `text*`, `*text`, `*text*`.
 - `dependi.npm.enabled`: Enable NPM package management.
 - `dependi.npm.indexServerURL`: The URL for the NPM package index server.
 - `dependi.npm.excludeUnstableVersions`: Exclude unstable versions from NPM package lists.
+- `dependi.npm.ignoreLinePattern`: Matches lines according to the position of `*`. For example: `text*`, `*text`, `*text*`.
 - `dependi.go.enabled`: Enable Go package management.
 - `dependi.go.indexServerURL`: The URL for the Go package index server.
 - `dependi.go.excludeUnstableVersions`: Exclude unstable versions from Go package lists.
+- `dependi.go.ignoreLinePattern`: Matches lines according to the position of `*`. For example: `text*`, `*text`, `*text*`.
 - `dependi.python.enabled`: Enable Python package management.
 - `dependi.python.indexServerURL`: The URL for the Python package index server.
 - `dependi.python.excludeUnstableVersions`: Exclude unstable versions from Python package lists.
+- `dependi.python.ignoreLinePattern`: Matches lines according to the position of `*`. For example: `text*`, `*text`, `*text*`.
 - `dependi.php.enabled`: Enable PHP package management.
 - `dependi.php.indexServerURL`: The URL for the PHP package index server.
 - `dependi.php.excludeUnstableVersions`: Exclude unstable versions from PHP package lists.
+- `dependi.php.ignoreLinePattern`: Matches lines according to the position of `*`. For example: `text*`, `*text`, `*text*`.
 - `dependi.vulnerability.enabled`: Enable checking for vulnerabilities in dependencies.
 - `dependi.vulnerability.ghsa.enabled`: Include GitHub Security Advisory vulnerabilities in checks.
 - `dependi.vulnerability.osvQueryURL.batch`: The URL for batch querying vulnerabilities via OSV.
