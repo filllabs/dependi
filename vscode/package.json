@@ -195,6 +195,13 @@
             "description": "Exclude unstable versions from Rust package lists.",
             "order": 6
           },
+          "dependi.rust.ignoreLinePattern": {
+            "type": "string",
+            "scope": "resource",
+            "default": "",
+            "description": "Matches lines according to the position of * forex.: 'text*', '*text', '*text*'",
+            "order": 7
+          },
           "dependi.npm.enabled": {
             "type": "boolean",
             "scope": "resource",
@@ -216,6 +223,12 @@
             "default": true,
             "description": "Exclude unstable versions from NPM package lists.",
             "order": 11
+          },
+          "dependi.npm.ignoreLinePattern": {
+            "type": "string",
+            "scope": "resource",
+            "default": "",
+            "description": "Matches lines according to the position of * forex.: 'text*', '*text', '*text*'"
           },
           "dependi.go.enabled": {
             "type": "boolean",
@@ -239,6 +252,13 @@
             "description": "Exclude unstable versions from Go package lists.",
             "order": 16
           },
+          "dependi.go.ignoreLinePattern": {
+            "type": "string",
+            "scope": "resource",
+            "default": "",
+            "description": "Matches lines according to the position of * forex.: 'text*', '*text', '*text*'",
+            "order": 17
+          },
           "dependi.python.enabled": {
             "type": "boolean",
             "scope": "resource",
@@ -261,12 +281,19 @@
             "description": "Exclude unstable versions from Python package lists.",
             "order": 21
           },
+          "dependi.python.ignoreLinePattern": {
+            "type": "string",
+            "scope": "resource",
+            "default": "",
+            "description": "Matches lines according to the position of * forex.: 'text*', '*text', '*text*'",
+            "order": 22
+          },
           "dependi.php.enabled": {
             "type": "boolean",
             "scope": "resource",
             "default": true,
             "description": "Enable checking for PHP dependencies.",
-            "order": 22
+            "order": 23
           },
           "dependi.php.indexServerURL": {
             "type": "string",
@@ -274,28 +301,35 @@
             "description": "The URL for the PHP package index server.",
             "format": "url",
             "default": "https://repo.packagist.org",
-            "order": 23
+            "order": 24
           },
           "dependi.php.excludeUnstableVersions": {
             "type": "boolean",
             "scope": "resource",
             "default": true,
             "description": "Exclude unstable versions from PHP package lists.",
-            "order": 24
+            "order": 25
+          },
+          "dependi.php.ignoreLinePattern": {
+            "type": "string",
+            "scope": "resource",
+            "default": "",
+            "description": "Matches lines according to the position of * forex.: 'text*', '*text', '*text*'",
+            "order": 26
           },
           "dependi.vulnerability.enabled": {
             "type": "boolean",
             "scope": "resource",
             "default": true,
             "description": "Enable checking for vulnerabilities in dependencies.",
-            "order": 25
+            "order": 27
           },
           "dependi.vulnerability.ghsa.enabled": {
             "type": "boolean",
             "scope": "resource",
             "default": false,
             "description": "Include GitHub Security Advisory vulnerabilities in checks.",
-            "order": 26
+            "order": 28
           },
           "dependi.vulnerability.osvQueryURL.batch": {
             "type": "string",
@@ -303,7 +337,7 @@
             "description": "The URL for batch querying vulnerabilities via OSV.",
             "format": "url",
             "default": "https://api.osv.dev/v1/querybatch",
-            "order": 27
+            "order": 29
           },
           "dependi.vulnerability.osvQueryURL.single": {
             "type": "string",
@@ -311,7 +345,7 @@
             "description": "The URL for querying single vulnerabilities via OSV.",
             "format": "url",
             "default": "https://api.osv.dev/v1/query",
-            "order": 28
+            "order": 30
           }
         }
       },

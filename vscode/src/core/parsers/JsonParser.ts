@@ -1,6 +1,8 @@
 import { TextDocument, TextLine } from "vscode";
 import Item from "../Item";
 import { isQuote, shouldIgnoreLine } from "./utils";
+import { Settings } from "../../config";
+import { CurrentLanguageConfig } from "../Language";
 
 class State {
   inDependencies: boolean;
@@ -22,9 +24,10 @@ export class JsonParser {
 	) {}
 
   parse(doc: TextDocument): Item[] {
+    const pattern = CurrentLanguageConfig === "npm" ? Settings.npm.ignoreLinePattern : Settings.php.ignoreLinePattern;
     for (let row = 0; row < doc.lineCount; row++) {
       let line = doc.lineAt(row);
-      if (shouldIgnoreLine(line)) {
+      if (shouldIgnoreLine(line, pattern)) {
         continue;
       }
       if (this.state.bypass) {
@@ -47,19 +50,19 @@ export class JsonParser {
     return this.state.items;
   }
 
-	addDependency(item: Item) {
-		item.createRange();
-		item.createDecoRange();
-		this.state.items.push(item);
-	}
+  addDependency(item: Item) {
+    item.createRange();
+    item.createDecoRange();
+    this.state.items.push(item);
+  }
 
-	isDependencies(line: TextLine) {
-		const start = line.firstNonWhitespaceCharacterIndex;
-		return (
+  isDependencies(line: TextLine) {
+    const start = line.firstNonWhitespaceCharacterIndex;
+    return (
 			line.text.substring(start, start + this.depsKey.length + 3) === `"${this.depsKey}":` ||
 			line.text.substring(start, start + this.devDepsKey.length + 3) === `"${this.devDepsKey}":`
-		);
-	}
+    );
+  }
 }
 
 function isBlockEnd(line: TextLine): boolean {

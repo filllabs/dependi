@@ -8,22 +8,27 @@ export enum Configs {
   RUST_ENABLED = `rust.enabled`,
   RUST_INDEX_SERVER_URL = `rust.indexServerURL`,
   RUST_IGNORE_UNSTABLES = `rust.excludeUnstableVersions`,
+  RUST_IGNORE_LINE_PATTERN = `rust.ignoreLinePattern`,
 
   NPM_ENABLED = `npm.enabled`,
   NPM_INDEX_SERVER_URL = `npm.indexServerURL`,
   NPM_IGNORE_UNSTABLES = `npm.excludeUnstableVersions`,
+  NPM_IGNORE_LINE_PATTERN = `npm.ignoreLinePattern`,
 
   PHP_ENABLED = `php.enabled`,
   PHP_INDEX_SERVER_URL = `php.indexServerURL`,
   PHP_IGNORE_UNSTABLES = `php.excludeUnstableVersions`,
+  PHP_IGNORE_LINE_PATTERN = `php.ignoreLinePattern`,
 
   GO_ENABLED = `go.enabled`,
   GO_INDEX_SERVER_URL = `go.indexServerURL`,
   GO_IGNORE_UNSTABLES = `go.excludeUnstableVersions`,
+  GO_IGNORE_LINE_PATTERN = `go.ignoreLinePattern`,
 
   PYTHON_ENABLED = `python.enabled`,
   PYTHON_INDEX_SERVER_URL = `python.indexServerURL`,
   PYTHON_IGNORE_UNSTABLES = `python.excludeUnstableVersions`,
+  PYTHON_IGNORE_LINE_PATTERN = `python.ignoreLinePattern`,
 
   VULS_ENABLED = `vulnerability.enabled`,
   VULS_GHSA_ENABLED = `vulnerability.ghsa.enabled`,
@@ -62,27 +67,32 @@ export const Settings = {
   rust: {
     enabled: true,
     index: "",
-    ignoreUnstable: false
+    ignoreUnstable: false,
+    ignoreLinePattern: ""
   },
   npm: {
     enabled: true,
     index: "",
-    ignoreUnstable: false
+    ignoreUnstable: false,
+    ignoreLinePattern: ""
   },
   php: {
     enabled: true,
     index: "",
-    ignoreUnstable: false
+    ignoreUnstable: false,
+    ignoreLinePattern: ""
   },
   go: {
     enabled: true,
     index: "",
-    ignoreUnstable: false
+    ignoreUnstable: false,
+    ignoreLinePattern: ""
   },
   python: {
     enabled: true,
     index: "",
-    ignoreUnstable: false
+    ignoreUnstable: false,
+    ignoreLinePattern: ""
   },
   vulnerability: {
     enabled: false,
@@ -123,22 +133,27 @@ export const Settings = {
     this.rust.enabled = config.get<boolean>(Configs.RUST_ENABLED) ?? true;
     this.rust.index = config.get<string>(Configs.RUST_INDEX_SERVER_URL) || "https://index.crates.io";
     this.rust.ignoreUnstable = config.get<boolean>(Configs.RUST_IGNORE_UNSTABLES) ?? true;
+    this.rust.ignoreLinePattern = config.get<string>(Configs.RUST_IGNORE_LINE_PATTERN) || "";
 
     this.npm.enabled = config.get<boolean>(Configs.NPM_ENABLED) ?? true;
     this.npm.index = config.get<string>(Configs.NPM_INDEX_SERVER_URL) || "https://registry.npmjs.org";
     this.npm.ignoreUnstable = config.get<boolean>(Configs.NPM_IGNORE_UNSTABLES) ?? true;
+    this.npm.ignoreLinePattern = config.get<string>(Configs.NPM_IGNORE_LINE_PATTERN) || "";
 
     this.php.enabled = config.get<boolean>(Configs.PHP_ENABLED) ?? true;
     this.php.index = config.get<string>(Configs.PHP_INDEX_SERVER_URL) || "https://repo.packagist.org";
     this.php.ignoreUnstable = config.get<boolean>(Configs.PHP_IGNORE_UNSTABLES) ?? true;
+    this.php.ignoreLinePattern = config.get<string>(Configs.PHP_IGNORE_LINE_PATTERN) || "";
 
     this.go.enabled = config.get<boolean>(Configs.GO_ENABLED) ?? true;
     this.go.index = config.get<string>(Configs.GO_INDEX_SERVER_URL) || "https://proxy.golang.org";
     this.go.ignoreUnstable = config.get<boolean>(Configs.GO_IGNORE_UNSTABLES) ?? true;
+    this.go.ignoreLinePattern = config.get<string>(Configs.GO_IGNORE_LINE_PATTERN) || "";
 
     this.python.enabled = config.get<boolean>(Configs.PYTHON_ENABLED) ?? true;
     this.python.index = config.get<string>(Configs.PYTHON_INDEX_SERVER_URL) || "https://pypi.org/pypi";
     this.python.ignoreUnstable = config.get<boolean>(Configs.PYTHON_IGNORE_UNSTABLES) ?? true;
+    this.python.ignoreLinePattern = config.get<string>(Configs.PYTHON_IGNORE_LINE_PATTERN) || "";
 
     this.vulnerability.enabled = config.get<boolean>(Configs.VULS_ENABLED) ?? true;
     this.vulnerability.ghsa = config.get<boolean>(Configs.VULS_GHSA_ENABLED) ?? false;

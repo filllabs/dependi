@@ -25,6 +25,7 @@ export function isDisabledLine(line: string) {
 
 export function shouldIgnoreLine(
   line: TextLine,
+  pattern: string,
   commandChar?: string[]
 ): boolean {
   if (line.isEmptyOrWhitespace) {
@@ -41,6 +42,24 @@ export function shouldIgnoreLine(
   }
   if (isGitConflictLine(line.text)) {
     return true;
+  }
+  if (isDisablePatternLine(line.text,pattern)) {
+    return true;
+  }
+  return false;
+}
+
+export function isDisablePatternLine(line: string, pattern: string) {
+  line = line.trim();
+  if (pattern.startsWith("*") && pattern.endsWith("*")) {
+    const trimmedPattern = pattern.slice(1, -1);
+    return line.includes(trimmedPattern);
+  } else if (pattern.startsWith("*")) {
+    const trimmedPattern = pattern.slice(1);
+    return line.endsWith(trimmedPattern);
+  } else if (pattern.endsWith("*")) {
+    const trimmedPattern = pattern.slice(0, -1);
+    return line.startsWith(trimmedPattern);
   }
   return false;
 }

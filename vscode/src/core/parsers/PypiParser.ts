@@ -1,6 +1,7 @@
 import { TextDocument, TextLine } from "vscode";
 import Item from "../Item";
 import { isQuote, shouldIgnoreLine } from "./utils";
+import { Settings } from "../../config";
 
 class State {
   items: Item[];
@@ -16,7 +17,7 @@ export class PypiParser {
     let state = new State();
     for (let row = 0; row < doc.lineCount; row++) {
       let line = doc.lineAt(row);
-      if (shouldIgnoreLine(line, ["#", "-", "."])) {
+      if (shouldIgnoreLine(line, Settings.python.ignoreLinePattern, ["#", "-", "."])) {
         continue;
       }
       if (state.bypass) {
