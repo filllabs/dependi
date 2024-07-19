@@ -199,7 +199,7 @@
             "type": "string",
             "scope": "resource",
             "default": "",
-            "description": "Matches lines according to the position of * forex.: 'text*', '*text', '*text*'",
+            "markdownDescription": "Matches lines according to the position of `*`. For example: `text*`, `*text`, `*text*`.",
             "order": 7
           },
           "dependi.npm.enabled": {
@@ -228,7 +228,7 @@
             "type": "string",
             "scope": "resource",
             "default": "",
-            "description": "Matches lines according to the position of * forex.: 'text*', '*text', '*text*'"
+            "markdownDescription": "Matches lines according to the position of `*`. For example: `text*`, `*text`, `*text*`."
           },
           "dependi.go.enabled": {
             "type": "boolean",
@@ -256,7 +256,7 @@
             "type": "string",
             "scope": "resource",
             "default": "",
-            "description": "Matches lines according to the position of * forex.: 'text*', '*text', '*text*'",
+            "markdownDescription": "Matches lines according to the position of `*`. For example: `text*`, `*text`, `*text*`.",
             "order": 17
           },
           "dependi.python.enabled": {
@@ -285,7 +285,7 @@
             "type": "string",
             "scope": "resource",
             "default": "",
-            "description": "Matches lines according to the position of * forex.: 'text*', '*text', '*text*'",
+            "markdownDescription": "Matches lines according to the position of `*`. For example: `text*`, `*text`, `*text*`.",
             "order": 22
           },
           "dependi.php.enabled": {
@@ -314,7 +314,7 @@
             "type": "string",
             "scope": "resource",
             "default": "",
-            "description": "Matches lines according to the position of * forex.: 'text*', '*text', '*text*'",
+            "markdownDescription": "Matches lines according to the position of `*`. For example: `text*`, `*text`, `*text*`.",
             "order": 26
           },
           "dependi.vulnerability.enabled": {
