@@ -17,9 +17,7 @@ export function isQuote(ch: string) {
   return ch === '"' || ch === "'";
 }
 
-export function isComment(ch: string, commentChar: string) {
-  return ch === commentChar;
-}
+
 
 export function isDisabledLine(line: string) {
   return line.includes("dependi:") && line.includes("disable-check");
@@ -27,17 +25,16 @@ export function isDisabledLine(line: string) {
 
 export function shouldIgnoreLine(
   line: TextLine,
-  commandChar?: string
+  commandChar?: string[]
 ): boolean {
   if (line.isEmptyOrWhitespace) {
     return true;
   }
   let column = line.firstNonWhitespaceCharacterIndex;
   const firstChar = line.text[column];
-  if (commandChar) {
-    if (isComment(firstChar, commandChar)) {
-      return true;
-    }
+  // check if the line is a comment or unwanted line
+  if (commandChar && commandChar.includes(firstChar)) {
+    return true;
   }
   if (isDisabledLine(line.text)) {
     return true;

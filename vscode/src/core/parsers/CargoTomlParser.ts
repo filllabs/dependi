@@ -28,7 +28,7 @@ export class CargoTomlParser implements Parser {
     const state = new State();
     for (let row = 0; row < doc.lineCount; row++) {
       let line = doc.lineAt(row);
-      if (shouldIgnoreLine(line, "#")) {
+      if (shouldIgnoreLine(line, ["#"])) {
         continue;
       }
       // if it is table  check if it is dependency table and its type, single or multiple
