@@ -19,7 +19,7 @@ export class GoModParser {
 
     for (let row = 0; row < doc.lineCount; row++) {
       let line = doc.lineAt(row);
-      if (shouldIgnoreLine(line, "/")) {
+      if (shouldIgnoreLine(line, ["/"])) {
         continue;
       }
       if (state.bypass) {

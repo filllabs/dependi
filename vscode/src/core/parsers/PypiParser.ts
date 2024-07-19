@@ -16,7 +16,7 @@ export class PypiParser {
     let state = new State();
     for (let row = 0; row < doc.lineCount; row++) {
       let line = doc.lineAt(row);
-      if (shouldIgnoreLine(line, "#")) {
+      if (shouldIgnoreLine(line, ["#", "-", "."])) {
         continue;
       }
       if (state.bypass) {
@@ -169,8 +169,8 @@ export function possibleLatestVersion(
       );
       return filteredVersions.length > 0
         ? filteredVersions.reduce((prev, curr) =>
-            compareVersions(prev, curr) >= 0 ? prev : curr
-          )
+          compareVersions(prev, curr) >= 0 ? prev : curr
+        )
         : null;
     }
     return exactVersionConstraint.slice(2);
@@ -184,8 +184,8 @@ export function possibleLatestVersion(
     );
     return filteredVersions.length > 0
       ? filteredVersions.reduce((prev, curr) =>
-          compareVersions(prev, curr) >= 0 ? prev : curr
-        )
+        compareVersions(prev, curr) >= 0 ? prev : curr
+      )
       : null;
   } else {
     const possibleVersions = versions.filter((version) =>
@@ -193,8 +193,8 @@ export function possibleLatestVersion(
     );
     return possibleVersions.length > 0
       ? possibleVersions.reduce((prev, curr) =>
-          compareVersions(prev, curr) >= 0 ? prev : curr
-        )
+        compareVersions(prev, curr) >= 0 ? prev : curr
+      )
       : null;
   }
 }

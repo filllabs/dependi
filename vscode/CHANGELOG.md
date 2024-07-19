@@ -12,7 +12,11 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 - Fetching dependencies notification silenced to status bar spinner [Issue #34](https://github.com/filllabs/dependi/issues/34)
 
-- GHSA vulnerability is now enabled as deault.
+- GHSA vulnerability is now enabled as default.
+
+### Bug Fixes
+
+- requirements.txt file parsing bug fixed [Issue #23](https://github.com/filllabs/dependi/issues/23)
 
 ## 0.7.3
 
