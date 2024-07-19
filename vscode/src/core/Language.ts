@@ -29,13 +29,13 @@ export function setLanguage(file?: string) {
             CurrentLanguage = Language.JS;
             CurrentLanguageConfig = "npm";
             return Language.JS;
-        case "composer.json":
-            CurrentLanguage = Language.PHP;
-            CurrentLanguageConfig = "php";
-            return Language.PHP;
         case "requirements.txt":
             CurrentLanguage = Language.Python;
             CurrentLanguageConfig = "python";
             return Language.Python;
+        case "composer.json":
+            CurrentLanguage = Language.PHP;
+            CurrentLanguageConfig = "php";
+            return Language.PHP;
     }
 };

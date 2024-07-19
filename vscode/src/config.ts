@@ -140,8 +140,8 @@ export const Settings = {
     this.python.index = config.get<string>(Configs.PYTHON_INDEX_SERVER_URL) || "https://pypi.org/pypi";
     this.python.ignoreUnstable = config.get<boolean>(Configs.PYTHON_IGNORE_UNSTABLES) ?? true;
 
-    this.vulnerability.enabled = config.get<boolean>(Configs.VULS_ENABLED) || true;
-    this.vulnerability.ghsa = config.get<boolean>(Configs.VULS_GHSA_ENABLED) || false;
+    this.vulnerability.enabled = config.get<boolean>(Configs.VULS_ENABLED) ?? true;
+    this.vulnerability.ghsa = config.get<boolean>(Configs.VULS_GHSA_ENABLED) ?? false;
     this.vulnerability.osvBatch = config.get<string>(Configs.VULS_OSV_BATCH_URL) || "https://api.osv.dev/v1/querybatch";
     this.vulnerability.osvSingle = config.get<string>(Configs.VULS_OSV_URL) || "https://api.osv.dev/v1/query";
 
