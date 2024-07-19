@@ -1,12 +1,13 @@
-import Item from "../Item";
-import Dependency from "../Dependency";
-import { Fetcher } from "./fetcher";
-import { StatusBar } from "../../ui/status-bar";
-import * as API from "../../api/index/pypi-index-server";
 import { CrateMetadatas } from "../../api/crateMetadatas";
-import compareVersions from "../../semver/compareVersions";
+import * as API from "../../api/index/pypi-index-server";
 import { queryMultiplePackageVulns } from "../../api/osv/vulnerability-service";
+import { Settings } from "../../config";
+import compareVersions from "../../semver/compareVersions";
+import { StatusBar } from "../../ui/status-bar";
+import Dependency from "../Dependency";
+import Item from "../Item";
 import { possibleLatestVersion, splitByComma } from "../parsers/PypiParser";
+import { Fetcher } from "./fetcher";
 
 export class PypiFetcher extends Fetcher {
   async versions(dependencies: Item[]): Promise<Dependency[]> {
@@ -19,10 +20,11 @@ export class PypiFetcher extends Fetcher {
     versions: (name: string, indexServerURL: string) => Promise<CrateMetadatas>,
     indexServerURL: string
   ): (i: Item) => Promise<Dependency> {
+    const base = this;
     return async function (item: Item): Promise<Dependency> {
       return versions(item.key, indexServerURL)
         .then((dep: any) => {
-          return mapVersions(dep, item);
+          return base.mapVersions(dep, item);
         })
         .catch((error: Error) => {
           console.error(error);
@@ -41,27 +43,38 @@ export class PypiFetcher extends Fetcher {
     return packageVulns;
   }
   checkPreRelease(version: string): boolean {
-    throw new Error("Method not implemented.");
+    if (!Settings.python.ignoreUnstable) return false;
+    return (
+      version.indexOf("-alpha") !== -1 ||
+      version.indexOf("-beta") !== -1 ||
+      version.indexOf("-rc") !== -1 ||
+      version.indexOf("-SNAPSHOT") !== -1 ||
+      version.indexOf("-dev") !== -1 ||
+      version.indexOf("-preview") !== -1 ||
+      version.indexOf("-experimental") !== -1 ||
+      version.indexOf("-canary") !== -1 ||
+      version.indexOf("-pre") !== -1
+    );
+  }
+  mapVersions(dep: Dependency, item?: Item): Dependency {
+    const versions = dep
+      .versions!.filter((i: string) => i !== "" && i !== undefined && !this.checkPreRelease(i))
+      .sort(compareVersions)
+      .reverse();
+    if (item) {
+      const constrains = splitByComma(item.value ?? "");
+      const currVersion = possibleLatestVersion(constrains, versions);
+      item.value = currVersion ? currVersion : "";
+      return {
+        item,
+        versions,
+      };
+    }
+    const constrains = splitByComma(dep.item.value ?? "");
+    const currVersion = possibleLatestVersion(constrains, versions);
+    dep.item.value = currVersion ? currVersion : "";
+    dep.versions = versions;
+    return dep;
   }
 }
 
-export function mapVersions(dep: Dependency, item?: Item): Dependency {
-  const versions = dep
-    .versions!.filter((i: string) => i !== "" && i !== undefined)
-    .sort(compareVersions)
-    .reverse();
-  if (item) {
-    const constrains = splitByComma(item.value ?? "");
-    const currVersion = possibleLatestVersion(constrains, versions);
-    item.value = currVersion ? currVersion : "";
-    return {
-      item,
-      versions,
-    };
-  }
-  const constrains = splitByComma(dep.item.value ?? "");
-  const currVersion = possibleLatestVersion(constrains, versions);
-  dep.item.value = currVersion ? currVersion : "";
-  dep.versions = versions;
-  return dep;
-}

@@ -1,11 +1,12 @@
-import Item from "../Item";
-import Dependency from "../Dependency";
-import { StatusBar } from "../../ui/status-bar";
-import * as API from "../../api/index/sparse-index-server";
-import compareVersions from "../../semver/compareVersions";
 import { CrateMetadatas } from "../../api/crateMetadatas";
-import { Fetcher } from "./fetcher";
+import * as API from "../../api/index/sparse-index-server";
 import { queryMultiplePackageVulns } from "../../api/osv/vulnerability-service";
+import { Settings } from "../../config";
+import compareVersions from "../../semver/compareVersions";
+import { StatusBar } from "../../ui/status-bar";
+import Dependency from "../Dependency";
+import Item from "../Item";
+import { Fetcher } from "./fetcher";
 
 export class CratesFetcher extends Fetcher {
   async versions(dependencies: Item[]): Promise<Dependency[]> {
@@ -23,11 +24,7 @@ export class CratesFetcher extends Fetcher {
       return versions(item.key, indexServerURL)
         .then((crate: any) => {
           const versions = crate.versions
-            .reduce((result: any[], item: string) => {
-              const isPreRelease = base.checkPreRelease(item);
-              if (!isPreRelease) result.push(item);
-              return result;
-            }, [])
+            .filter((i: string) => i !== "" && i !== undefined && !base.checkPreRelease(i))
             .sort(compareVersions)
             .reverse();
           return {
@@ -56,6 +53,7 @@ export class CratesFetcher extends Fetcher {
   }
 
   checkPreRelease(version: string): boolean {
+    if (!Settings.rust.ignoreUnstable) return false;
     return (
       version.indexOf("-alpha") !== -1 ||
       version.indexOf("-beta") !== -1 ||
