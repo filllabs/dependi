@@ -2,6 +2,7 @@ import { TextDocument, TextLine } from "vscode";
 import Item from "../Item";
 import { Parser } from "./parser";
 import { isQuote, shouldIgnoreLine } from "./utils";
+import { Settings } from "../../config";
 
 class State {
   inInlineTable: boolean;
@@ -28,7 +29,7 @@ export class CargoTomlParser implements Parser {
     const state = new State();
     for (let row = 0; row < doc.lineCount; row++) {
       let line = doc.lineAt(row);
-      if (shouldIgnoreLine(line, ["#"])) {
+      if (shouldIgnoreLine(line, Settings.rust.ignoreLinePattern, ["#"])) {
         continue;
       }
       // if it is table  check if it is dependency table and its type, single or multiple

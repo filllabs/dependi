@@ -1,6 +1,7 @@
 import { TextDocument, TextLine } from "vscode";
 import Item from "../Item";
 import { isQuote, shouldIgnoreLine } from "./utils";
+import { Settings } from "../../config";
 
 class State {
   inRequire: boolean;
@@ -19,7 +20,7 @@ export class GoModParser {
 
     for (let row = 0; row < doc.lineCount; row++) {
       let line = doc.lineAt(row);
-      if (shouldIgnoreLine(line, ["/"])) {
+      if (shouldIgnoreLine(line, Settings.go.ignoreLinePattern, ["/"])) {
         continue;
       }
       if (state.bypass) {

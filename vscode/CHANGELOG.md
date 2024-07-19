@@ -14,6 +14,8 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 - GHSA vulnerability is now enabled as default.
 
+- Added support to ignore lines based on specified patterns [Issue #35](https://github.com/filllabs/dependi/issues/35)
+
 ### Bug Fixes
 
 - requirements.txt file parsing bug fixed [Issue #23](https://github.com/filllabs/dependi/issues/23)
