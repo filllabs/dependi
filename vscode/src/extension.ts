@@ -86,7 +86,7 @@ async function configure(context: ExtensionContext) {
   } else if (lt.shouldShowWelcomePage(context.extension.packageJSON.version)) {
     console.debug("Updated version");
     // TODO: open different page for updated version
-    WelcomePagePanel.render(context);
+    // WelcomePagePanel.render(context);
     await lt.setShownVersion(context.extension.packageJSON.version);
   }
 }

@@ -20,6 +20,8 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 - requirements.txt file parsing bug fixed [Issue #23](https://github.com/filllabs/dependi/issues/23)
 
+- Welcome Page silenced on updates.
+
 ## 0.7.3
 
 ### Bug Fixes
