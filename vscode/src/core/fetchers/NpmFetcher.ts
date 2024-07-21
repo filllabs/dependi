@@ -1,12 +1,13 @@
 
-import Item from "../Item";
-import Dependency from "../Dependency";
-import { Fetcher } from "./fetcher";
-import { StatusBar } from "../../ui/status-bar";
-import * as API from "../../api/index/npm-index-server";
 import { CrateMetadatas } from "../../api/crateMetadatas";
-import compareVersions from "../../semver/compareVersions";
+import * as API from "../../api/index/npm-index-server";
 import { queryMultiplePackageVulns } from "../../api/osv/vulnerability-service";
+import { Settings } from "../../config";
+import compareVersions from "../../semver/compareVersions";
+import { StatusBar } from "../../ui/status-bar";
+import Dependency from "../Dependency";
+import Item from "../Item";
+import { Fetcher } from "./fetcher";
 
 export class NpmFetcher extends Fetcher {
 
@@ -20,10 +21,11 @@ export class NpmFetcher extends Fetcher {
 
 
   transformServerResponse(versions: (name: string, indexServerURL: string, currentVersion?: string) => Promise<CrateMetadatas>, indexServerURL: string, isLatest?: boolean): (i: Item) => Promise<Dependency> {
+    const base = this;
     return async function (item: Item): Promise<Dependency> {
       const checkVersion = isLatest ? versions(item.key, indexServerURL, item.value) : versions(item.key, indexServerURL);
       return checkVersion.then((mod: any) => {
-        const versions = mod.versions.filter((i: string) => i !== "" && i !== undefined).sort(compareVersions).reverse();
+        const versions = mod.versions.filter((i: string) => i !== "" && i !== undefined && !base.checkPreRelease(i)).sort(compareVersions).reverse();
         return {
           item,
           versions,
@@ -46,7 +48,18 @@ export class NpmFetcher extends Fetcher {
   }
 
   checkPreRelease(version: string): boolean {
-    throw new Error("Method not implemented.");
+    if (!Settings.npm.ignoreUnstable) return false;
+    return (
+      version.indexOf("-alpha") !== -1 ||
+      version.indexOf("-beta") !== -1 ||
+      version.indexOf("-rc") !== -1 ||
+      version.indexOf("-SNAPSHOT") !== -1 ||
+      version.indexOf("-dev") !== -1 ||
+      version.indexOf("-preview") !== -1 ||
+      version.indexOf("-experimental") !== -1 ||
+      version.indexOf("-canary") !== -1 ||
+      version.indexOf("-pre") !== -1
+    );
   }
 
 }
