@@ -2,6 +2,14 @@
 
 All notable changes to the "dependi" extension will be documented in this file.
 
+## 0.7.5
+
+### Bug Fixes
+
+- Update notification added for new versions instead of welcome page
+
+- Even Better TOML extension removed from dependencies
+
 ## 0.7.4
 
 ### New Features
