@@ -44,7 +44,7 @@ export function getWelcomePage(
           <div class="logo-header">
           <h1>Dependi <em>v${version}</em> </h1>
          
-          <p>Welcome to <b>Dependi</b>. Empowers developers to efficiently manage dependencies and address vulnerabilities in Rust, Go, JavaScript, and Python projects.</p>
+          <p>Welcome to <b>Dependi</b>. Empowers developers to efficiently manage dependencies and address vulnerabilities in Rust, Go, JavaScript, TypeScript, Python and PHP projects.</p>
           </div>
     </div>
     <div class="split">
