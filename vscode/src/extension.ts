@@ -4,6 +4,7 @@
  */
 import {
   ExtensionContext,
+  ProgressLocation,
   TextDocumentChangeEvent,
   window,
   workspace,
@@ -85,11 +86,21 @@ async function configure(context: ExtensionContext) {
     await lt.setShownVersion(Settings.version);
   } else if (lt.shouldShowWelcomePage(context.extension.packageJSON.version)) {
     console.debug("Updated version");
-    // TODO: open different page for updated version
-    // WelcomePagePanel.render(context);
+    window.withProgress(
+      {
+        title: "Dependi has been updated to a new version. See the [CHANGELOG!](https://github.com/filllabs/dependi/blob/main/vscode/CHANGELOG.md)",
+        cancellable: true,
+        location: ProgressLocation.Notification,
+      },
+      async () => {
+        await new Promise<void>(async (resolve, reject) => {
+          setTimeout(() => {
+            resolve();
+          }, 3000);
+        });
+      }
+    );
     await lt.setShownVersion(context.extension.packageJSON.version);
   }
 }
-
-
 
