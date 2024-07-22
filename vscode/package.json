@@ -622,7 +622,6 @@
     "semver": "7.6.2"
   },
   "extensionDependencies": [
-    "vscode.git",
-    "tamasfe.even-better-toml"
+    "vscode.git"
   ]
 }
