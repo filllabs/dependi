@@ -52,7 +52,7 @@ export class DependiFetcher extends Fetcher {
 
   mapVersions(dep: Dependency, item?: Item): Dependency {
     const versions = dep
-      .versions!.filter((i: string) => i !== "" && i !== undefined && !this.checkPreRelease(i))
+      .versions!.filter((i: string) => i !== "" && i !== undefined)
       .sort(compareVersions)
       .reverse();
     if (item) {
@@ -66,7 +66,7 @@ export class DependiFetcher extends Fetcher {
     }
     const constrains = splitByComma(dep.item.value ?? "");
     const currVersion = possibleLatestVersion(constrains, versions);
-    dep.item.value = currVersion ? currVersion : "";
+    dep.item.value = currVersion ? currVersion : dep.item.value;
     dep.versions = versions;
     return dep;
   }

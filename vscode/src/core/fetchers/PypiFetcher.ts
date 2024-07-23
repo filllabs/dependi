@@ -64,7 +64,7 @@ export class PypiFetcher extends Fetcher {
     if (item) {
       const constrains = splitByComma(item.value ?? "");
       const currVersion = possibleLatestVersion(constrains, versions);
-      item.value = currVersion ? currVersion : "";
+      item.value = currVersion ? currVersion : item.value;
       return {
         item,
         versions,
@@ -72,7 +72,7 @@ export class PypiFetcher extends Fetcher {
     }
     const constrains = splitByComma(dep.item.value ?? "");
     const currVersion = possibleLatestVersion(constrains, versions);
-    dep.item.value = currVersion ? currVersion : "";
+    dep.item.value = currVersion ? currVersion : dep.item.value;
     dep.versions = versions;
     return dep;
   }

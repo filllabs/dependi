@@ -37,5 +37,9 @@ export function setLanguage(file?: string) {
             CurrentLanguage = Language.PHP;
             CurrentLanguageConfig = "php";
             return Language.PHP;
+        case "pyproject.toml":
+            CurrentLanguage = Language.Python;
+            CurrentLanguageConfig = "python";
+            return Language.Python;
     }
 };
