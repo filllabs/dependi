@@ -4,6 +4,10 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 ## 0.7.6
 
+### New Features
+
+- Added a report to list vulnerable library versions from the manifest file. [Issue #53](https://github.com/filllabs/dependi/issues/53)
+
 ### Bug Fixes
 
 - Fixed local dependency errors now it wil ignore. [Issue #52](https://github.com/filllabs/dependi/issues/52)

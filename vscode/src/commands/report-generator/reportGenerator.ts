@@ -1,7 +1,7 @@
 import {
   window,
 } from "vscode";
-import { ReportItem, VulnReq, getLangIdFromName, getVulnReport } from "../../api/index/dependi-index-server/reports";
+import { ReportItem, VulnReq, getCurrentVulnReport, getLangIdFromName, getVulnReport } from "../../api/index/dependi-index-server/reports";
 import { Configs, Settings } from "../../config";
 import Item from "../../core/Item";
 import { Parser } from "../../core/parsers/parser";
@@ -150,4 +150,72 @@ export async function generateMainReport(progress: any) {
   } catch (error) {
     throw new Error(`Error during report generation: ${error}`);
   }
+}
+
+export async function generateCurrentReport(progress: any) {
+  let totalPercentage = 0;
+  try {
+    const { fileName } = await getActiveEditorLanguage();
+
+    totalPercentage = incrementProgress(progress, "parsingFile", totalPercentage);
+    const parser: Parser = parserInvoker(fileName);
+    const { reportItems } = await parseFile(parser);
+
+    totalPercentage = incrementProgress(progress, "generatingReport", totalPercentage);
+
+    const vulnRequest: VulnReq = {
+      RepoName: "",
+      Commits:  [],
+      PreviousItems: [],
+      CurrentItems: reportItems,
+      Language: getLangIdFromName(fileName),
+      GHSACheck: Settings.vulnerability.ghsa,
+    };
+
+    const reportResp = await getCurrentVulnReport(vulnRequest);
+
+    if (reportResp.status !== 200) {
+      switch (getError(reportResp.error)) {
+        case Errors.DLR:
+          openDeviceLimitDialog();
+          return;
+        case Errors.PAYRQ:
+          openPaymentRequiredDialog();
+          return;
+        case Errors.UNAUTH:
+          openSettingsDialog(Configs.INDEX_SERVER_API_KEY, "Unauthorized, please check your api key.");
+          return;
+        case Errors.IVAK:
+          openSettingsDialog(Configs.INDEX_SERVER_API_KEY, "Invalid api key or api key not found. Please check your api key.");
+          return;
+        case Errors.UINA:
+          openSettingsDialog(Configs.INDEX_SERVER_API_KEY, "User is not active. Please check emails from us or visit dependi.io dashboard.");
+        default:
+          window.showErrorMessage(getError(reportResp.error));
+          return;
+      }
+    }
+    const reportHTML: string = reportResp.body || "";
+    totalPercentage = incrementProgress(progress, "creatingUI", totalPercentage);
+    return reportHTML;
+
+  } catch (error) {
+    throw new Error(`Error during report generation: ${error}`);
+  }
+}
+
+async function parseFile(parser: Parser) {
+  const editor = window.activeTextEditor;
+  if (!editor) {
+    throw new Error("Active editor not found");
+  }
+
+  const items: Item[] = parser.parse(editor.document);
+
+  const reportItems: ReportItem[] = items.map((item) => ({
+    Key: item.key,
+    Value: item.value || "",
+  }));
+
+  return { reportItems };
 }

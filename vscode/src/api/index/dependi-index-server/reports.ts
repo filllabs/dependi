@@ -63,6 +63,20 @@ export async function getVulnReport(req: VulnReq, options?: RequestInit) {
   return response;
 }
 
+export async function getCurrentVulnReport(req: VulnReq, options?: RequestInit) {
+  const response = await request<string>(`v1/reports/vulnerability/current`, {
+    method: "POST",
+    headers: {
+      Authorization: Settings.api.key,
+      "X-Device-ID": Settings.api.deviceID,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(req),
+    ...options,
+  });
+  return response;
+}
+
 export async function getReportPDF(req: string, options?: RequestInit) {
   return await request<Blob>(`v1/reports/pdf`, {
     method: "POST",
