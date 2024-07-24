@@ -10,7 +10,7 @@ type Type = "Error" | "Warning" | "Info" | "Loading";
  * Extends StatusBarItem in order to add support prefixed text changes.
  */
 interface StatusBarItemExt extends StatusBarItem {
-  setText: (t: Type, name?: string) => void;
+  setText: (t: Type, name?: string, noDialog?: boolean) => void;
   fetching: (indexServerURL: string) => void;
 }
 
@@ -18,14 +18,19 @@ export const StatusBar: StatusBarItemExt = window.createStatusBarItem(
   StatusBarAlignment.Right,
   -1000
 ) as StatusBarItemExt;
-StatusBar.setText = (t: Type, text?: string) => {
+StatusBar.setText = (t: Type, text?: string, noDialog: boolean = false) => {
   switch (t) {
     case "Error":
       StatusBar.color = "statusBarItem.errorForeground";
       StatusBar.text = "$(error) Dependi";
-      StatusBar.tooltip = "";
-      window.showErrorMessage(text || "Error");
-      return;
+      if (noDialog) {
+        StatusBar.tooltip = text || "Error";
+        return;
+      } else {
+        StatusBar.tooltip = "";
+        window.showErrorMessage(text || "Error");
+        return;
+      }
     case "Warning":
       StatusBar.text = "$(warning) Dependi";
       StatusBar.color = "statusBarItem.warningForeground";

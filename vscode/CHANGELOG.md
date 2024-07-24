@@ -8,6 +8,10 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 - Fixed local dependency errors now it wil ignore. [Issue #52](https://github.com/filllabs/dependi/issues/52)
 
+- Better error handling.
+
+- Wildcard version support added for TOML files. [Issue #59](https://github.com/filllabs/dependi/issues/59)
+
 ## 0.7.5
 
 ### Bug Fixes
