@@ -202,6 +202,13 @@
             "markdownDescription": "Matches lines according to the position of `*`. For example: `text*`, `*text`, `*text*`.",
             "order": 7
           },
+          "dependi.rust.informPatchUpdates": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": false,
+            "description": "Inform about available patch updates for Rust packages via decoration.",
+            "order": 8
+          },
           "dependi.npm.enabled": {
             "type": "boolean",
             "scope": "resource",
@@ -228,7 +235,15 @@
             "type": "string",
             "scope": "resource",
             "default": "",
+            "order": 12,
             "markdownDescription": "Matches lines according to the position of `*`. For example: `text*`, `*text`, `*text*`."
+          },
+          "dependi.npm.informPatchUpdates": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": false,
+            "description": "Inform about available patch updates for NPM packages via decoration.",
+            "order": 13
           },
           "dependi.go.enabled": {
             "type": "boolean",
@@ -259,6 +274,13 @@
             "markdownDescription": "Matches lines according to the position of `*`. For example: `text*`, `*text`, `*text*`.",
             "order": 17
           },
+          "dependi.go.informPatchUpdates": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": false,
+            "description": "Inform about available patch updates for Go packages via decoration.",
+            "order": 18
+          },
           "dependi.python.enabled": {
             "type": "boolean",
             "scope": "resource",
@@ -288,12 +310,19 @@
             "markdownDescription": "Matches lines according to the position of `*`. For example: `text*`, `*text`, `*text*`.",
             "order": 22
           },
+          "dependi.python.informPatchUpdates": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": false,
+            "description": "Inform about available patch updates for Python packages via decoration.",
+            "order": 23
+          },
           "dependi.php.enabled": {
             "type": "boolean",
             "scope": "resource",
             "default": true,
             "description": "Enable checking for PHP dependencies.",
-            "order": 23
+            "order": 25
           },
           "dependi.php.indexServerURL": {
             "type": "string",
@@ -301,35 +330,42 @@
             "description": "The URL for the PHP package index server.",
             "format": "url",
             "default": "https://repo.packagist.org",
-            "order": 24
+            "order": 26
           },
           "dependi.php.excludeUnstableVersions": {
             "type": "boolean",
             "scope": "resource",
             "default": true,
             "description": "Exclude unstable versions from PHP package lists.",
-            "order": 25
+            "order": 27
           },
           "dependi.php.ignoreLinePattern": {
             "type": "string",
             "scope": "resource",
             "default": "",
             "markdownDescription": "Matches lines according to the position of `*`. For example: `text*`, `*text`, `*text*`.",
-            "order": 26
+            "order": 28
+          },
+          "dependi.php.informPatchUpdates": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": false,
+            "description": "Inform about available patch updates for PHP packages via decoration.",
+            "order": 29
           },
           "dependi.vulnerability.enabled": {
             "type": "boolean",
             "scope": "resource",
             "default": true,
             "description": "Enable checking for vulnerabilities in dependencies.",
-            "order": 27
+            "order": 30
           },
           "dependi.vulnerability.ghsa.enabled": {
             "type": "boolean",
             "scope": "resource",
             "default": false,
             "description": "Include GitHub Security Advisory vulnerabilities in checks.",
-            "order": 28
+            "order": 31
           },
           "dependi.vulnerability.osvQueryURL.batch": {
             "type": "string",
@@ -337,7 +373,7 @@
             "description": "The URL for batch querying vulnerabilities via OSV.",
             "format": "url",
             "default": "https://api.osv.dev/v1/querybatch",
-            "order": 29
+            "order": 32
           },
           "dependi.vulnerability.osvQueryURL.single": {
             "type": "string",
@@ -345,7 +381,7 @@
             "description": "The URL for querying single vulnerabilities via OSV.",
             "format": "url",
             "default": "https://api.osv.dev/v1/query",
-            "order": 30
+            "order": 33
           }
         }
       },
@@ -434,17 +470,88 @@
               }
             }
           },
+          "dependi.decoration.patchAvailable.template": {
+            "type": "string",
+            "scope": "resource",
+            "default": "⚠️ ${version}",
+            "description": "Decoration for package versions has a semver patch available.",
+            "order": 10
+          },
+          "dependi.decoration.patchAvailable.style": {
+            "type": "object",
+            "default": null,
+            "order": 11,
+            "description": "Style for decorations when package version has a semver patch available.",
+            "properties": {
+              "after": {
+                "type": "object",
+                "default": null,
+                "scope": "resource",
+                "description": "Style for text after the package name.",
+                "properties": {
+                  "color": {
+                    "type": "string",
+                    "scope": "resource",
+                    "default": "#ffffffff",
+                    "format": "color",
+                    "description": "Text color."
+                  },
+                  "border": {
+                    "type": "string",
+                    "scope": "resource",
+                    "default": "",
+                    "description": "Text border."
+                  },
+                  "backgroundColor": {
+                    "type": "string",
+                    "scope": "resource",
+                    "default": "#00000000",
+                    "format": "color",
+                    "description": "Background color."
+                  }
+                }
+              },
+              "before": {
+                "type": "object",
+                "default": null,
+                "scope": "resource",
+                "description": "Style for text before the package name.",
+                "properties": {
+                  "color": {
+                    "type": "string",
+                    "scope": "resource",
+                    "default": "#ffffffff",
+                    "format": "color",
+                    "description": "Text color."
+                  },
+                  "border": {
+                    "type": "string",
+                    "scope": "resource",
+                    "default": "",
+                    "description": "Text border."
+                  },
+                  "backgroundColor": {
+                    "type": "string",
+                    "scope": "resource",
+                    "default": "#00000000",
+                    "format": "color",
+                    "description": "Background color."
+                  }
+                }
+              }
+            }
+          },
           "dependi.decoration.incompatible.template": {
             "type": "string",
             "scope": "resource",
             "default": "❌ ${version}",
             "description": "Decoration for incompatible package versions.",
-            "order": 10
+            "order": 12
           },
           "dependi.decoration.incompatible.style": {
             "type": "object",
             "default": null,
-            "order": 11,
+            "order": 13,
             "description": "Style for incompatible version decorations.",
             "properties": {
               "after": {

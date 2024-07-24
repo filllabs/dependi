@@ -2,20 +2,22 @@
  * Helps to manage decorations for the TOML files.
  */
 import {
-  DecorationOptions,
-  TextEditor,
-  MarkdownString,
   DecorationInstanceRenderOptions,
+  DecorationOptions,
+  MarkdownString,
   Range,
+  TextEditor,
 } from "vscode";
 
-import { checkVersion } from "../semver/semverUtils";
-import Item from "../core/Item";
-import { ReplaceItem } from "../commands/replacers/replace";
 import { validRange } from "semver";
-import { Language } from "../core/Language";
+import { ReplaceItem } from "../commands/replacers/replace";
 import { Configs } from "../config";
+import Item from "../core/Item";
+import { Language } from "../core/Language";
+import { checkVersion } from "../semver/semverUtils";
 import DecorationPreferences from "./pref";
+
+type DecorationType = "COMP" | "PATCH" | "INCOMP" | "ERROR";
 
 /**
  * Create a decoration for the given crate.
@@ -32,10 +34,10 @@ export default function decoration(
   lang: Language,
   vuln: Map<string, string[]> | undefined,
   error?: string,
-): [DecorationOptions, "COMP" | "INCOMP" | "ERROR"] {
+): [DecorationOptions, DecorationType] {
   // Also handle json valued dependencies
   const version = item.value?.replace(",", "");
-  const [satisfies, maxSatisfying] = checkVersion(version, versions);
+  const [satisfies, hasPatchUpdate, maxSatisfying] = checkVersion(version, versions);
 
   const formatError = (error: string) => {
     // Markdown does not like newlines in middle of emphasis, or spaces next to emphasis characters.
@@ -58,7 +60,7 @@ export default function decoration(
       contentText: "",
     }
   };
-  let type = "COMP" as "COMP" | "INCOMP" | "ERROR";
+  let type: DecorationType = "COMP";
 
 
   if (error) {
@@ -89,7 +91,9 @@ export default function decoration(
       type = "ERROR";
     } else if (versions[0] !== maxSatisfying) {
       type = satisfies ? "COMP" : "INCOMP";
-
+    }
+    if (hasPatchUpdate && type === "COMP") {
+      type = "PATCH";
     }
 
     const contentText = getContentText(decorationPreferences, type);
@@ -102,6 +106,8 @@ export default function decoration(
     }
   }
 
+  console.log(`Decoration: ${type} ${item.key} ${version} ${versions[0]} ${renderOptions[position]!.contentText}`);
+
   const deco: DecorationOptions = {
     range: position == "after" ? item.decoRange : new Range(item.line, 0, item.line, item.endOfLine),
     hoverMessage,
@@ -113,11 +119,16 @@ export default function decoration(
 
 function getContentText(decorationPreferences: DecorationPreferences, type: string) {
   let contentText = decorationPreferences.compatibleText;
-  if (type === "INCOMP") {
-    contentText = decorationPreferences.incompatibleText;
-  }
-  if (type === "ERROR") {
-    contentText = decorationPreferences.errorText;
+  switch (type) {
+    case "PATCH":
+      contentText = decorationPreferences.patchUpdateText;
+      break;
+    case "INCOMP":
+      contentText = decorationPreferences.incompatibleText;
+      break;
+    case "ERROR":
+      contentText = decorationPreferences.errorText;
+      break;
   }
   return contentText;
 }

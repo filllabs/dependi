@@ -8,9 +8,11 @@ export type DecorationPosition = keyof ThemableDecorationInstanceRenderOptions;
  */
 export default interface DecorationPreferences {
   compatibleType: TextEditorDecorationType,
+  patchUpdateType: TextEditorDecorationType,
   incompatibleType: TextEditorDecorationType,
   errorType: TextEditorDecorationType,
   compatibleText: string;
+  patchUpdateText: string;
   incompatibleText: string;
   errorText: string;
   vulnText: string;
@@ -22,6 +24,8 @@ export default interface DecorationPreferences {
 export function loadPref(): DecorationPreferences {
   const compText = Settings.decorator.compatible.template;
   const compCss = { ...Settings.decorator.compatible.css };
+  const patchText = Settings.decorator.patchUpdate.template;
+  const patchCss = { ...Settings.decorator.patchUpdate.css };
   const incompText = Settings.decorator.incompatible.template;
   const incompCss = { ...Settings.decorator.incompatible.css };
   const errorText = Settings.decorator.error.template;
@@ -36,9 +40,11 @@ export function loadPref(): DecorationPreferences {
 
   return {
     compatibleType: createType(compCss),
+    patchUpdateType: createType(patchCss),
     incompatibleType: createType(incompCss),
     errorType: createType(errorCss),
     compatibleText: compText,
+    patchUpdateText: patchText,
     incompatibleText: incompText,
     errorText,
     vulnText: vulnText,

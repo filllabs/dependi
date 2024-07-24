@@ -1,12 +1,12 @@
 import {
-  TextEditor,
   DecorationOptions,
+  TextEditor,
 } from "vscode";
-import { StatusBar } from "./status-bar";
 import Dependency from "../core/Dependency";
-import decoration from "./decoration";
 import { Language } from "../core/Language";
+import decoration from "./decoration";
 import DecorationPreferences, { loadPref } from "./pref";
+import { StatusBar } from "./status-bar";
 
 var previousPref: DecorationPreferences | undefined;
 
@@ -55,6 +55,9 @@ export default function decorate(
       if (deco) {
         switch (deco[1]) {
           case "COMP":
+            compOptions.push(deco[0]);
+            break;
+          case "PATCH":
             compOptions.push(deco[0]);
             break;
           case "INCOMP":
