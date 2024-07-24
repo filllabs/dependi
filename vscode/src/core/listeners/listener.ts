@@ -27,6 +27,8 @@ import { GoModListener } from "./GoModListener";
 import { NpmListener } from "./NpmListener";
 import { PhpListener } from './PhpListener';
 import { PypiListener } from "./PypiListener";
+import path from "path";
+import { PyProjectParser } from "../parsers/PyProjectParser";
 
 export interface Listener {
   fetcher: Fetcher;
@@ -76,9 +78,10 @@ export default async function listener(editor: TextEditor | undefined): Promise<
         if (!Settings.python.enabled)
           return;
         ignoreUnstablesKey = Configs.PYTHON_IGNORE_UNSTABLES;
+        const parser = path.basename(editor.document.fileName) === "pyproject.toml" ? new PyProjectParser() : new PypiParser();
         listener = new PypiListener(
-          new PypiFetcher(Settings.python.index, ignoreUnstablesKey, Configs.PYTHON_INDEX_SERVER_URL),
-          new PypiParser());
+          new PypiFetcher(Settings.python.index, ignoreUnstablesKey, Configs.PYTHON_INDEX_SERVER_URL), 
+          parser);
     }
     if (listener !== undefined) {
 
