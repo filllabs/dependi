@@ -78,15 +78,10 @@ export default async function listener(editor: TextEditor | undefined): Promise<
         if (!Settings.python.enabled)
           return;
         ignoreUnstablesKey = Configs.PYTHON_IGNORE_UNSTABLES;
-        if (path.basename(editor.document.fileName) === "pyproject.toml") {
-          listener = new PypiListener(
-            new PypiFetcher(Settings.python.index, ignoreUnstablesKey, Configs.PYTHON_INDEX_SERVER_URL),
-            new PyProjectParser());
-        } else {
-          listener = new PypiListener(
-            new PypiFetcher(Settings.python.index, ignoreUnstablesKey, Configs.PYTHON_INDEX_SERVER_URL),
-            new PypiParser());
-          }
+        const parser = path.basename(editor.document.fileName) === "pyproject.toml" ? new PyProjectParser() : new PypiParser();
+        listener = new PypiListener(
+          new PypiFetcher(Settings.python.index, ignoreUnstablesKey, Configs.PYTHON_INDEX_SERVER_URL), 
+          parser);
     }
     if (listener !== undefined) {
 
