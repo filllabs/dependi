@@ -58,7 +58,7 @@ export class DependiFetcher extends Fetcher {
     if (item) {
       const constrains = splitByComma(item.value ?? "");
       const currVersion = possibleLatestVersion(constrains, versions);
-      item.value = currVersion ? currVersion : "";
+      item.value = currVersion ? currVersion : item.value;
       return {
         item,
         versions,
