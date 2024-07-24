@@ -15,7 +15,7 @@ export class JsonListener implements Listener {
 		public lang: Language
 	) {
   }
-  async parseAndDecorate(editor: TextEditor, filterDeps?: (deps: Item[]) => Item[]){
+  async parseAndDecorate(editor: TextEditor, filterDeps?: (deps: Item[]) => Item[]) {
     try {
       dependencies = this.parser.parse(editor.document);
       dependencies = filterDeps ? filterDeps(dependencies) : dependencies;

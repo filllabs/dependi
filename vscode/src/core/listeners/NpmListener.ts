@@ -24,7 +24,7 @@ export class NpmListener extends JsonListener {
 				return dependencies;
 			}
 
-			return dependencies.filter(item => namespaces.every(ms => !item.key.startsWith(`${ms}/`)))
+			return dependencies.filter(item => namespaces.every(ms => !item.key.startsWith(`${ms}/`)));
 		});
 	}
 
@@ -47,7 +47,7 @@ export class NpmListener extends JsonListener {
 
 				// ignore comments
 				if (trimmedLine.startsWith(';') || trimmedLine.startsWith('#')) {
-					return
+					return;
 				}
 	
 				if (trimmedLine) {
