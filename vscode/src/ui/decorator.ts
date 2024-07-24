@@ -89,9 +89,7 @@ export default function decorate(
   if (errors.length) {
     StatusBar.setText(
       "Error",
-      `Completed with errors
-${errors.join("\n")}`
-    );
+      `Completed with errors ${errors.join("\n")}`, true);
   } else {
     StatusBar.setText("Info");
   }

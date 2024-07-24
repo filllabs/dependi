@@ -95,17 +95,16 @@ export default function decoration(
     if (hasPatchUpdate && type === "COMP") {
       type = "PATCH";
     }
+  }
 
 
+  const contentText = getContentText(decorationPreferences, type);
+  renderOptions[position]!.contentText = contentText.replace("${version}", versions[0]);
 
-    const contentText = getContentText(decorationPreferences, type);
-    renderOptions[position]!.contentText = contentText.replace("${version}", versions[0]);
-
-    const vulnerabilities = vuln?.get(version!);
-    if (vulnerabilities && vulnerabilities.length > 0) {
-      const vulnText = decorationPreferences.vulnText.replace("${count}", `${vulnerabilities?.length}`);
-      renderOptions[position]!.contentText = renderOptions[position]!.contentText! + "\t" + vulnText;
-    }
+  const vulnerabilities = vuln?.get(version!);
+  if (vulnerabilities && vulnerabilities.length > 0) {
+    const vulnText = decorationPreferences.vulnText.replace("${count}", `${vulnerabilities?.length}`);
+    renderOptions[position]!.contentText = renderOptions[position]!.contentText! + "\t" + vulnText;
   }
 
   // if local dependency, remove the content text just add version listing
