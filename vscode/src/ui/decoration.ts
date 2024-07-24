@@ -129,7 +129,13 @@ function isLocal(version?: string) {
     version.startsWith("path:") ||
     version.startsWith("link:") ||
     version.startsWith("git:") ||
-    version.startsWith("workspace:");
+    version.startsWith("git+") ||
+    version.startsWith("github:") ||
+    version.startsWith("workspace:") ||
+    version.startsWith("ssh:") ||
+    version.startsWith("http:") ||
+    version.startsWith("https:");
+
 }
 
 function getContentText(decorationPreferences: DecorationPreferences, type: string) {
