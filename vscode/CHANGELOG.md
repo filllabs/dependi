@@ -12,6 +12,10 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 - Informing patch updates added as a setting per language. [Issue #13](https://github.com/filllabs/dependi/issues/13)
 
+- Fixed issue Cargo.toml now ignores local libraries. [Issue #29](https://github.com/filllabs/dependi/issues/29)
+
+- Added support for pyproject.toml in Python language. [Issue #12](https://github.com/filllabs/dependi/issues/12)
+
 ## 0.7.4
 
 ### New Features
