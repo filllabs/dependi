@@ -2,6 +2,12 @@
 
 All notable changes to the "dependi" extension will be documented in this file.
 
+## 0.7.6
+
+### Bug Fixes
+
+- Fixed local dependency errors now it wil ignore. [Issue #52](https://github.com/filllabs/dependi/issues/52)
+
 ## 0.7.5
 
 ### Bug Fixes

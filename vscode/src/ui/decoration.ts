@@ -96,6 +96,8 @@ export default function decoration(
       type = "PATCH";
     }
 
+
+
     const contentText = getContentText(decorationPreferences, type);
     renderOptions[position]!.contentText = contentText.replace("${version}", versions[0]);
 
@@ -106,6 +108,11 @@ export default function decoration(
     }
   }
 
+  // if local dependency, remove the content text just add version listing
+  if (isLocal(version)) {
+    renderOptions[position]!.contentText = "";
+  }
+
   const deco: DecorationOptions = {
     range: position == "after" ? item.decoRange : new Range(item.line, 0, item.line, item.endOfLine),
     hoverMessage,
@@ -114,6 +121,22 @@ export default function decoration(
   return [deco, type];
 }
 
+function isLocal(version?: string) {
+  if (!version)
+    return false;
+
+  return version.startsWith("file:") ||
+    version.startsWith("path:") ||
+    version.startsWith("link:") ||
+    version.startsWith("git:") ||
+    version.startsWith("git+") ||
+    version.startsWith("github:") ||
+    version.startsWith("workspace:") ||
+    version.startsWith("ssh:") ||
+    version.startsWith("http:") ||
+    version.startsWith("https:");
+
+}
 
 function getContentText(decorationPreferences: DecorationPreferences, type: string) {
   let contentText = decorationPreferences.compatibleText;
