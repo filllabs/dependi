@@ -106,8 +106,6 @@ export default function decoration(
     }
   }
 
-  console.log(`Decoration: ${type} ${item.key} ${version} ${versions[0]} ${renderOptions[position]!.contentText}`);
-
   const deco: DecorationOptions = {
     range: position == "after" ? item.decoRange : new Range(item.line, 0, item.line, item.endOfLine),
     hoverMessage,
