@@ -143,7 +143,7 @@ function parsePair(line: string, row: number): Item | undefined {
     line.substring(eqIndex + 1, commentIndex > -1 ? commentIndex : line.length)
   );
 
-  if (isBoolean(item.value)) {
+  if (isBoolean(item.value) || item.value.includes("path")) {
     return undefined;
   }
   if (line.indexOf("{") > -1) {
