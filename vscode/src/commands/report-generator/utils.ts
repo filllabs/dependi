@@ -1,9 +1,14 @@
+import { Errors, getError } from "../../api/index/dependi-index-server/errors";
 import { CargoTomlParser } from "../../core/parsers/CargoTomlParser";
 import { GoModParser } from "../../core/parsers/GoModParser";
 import { NpmParser } from "../../core/parsers/NpmParser";
 import { PhpParser } from "../../core/parsers/PhpParser";
 import { PypiParser } from "../../core/parsers/PypiParser";
 import os from "os";
+import { openDeviceLimitDialog, openPaymentRequiredDialog, openSettingsDialog } from "../../ui/dialogs";
+import { Configs } from "../../config";
+import { RequestState } from "../../api/index/dependi-index-server";
+import { window } from "vscode";
 
 export const parserInvoker = (language: string) => {
   switch (language) {
@@ -28,4 +33,26 @@ export const winHelper = (path: string) => {
   }
   let newPath = path.slice(1);
   return newPath = newPath.replace(/\\/g, "/");
+}
+
+export function handleReportError(reportResp: RequestState<string>) {
+  switch (getError(reportResp.error)) {
+    case Errors.DLR:
+      openDeviceLimitDialog();
+      break;
+    case Errors.PAYRQ:
+      openPaymentRequiredDialog();
+      break;
+    case Errors.UNAUTH:
+      openSettingsDialog(Configs.INDEX_SERVER_API_KEY, "Unauthorized, please check your api key.");
+      break;
+    case Errors.IVAK:
+      openSettingsDialog(Configs.INDEX_SERVER_API_KEY, "Invalid api key or api key not found. Please check your api key.");
+      break;
+    case Errors.UINA:
+      openSettingsDialog(Configs.INDEX_SERVER_API_KEY, "User is not active. Please check emails from us or visit dependi.io dashboard.");
+      break;
+    default:
+      window.showErrorMessage(getError(reportResp.error));
+  }
 }
