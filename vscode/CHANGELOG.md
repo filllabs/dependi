@@ -10,6 +10,8 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 - Even Better TOML extension removed from dependencies
 
+- Informing patch updates added as a setting per language. [Issue #13](https://github.com/filllabs/dependi/issues/13)
+
 ## 0.7.4
 
 ### New Features
