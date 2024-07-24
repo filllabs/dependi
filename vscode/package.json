@@ -152,6 +152,11 @@
         "command": "dependi.commands.vulnerability.report",
         "title": "Generate detailed vulnerability report",
         "category": "Dependi"
+      },
+      {
+        "command": "dependi.commands.vulnerability.currentReport",
+        "title": "Generate current vulnerability report",
+        "category": "Dependi"
       }
     ],
     "configuration": [

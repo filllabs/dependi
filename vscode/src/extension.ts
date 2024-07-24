@@ -18,6 +18,7 @@ import { setLanguage } from "./core/Language";
 import listener from "./core/listeners/listener";
 import { WelcomePagePanel } from "./panels/WelcomePanel";
 import { ExtensionStorage } from "./storage";
+import { generateCurrentVulnReport } from "./commands/report-generator/generateCurrentVulnReport";
 
 
 export function activate(context: ExtensionContext) {
@@ -67,6 +68,7 @@ export function activate(context: ExtensionContext) {
   context.subscriptions.push(replaceVersion);
   context.subscriptions.push(updateAll);
   context.subscriptions.push(generateVulnerabilityReport(context));
+  context.subscriptions.push(generateCurrentVulnReport(context));
 }
 
 export function deactivate() {

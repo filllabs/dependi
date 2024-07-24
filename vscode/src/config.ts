@@ -59,6 +59,7 @@ export enum Configs {
   //Commands
   REPLACE_VERSIONS = `${DEPENDI}commands.replaceVersion`,
   GENERATE_VULNERABILITY_REPORT = `${DEPENDI}commands.vulnerability.report`,
+  GENERATE_VULNERABILITY_CURRENT_REPORT = `${DEPENDI}commands.vulnerability.currentReport`,
   // CREATE_CHANGELOG = `${DEPENDI}createChangelog`,
   UPDATE_ALL = `${DEPENDI}commands.updateAll`,
   RETRY = `${DEPENDI}commands.retry`,
