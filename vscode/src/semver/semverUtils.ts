@@ -12,13 +12,13 @@ export function checkVersion(version: string = "0.0.0", versions: string[]): [bo
     v = "^" + v;
   const max = versions[0];
   if (maxSatisfying(versions, v) === null) {
-    if (valid(v) === null) {
+    if (valid(normalizeVersion(version)) === null) {
       return [false, false, null];
     }
     // TODO: ask this test with kaan
     const minV = minVersion(v)?.toString() ?? '0.0.0';
     if (gt(minV, max)) {
-      return [true, true, v];
+      return [true, false, v];
     }
   }
   // if check patch is true, check if the patch version is the same or higher than the current version
