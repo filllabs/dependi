@@ -16,6 +16,8 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 - Wildcard version support added for TOML files. [Issue #59](https://github.com/filllabs/dependi/issues/59)
 
+- Fixed resolved issue where outdated packages appeared as up-to-date. [Issue #60](https://github.com/filllabs/dependi/issues/60)
+
 ## 0.7.5
 
 ### Bug Fixes
