@@ -5,6 +5,8 @@ import { CurrentLanguage, Language } from "../core/Language";
 
 export function checkVersion(version: string = "0.0.0", versions: string[]): [boolean, boolean, string | null] {
   let v = version;
+
+  versions = versions.map(normalizeVersion);
   let prefix = v.charCodeAt(0);
   if (prefix > 47 && prefix < 58)
     v = "^" + v;
@@ -40,4 +42,13 @@ export function checkVersion(version: string = "0.0.0", versions: string[]): [bo
   }
   const pathUpdated = shouldPatchBeChecked ? compare(max, minVersion(v) ?? '0.0.0') === 1 : false;
   return [satisfies(max, v), pathUpdated, maxSatisfying(versions, v)];
+}
+
+function normalizeVersion(version: string): string {
+  if (!version.includes(".")) {
+    return `${version}.0.0`;
+  } else if (version.split(".").length === 2) {
+    return `${version}.0`;
+  }
+  return version;
 }
