@@ -26,9 +26,10 @@ export class PyProjectParser extends TomlParser {
     if (eqIndex === -1) {
       return undefined;
     }
+    const braketIndex = line.substring(0, eqIndex).indexOf("[");
     row = eqIndex + 1;
     const commentIndex = line.indexOf("#");
-    item.key = clearText(line.substring(0, eqIndex));
+    item.key = clearText(line.substring(0, braketIndex > -1 ? braketIndex : eqIndex));
     item.key = item.key.replace(".version", "");
     item.value = clearText(
       line.substring(eqIndex + 1, commentIndex > -1 ? commentIndex : line.length)
