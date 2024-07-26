@@ -161,7 +161,7 @@
     ],
     "configuration": [
       {
-        "title": "General Settings",
+        "title": "Dependi API Settings",
         "properties": {
           "dependi.apiURL": {
             "type": "string",
@@ -177,7 +177,12 @@
             "default": "",
             "description": "API key for accessing enhanced features.",
             "order": 2
-          },
+          }
+        }
+      },
+      {
+        "title": "Rust Settings",
+        "properties": {
           "dependi.rust.enabled": {
             "type": "boolean",
             "scope": "resource",
@@ -213,7 +218,12 @@
             "default": false,
             "description": "Inform about available patch updates for Rust packages via decoration.",
             "order": 8
-          },
+          }
+        }
+      },
+      {
+        "title": "JavaScript/TypeScript Settings",
+        "properties": {
           "dependi.npm.enabled": {
             "type": "boolean",
             "scope": "resource",
@@ -249,7 +259,12 @@
             "default": false,
             "description": "Inform about available patch updates for NPM packages via decoration.",
             "order": 13
-          },
+          }
+        }
+      },
+      {
+        "title": "Go Settings",
+        "properties": {
           "dependi.go.enabled": {
             "type": "boolean",
             "scope": "resource",
@@ -285,7 +300,12 @@
             "default": false,
             "description": "Inform about available patch updates for Go packages via decoration.",
             "order": 18
-          },
+          }
+        }
+      },
+      {
+        "title": "Python Settings",
+        "properties": {
           "dependi.python.enabled": {
             "type": "boolean",
             "scope": "resource",
@@ -321,7 +341,12 @@
             "default": false,
             "description": "Inform about available patch updates for Python packages via decoration.",
             "order": 23
-          },
+          }
+        }
+      },
+      {
+        "title": "PHP Settings",
+        "properties": {
           "dependi.php.enabled": {
             "type": "boolean",
             "scope": "resource",
@@ -357,7 +382,12 @@
             "default": false,
             "description": "Inform about available patch updates for PHP packages via decoration.",
             "order": 29
-          },
+          }
+        }
+      },
+      {
+        "title": "Vulnerability Settings",
+        "properties": {
           "dependi.vulnerability.enabled": {
             "type": "boolean",
             "scope": "resource",
