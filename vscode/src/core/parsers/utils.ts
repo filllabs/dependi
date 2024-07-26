@@ -43,23 +43,35 @@ export function shouldIgnoreLine(
   if (isGitConflictLine(line.text)) {
     return true;
   }
-  if (isDisablePatternLine(line.text,pattern)) {
+  if (isDisablePatternLine(line.text, pattern) ) {
     return true;
   }
   return false;
 }
 
 export function isDisablePatternLine(line: string, pattern: string) {
+  if (!pattern || pattern.trim() === "") {
+    return false;
+  }
   line = line.trim();
-  if (pattern.startsWith("*") && pattern.endsWith("*")) {
-    const trimmedPattern = pattern.slice(1, -1);
-    return line.includes(trimmedPattern);
-  } else if (pattern.startsWith("*")) {
-    const trimmedPattern = pattern.slice(1);
-    return line.endsWith(trimmedPattern);
-  } else if (pattern.endsWith("*")) {
-    const trimmedPattern = pattern.slice(0, -1);
-    return line.startsWith(trimmedPattern);
+  const patterns = pattern.split(",").map((p) => p.trim());
+  for (const p of patterns) {
+    if (p.startsWith("*") && p.endsWith("*")) {
+      const trimmedPattern = p.slice(1, -1);
+      if (line.includes(trimmedPattern)) {
+        return true;
+      }
+    } else if (p.startsWith("*")) {
+      const trimmedPattern = p.slice(1);
+      if (line.endsWith(trimmedPattern)) {
+        return true;
+      }
+    } else if (p.endsWith("*")) {
+      const trimmedPattern = p.slice(0, -1);
+      if (line.startsWith(trimmedPattern)) {
+        return true;
+      }
+    }
   }
   return false;
 }
