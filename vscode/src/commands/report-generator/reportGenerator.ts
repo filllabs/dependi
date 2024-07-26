@@ -173,7 +173,7 @@ async function parseFile(parser: Parser) {
 
   const reportItems: ReportItem[] = items.map((item) => ({
     Key: item.key,
-    Value: item.value || "",
+    Value: item.value?.replace(/[=><]/g, "")  || "",
   }));
 
   return { reportItems };
