@@ -205,11 +205,11 @@
             "description": "Exclude unstable versions from Rust package lists.",
             "order": 6
           },
-          "dependi.rust.ignoreLinePattern": {
+          "dependi.rust.ignoreLinePatterns": {
             "type": "string",
             "scope": "resource",
             "default": "",
-            "markdownDescription": "Matches lines according to the position of `*`. For example: `text*`, `*text`, `*text*`.",
+            "markdownDescription": "Matches lines based on `*` position: `text*`, `*text`, `*text*`. Multiple patterns can be used, separated by commas.",
             "order": 7
           },
           "dependi.rust.informPatchUpdates": {
@@ -246,12 +246,12 @@
             "description": "Exclude unstable versions from NPM package lists.",
             "order": 11
           },
-          "dependi.npm.ignoreLinePattern": {
+          "dependi.npm.ignoreLinePatterns": {
             "type": "string",
             "scope": "resource",
             "default": "",
             "order": 12,
-            "markdownDescription": "Matches lines according to the position of `*`. For example: `text*`, `*text`, `*text*`."
+            "markdownDescription": "Matches lines based on `*` position: `text*`, `*text`, `*text*`. Multiple patterns can be used, separated by commas."
           },
           "dependi.npm.informPatchUpdates": {
             "type": "boolean",
@@ -287,11 +287,11 @@
             "description": "Exclude unstable versions from Go package lists.",
             "order": 16
           },
-          "dependi.go.ignoreLinePattern": {
+          "dependi.go.ignoreLinePatterns": {
             "type": "string",
             "scope": "resource",
             "default": "",
-            "markdownDescription": "Matches lines according to the position of `*`. For example: `text*`, `*text`, `*text*`.",
+            "markdownDescription": "Matches lines based on `*` position: `text*`, `*text`, `*text*`. Multiple patterns can be used, separated by commas.",
             "order": 17
           },
           "dependi.go.informPatchUpdates": {
@@ -328,11 +328,11 @@
             "description": "Exclude unstable versions from Python package lists.",
             "order": 21
           },
-          "dependi.python.ignoreLinePattern": {
+          "dependi.python.ignoreLinePatterns": {
             "type": "string",
             "scope": "resource",
             "default": "",
-            "markdownDescription": "Matches lines according to the position of `*`. For example: `text*`, `*text`, `*text*`.",
+            "markdownDescription": "Matches lines based on `*` position: `text*`, `*text`, `*text*`. Multiple patterns can be used, separated by commas.",
             "order": 22
           },
           "dependi.python.informPatchUpdates": {
@@ -369,11 +369,11 @@
             "description": "Exclude unstable versions from PHP package lists.",
             "order": 27
           },
-          "dependi.php.ignoreLinePattern": {
+          "dependi.php.ignoreLinePatterns": {
             "type": "string",
             "scope": "resource",
             "default": "",
-            "markdownDescription": "Matches lines according to the position of `*`. For example: `text*`, `*text`, `*text*`.",
+            "markdownDescription": "Matches lines based on `*` position: `text*`, `*text`, `*text*`. Multiple patterns can be used, separated by commas.",
             "order": 28
           },
           "dependi.php.informPatchUpdates": {
