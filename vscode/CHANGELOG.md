@@ -2,6 +2,13 @@
 
 All notable changes to the "dependi" extension will be documented in this file.
 
+## 0.7.7
+
+### New Features
+
+- Updated "ignore line pattern" to support multiple patterns.
+
+
 ## 0.7.6
 
 ### New Features
@@ -22,7 +29,7 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 ### Improvements
 
-- Updated "ignore line pattern" to support multiple patterns.
+- Fixed the incorrect ordering of pre-release Python versions. [Issue #58](https://github.com/filllabs/dependi/issues/58)
 
 ## 0.7.5
 
