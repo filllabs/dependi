@@ -20,6 +20,8 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 - Fixed incorrect node linking in dependency graph. [Issue #66](https://github.com/filllabs/dependi/issues/66)
 
+- Fixed the incorrect ordering of pre-release Python versions. [Issue #58](https://github.com/filllabs/dependi/issues/58)
+
 ## 0.7.5
 
 ### Bug Fixes
