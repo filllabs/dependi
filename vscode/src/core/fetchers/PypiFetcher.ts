@@ -44,16 +44,21 @@ export class PypiFetcher extends Fetcher {
   }
   checkPreRelease(version: string): boolean {
     if (!Settings.python.ignoreUnstable) return false;
+    // alpha and beta regexes for python
+    const aORb = /\..*a|b.*/;
     return (
-      version.indexOf("-alpha") !== -1 ||
-      version.indexOf("-beta") !== -1 ||
-      version.indexOf("-rc") !== -1 ||
-      version.indexOf("-SNAPSHOT") !== -1 ||
-      version.indexOf("-dev") !== -1 ||
-      version.indexOf("-preview") !== -1 ||
-      version.indexOf("-experimental") !== -1 ||
-      version.indexOf("-canary") !== -1 ||
-      version.indexOf("-pre") !== -1
+      version.indexOf(".alpha") !== -1 ||
+      version.indexOf(".beta") !== -1 ||
+      version.indexOf(".rc") !== -1 ||
+      version.indexOf(".SNAPSHOT") !== -1 ||
+      version.indexOf(".dev") !== -1 ||
+      version.indexOf(".preview") !== -1 ||
+      version.indexOf(".experimental") !== -1 ||
+      version.indexOf(".canary") !== -1 ||
+      version.indexOf(".pre") !== -1 ||
+      aORb.test(version)
+
+
     );
   }
   mapVersions(dep: Dependency, item?: Item): Dependency {
