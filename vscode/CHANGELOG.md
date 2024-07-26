@@ -18,6 +18,8 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 - Fixed resolved issue where outdated packages appeared as up-to-date. [Issue #60](https://github.com/filllabs/dependi/issues/60)
 
+- Fixed incorrect node linking in dependency graph. [Issue #66](https://github.com/filllabs/dependi/issues/66)
+
 ## 0.7.5
 
 ### Bug Fixes

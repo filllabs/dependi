@@ -68,7 +68,7 @@ export class TomlParser implements Parser {
       }
       if (state.isMultipleDepTable) {
         // if it is multiple dependency table, we need to read pairs until we find another table
-        const pair = parsePair(line.text, row);
+        const pair = this.parsePair(line.text, row);
         if (!pair) {
           continue;
         }
@@ -86,7 +86,7 @@ export class TomlParser implements Parser {
         continue;
       } else {
         // we neet 2 things, version and package name from next rows until we find another table
-        const pair = parsePair(line.text, row);
+        const pair = this.parsePair(line.text, row);
         if (!pair) {
           continue;
         }
@@ -127,37 +127,37 @@ export class TomlParser implements Parser {
     items.push(state.currentItem);
     state.currentItem = new Item();
   }
-}
 
-function parsePair(line: string, row: number): Item | undefined {
-  const item = new Item();
-  let eqIndex = line.indexOf("=");
-  if (eqIndex === -1) {
-    return undefined;
-  }
-  row = eqIndex + 1;
-  const commentIndex = line.indexOf("#");
-  item.key = clearText(line.substring(0, eqIndex));
-  item.key = item.key.replace(".version", "");
-  item.value = clearText(
-    line.substring(eqIndex + 1, commentIndex > -1 ? commentIndex : line.length)
-  );
-
-  if (isBoolean(item.value) || item.value.includes("path")) {
-    return undefined;
-  }
-  if (line.indexOf("{") > -1) {
-    // json object
-    parsePackage(line, item);
-    parseVersion(line, item);
+  parsePair(line: string, row: number): Item | undefined {
+    const item = new Item();
+    let eqIndex = line.indexOf("=");
+    if (eqIndex === -1) {
+      return undefined;
+    }
+    row = eqIndex + 1;
+    const commentIndex = line.indexOf("#");
+    item.key = clearText(line.substring(0, eqIndex));
+    item.key = item.key.replace(".version", "");
+    item.value = clearText(
+      line.substring(eqIndex + 1, commentIndex > -1 ? commentIndex : line.length)
+    );
+  
+    if (isBoolean(item.value) || item.value.includes("path")) {
+      return undefined;
+    }
+    if (line.indexOf("{") > -1) {
+      // json object
+      parsePackage(line, item);
+      parseVersion(line, item);
+      return item.start > -1 ? item : undefined;
+    }
+    item.start = line.indexOf(item.value);
+    item.end = item.start + item.value.length;
     return item.start > -1 ? item : undefined;
   }
-  item.start = line.indexOf(item.value);
-  item.end = item.start + item.value.length;
-  return item.start > -1 ? item : undefined;
 }
 
-function parseVersion(line: string, item: Item) {
+export function parseVersion(line: string, item: Item) {
   let i = item.start;
   let eqIndex = line.indexOf("version");
   if (eqIndex === -1) {
@@ -211,7 +211,7 @@ function parseVersionValue(line: string, item: Item) {
   item.end = item.start + item.value.length;
 }
 
-function parsePackage(line: string, item: Item) {
+export function parsePackage(line: string, item: Item) {
   let i = item.start;
   let eqIndex = line.indexOf("package");
   if (eqIndex == -1) {
@@ -257,10 +257,10 @@ function isDependencySingle(line: string): boolean {
   return line.includes("dependencies.");
 }
 
-function isBoolean(value: string): boolean {
+export function isBoolean(value: string): boolean {
   return value === "true" || value === "false";
 }
-function clearText(text: string) {
+export function clearText(text: string) {
   return text.replace(/[^a-zA-Z0-9-_.*]/g, "").trim();
 }
 
