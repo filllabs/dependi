@@ -9,9 +9,14 @@ function indexOrEnd(str: string, q: string) {
   return str.indexOf(q) === -1 ? str.length : str.indexOf(q);
 }
 
+function lastIndexOrEnd(str: string, q: string) {
+  return str.lastIndexOf(q) === -1 ? str.length : str.lastIndexOf(q);
+}
+
 function split(v: string) {
   const c = v.replace(/^v/, "").replace(/\+.*$/, "");
-  const patchIndex = indexOrEnd(c, "-");
+
+  const patchIndex = CurrentLanguage === Language.Python ? lastIndexOrEnd(c, '.') : indexOrEnd(c, "-");
   const arr = c.substring(0, patchIndex).split(".");
   arr.push(c.substring(patchIndex + 1));
   return arr;
@@ -43,7 +48,6 @@ function compareVersions(v1: string, v2: string) {
 
   var sp1 = s1[s1.length - 1];
   var sp2 = s2[s2.length - 1];
-
   if (sp1 && sp2) {
     const p1 = sp1
       .split(".")
@@ -55,12 +59,12 @@ function compareVersions(v1: string, v2: string) {
     for (let i = 0; i < maxLimit; i++) {
       if (
         p1[i] === undefined ||
-        (typeof p2[i] === "string" && typeof p1[i] === "number")
+        (typeof p1[i] === "string" && typeof p2[i] === "number")
       )
         return -1;
       if (
         p2[i] === undefined ||
-        (typeof p1[i] === "string" && typeof p2[i] === "number")
+        (typeof p2[i] === "string" && typeof p1[i] === "number")
       )
         return 1;
 
