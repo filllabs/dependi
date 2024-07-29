@@ -1,9 +1,10 @@
 /**
  * Commands related to TOML files.
  */
-import { commands, TextEditor, TextEditorEdit, Range, workspace } from "vscode";
-import { status } from "./replace";
+import { commands, Range, TextEditor, TextEditorEdit, workspace } from "vscode";
 import { Configs } from "../../config";
+import { Logger } from "../../extension";
+import { status } from "./replace";
 
 
 
@@ -35,8 +36,10 @@ export const updateAll = commands.registerTextEditorCommand(
       workspace.save(editor.document.uri).then((uri) => {
         if (uri)
           console.debug("Saved", uri);
-        else
+        else {
           console.error("Failed to save", uri);
+          Logger.appendLine(`Failed to save ${uri}`);
+        }
       });
     }
   },

@@ -1,5 +1,6 @@
 import { TextEditor } from "vscode";
 import { Settings } from "../../config";
+import { Logger } from "../../extension";
 import decorate from "../../ui/decorator";
 import Dependency from "../Dependency";
 import Item from "../Item";
@@ -10,10 +11,10 @@ import { Listener, replaceItemList } from "./listener";
 
 export class JsonListener implements Listener {
   constructor(
-		public fetcher: Fetcher,
-		public parser: Parser,
-		public lang: Language
-	) {
+    public fetcher: Fetcher,
+    public parser: Parser,
+    public lang: Language
+  ) {
   }
   async parseAndDecorate(editor: TextEditor) {
     try {
@@ -48,6 +49,7 @@ export class JsonListener implements Listener {
 
     } catch (e) {
       console.error(e);
+      Logger.appendLine(`Failed to parse and decorate ${e}`);
     }
   }
 

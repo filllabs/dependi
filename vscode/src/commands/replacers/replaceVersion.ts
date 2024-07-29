@@ -1,6 +1,7 @@
 import { Range, TextEditor, TextEditorEdit, commands, workspace } from "vscode";
-import { ReplaceItem, status } from "./replace";
 import { Configs } from "../../config";
+import { Logger } from "../../extension";
+import { ReplaceItem, status } from "./replace";
 
 /**
  * Replace the version of the dependency at the given range.
@@ -14,7 +15,6 @@ export const replaceVersion = commands.registerTextEditorCommand(
     if (editor && info && !status.inProgress) {
 
       status.inProgress = true;
-      console.debug("Replacing", info.value, "at", info.range);
       const range = new Range(
         info.range.start.line,
         info.range.start.character,
@@ -27,8 +27,10 @@ export const replaceVersion = commands.registerTextEditorCommand(
     workspace.save(editor.document.uri).then((uri) => {
       if (uri)
         console.debug("Saved", uri);
-      else
+      else {
         console.error("Failed to save", uri);
+        Logger.appendLine(`Failed to save ${uri}`);
+      }
     });
 
   },

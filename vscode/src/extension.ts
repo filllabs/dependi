@@ -4,6 +4,7 @@
  */
 import {
   ExtensionContext,
+  OutputChannel,
   ProgressLocation,
   TextDocumentChangeEvent,
   window,
@@ -11,6 +12,7 @@ import {
 } from "vscode";
 import { replaceVersion } from "./commands/replacers/replaceVersion";
 import { updateAll } from "./commands/replacers/updateAll";
+import { generateCurrentVulnReport } from "./commands/report-generator/generateCurrentVulnReport";
 import { generateVulnerabilityReport } from "./commands/report-generator/generateVulnerabilityReport";
 import { retry } from "./commands/retry";
 import { Settings } from "./config";
@@ -18,12 +20,14 @@ import { setLanguage } from "./core/Language";
 import listener from "./core/listeners/listener";
 import { WelcomePagePanel } from "./panels/WelcomePanel";
 import { ExtensionStorage } from "./storage";
-import { generateCurrentVulnReport } from "./commands/report-generator/generateCurrentVulnReport";
 
+export var Logger: OutputChannel;
 
 export function activate(context: ExtensionContext) {
 
+  Logger = window.createOutputChannel("Dependi");
   console.debug('Congratulations, your extension "dependi" is now active!');
+  Logger.appendLine('Congratulations, your extension "dependi" is now active!');
 
   // Add commands
 
@@ -72,7 +76,7 @@ export function activate(context: ExtensionContext) {
 }
 
 export function deactivate() {
-
+  Logger.dispose();
 }
 
 
@@ -83,11 +87,11 @@ async function configure(context: ExtensionContext) {
   Settings.version = context.extension.packageJSON.version;
 
   if (lt.isFirstInstall()) {
-    console.debug("First install");
+    Logger.appendLine("First install");
     WelcomePagePanel.render(context);
     await lt.setShownVersion(Settings.version);
   } else if (lt.shouldShowWelcomePage(context.extension.packageJSON.version)) {
-    console.debug("Updated version");
+    Logger.appendLine("Updated version");
     window.withProgress(
       {
         title: "Dependi has been updated to a new version. See the [CHANGELOG!](https://github.com/filllabs/dependi/blob/main/vscode/CHANGELOG.md)",

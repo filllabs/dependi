@@ -1,6 +1,7 @@
 import * as https from "https";
 import NodeCache from "node-cache";
 import { Settings } from "../../config";
+import { Logger } from "../../extension";
 import { CrateMetadatas } from "../crateMetadatas";
 import { getReqOptions } from "../utils";
 const cache = new NodeCache({ stdTTL: 60 * 10 });
@@ -62,6 +63,7 @@ export const versions = (
           cache.set(cacheName, crate_metadatas);
         } catch (error) {
           console.error("Error parsing response:", error);
+          Logger.appendLine("Error parsing response: " + error);
           reject(error);
         }
         resolve(crate_metadatas);

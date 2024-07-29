@@ -1,7 +1,8 @@
 import * as fs from "fs";
 import * as vscode from "vscode";
-import { window, extensions, workspace, ExtensionContext } from "vscode";
+import { ExtensionContext, extensions, window, workspace } from "vscode";
 import { GitExtension } from "../../api/git";
+import { Logger } from "../../extension";
 
 interface MyData {
   hash: string;
@@ -374,6 +375,7 @@ function updateChangeLog(
       }
     });
   } catch (error) {
+    Logger.appendLine("Changelog report : An error occurred: " + error);
     console.error("An error occurred:", error);
   }
 }
