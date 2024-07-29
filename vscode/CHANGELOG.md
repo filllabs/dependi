@@ -10,6 +10,10 @@ All notable changes to the "dependi" extension will be documented in this file.
 - Logging added to output channel for better debugging and error handling.
 - Report , Update and Retry menu added to the title bar.
 
+### Bug Fixes
+
+- Fixed parsing issue with certain version strings. [Issue #77](https://github.com/filllabs/dependi/issues/77)
+
 ## 0.7.6
 
 ### New Features
