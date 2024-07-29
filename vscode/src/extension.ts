@@ -3,6 +3,7 @@
  * This extension helps to manage crate dependency versions.
  */
 import {
+  commands,
   ExtensionContext,
   OutputChannel,
   ProgressLocation,
@@ -66,6 +67,15 @@ export function activate(context: ExtensionContext) {
       }
     }),
   );
+  // add supported file names  according to the language settings
+  commands.executeCommand('setContext', 'dependi.supportedFiles', [
+    'Cargo.toml',
+    'go.mod',
+    'package.json',
+    'composer.json',
+    'requirements.txt',
+    'pyproject.toml'
+  ]);
 
   console.debug("Adding commands");
   context.subscriptions.push(retry);

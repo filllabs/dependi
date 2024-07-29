@@ -67,7 +67,9 @@
     "onLanguage:composer.json",
     "workspaceContains:**/composer.json",
     "onLanguage:requirements.txt",
-    "workspaceContains:**/requirements.txt"
+    "workspaceContains:**/requirements.txt",
+    "onLanguage:pyproject.toml",
+    "workspaceContains:**/pyproject.toml"
   ],
   "contributes": {
     "languages": [
@@ -80,7 +82,8 @@
           ".toml"
         ],
         "filenames": [
-          "Cargo.toml"
+          "Cargo.toml",
+          "pyproject.toml"
         ]
       },
       {
@@ -132,6 +135,30 @@
         ]
       }
     ],
+    "menus": {
+      "editor/title": [
+        {
+          "when": "resourceFilename in dependi.supportedFiles",
+          "command": "dependi.commands.vulnerability.report",
+          "group": "navigation"
+        },
+        {
+          "when": "resourceFilename in dependi.supportedFiles",
+          "command": "dependi.commands.vulnerability.currentReport",
+          "group": "navigation"
+        },
+        {
+          "when": "resourceFilename in dependi.supportedFiles",
+          "command": "dependi.commands.updateAll",
+          "group": "navigation"
+        },
+        {
+          "when": "resourceFilename in dependi.supportedFiles",
+          "command": "dependi.commands.retry",
+          "group": "navigation"
+        }
+      ]
+    },
     "commands": [
       {
         "command": "dependi.commands.replaceVersion",
@@ -141,22 +168,38 @@
       {
         "command": "dependi.commands.retry",
         "title": "Retry to fetch dependencies",
-        "category": "Dependi"
+        "category": "Dependi",
+        "icon": {
+          "dark": "./src/icons/retry-dark.svg",
+          "light": "./src/icons/retry-light.svg"
+        }
       },
       {
         "command": "dependi.commands.updateAll",
         "title": "Update All dependencies to latest version",
-        "category": "Dependi"
+        "category": "Dependi",
+        "icon": {
+          "dark": "./src/icons/update-dark.svg",
+          "light": "./src/icons/update-light.svg"
+        }
       },
       {
         "command": "dependi.commands.vulnerability.report",
-        "title": "Generate detailed vulnerability report",
-        "category": "Dependi"
+        "title": "Generate vulnerability report compared to latest dependency commit",
+        "category": "Dependi",
+        "icon": {
+          "dark": "./src/icons/vuln-rep-comp-dark.svg",
+          "light": "./src/icons/vuln-rep-comp-light.svg"
+        }
       },
       {
         "command": "dependi.commands.vulnerability.currentReport",
-        "title": "Generate current vulnerability report",
-        "category": "Dependi"
+        "title": "Generate vulnerability report the current dependencies",
+        "category": "Dependi",
+        "icon": {
+          "dark": "./src/icons/vuln-rep-dark.svg",
+          "light": "./src/icons/vuln-rep-light.svg"
+        }
       }
     ],
     "configuration": [
