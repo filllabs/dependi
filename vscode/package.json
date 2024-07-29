@@ -170,8 +170,8 @@
         "title": "Retry to fetch dependencies",
         "category": "Dependi",
         "icon": {
-          "dark": "./src/icons/retry-dark.svg",
-          "light": "./src/icons/retry-light.svg"
+          "dark": "./icons/retry-dark.svg",
+          "light": "./icons/retry-light.svg"
         }
       },
       {
@@ -179,8 +179,8 @@
         "title": "Update All dependencies to latest version",
         "category": "Dependi",
         "icon": {
-          "dark": "./src/icons/update-dark.svg",
-          "light": "./src/icons/update-light.svg"
+          "dark": "./icons/update-dark.svg",
+          "light": "./icons/update-light.svg"
         }
       },
       {
@@ -188,8 +188,8 @@
         "title": "Generate vulnerability report compared to latest dependency commit",
         "category": "Dependi",
         "icon": {
-          "dark": "./src/icons/vuln-rep-comp-dark.svg",
-          "light": "./src/icons/vuln-rep-comp-light.svg"
+          "dark": "./icons/vuln-rep-comp-dark.svg",
+          "light": "./icons/vuln-rep-comp-light.svg"
         }
       },
       {
@@ -197,8 +197,8 @@
         "title": "Generate vulnerability report the current dependencies",
         "category": "Dependi",
         "icon": {
-          "dark": "./src/icons/vuln-rep-dark.svg",
-          "light": "./src/icons/vuln-rep-light.svg"
+          "dark": "./icons/vuln-rep-dark.svg",
+          "light": "./icons/vuln-rep-light.svg"
         }
       }
     ],
