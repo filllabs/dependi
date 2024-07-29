@@ -4,6 +4,7 @@ import {
 } from "vscode";
 import Dependency from "../core/Dependency";
 import { Language } from "../core/Language";
+import { Logger } from "../extension";
 import decoration from "./decoration";
 import DecorationPreferences, { loadPref } from "./pref";
 import { StatusBar } from "./status-bar";
@@ -70,6 +71,7 @@ export default function decorate(
       }
     } catch (e) {
       console.error(e);
+      Logger.appendLine(`Failed to build build decorator (${dependency.item.value})`);
       errors.push(`Failed to build build decorator (${dependency.item.value})`);
     }
   }

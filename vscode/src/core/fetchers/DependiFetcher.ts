@@ -1,5 +1,6 @@
 import { Indexes, VersionsReq } from "../../api/index/dependi-index-server/indexes";
 import { Settings } from "../../config";
+import { Logger } from "../../extension";
 import compareVersions from "../../semver/compareVersions";
 import Dependency from "../Dependency";
 import Item from "../Item";
@@ -25,6 +26,7 @@ export class DependiFetcher extends Fetcher {
 
     if (Settings.api.deviceID === "") {
       console.error("DeviceID is empty");
+      Logger.appendLine("DeviceID is empty");
     }
 
     let versions = await Indexes.getVersions(req, {

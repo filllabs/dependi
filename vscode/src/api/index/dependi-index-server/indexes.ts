@@ -3,6 +3,7 @@ import { request } from ".";
 
 import { Configs } from "../../../config";
 import Dependency from "../../../core/Dependency";
+import { Logger } from "../../../extension";
 import { openDeviceLimitDialog, openPaymentRequiredDialog, openSettingsDialog } from "../../../ui/dialogs";
 import { Errors, getError } from "./errors";
 import { Language } from "./reports";
@@ -85,6 +86,7 @@ export async function getVersions(value: VersionsReq, options?: RequestInit) {
     })
     .catch((err) => {
       console.error("Catch get versions", err);
+      Logger.appendLine("Catch get versions: " + err);
       return [];
     });
 }

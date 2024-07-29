@@ -1,5 +1,6 @@
 import { TextEditor } from "vscode";
 import { Settings } from "../../config";
+import { Logger } from "../../extension";
 import decorate from "../../ui/decorator";
 import Dependency from "../Dependency";
 import Item from "../Item";
@@ -52,6 +53,7 @@ export class PypiListener implements Listener {
       }
     } catch (e) {
       console.error(e);
+      Logger.appendLine(`Failed to parse and decorate ${e}`);
     }
   }
 

@@ -1,4 +1,5 @@
 import { Settings } from "../../../config";
+import { Logger } from "../../../extension";
 import { UserAgent } from "../../utils";
 
 export async function request<Data>(path: string, init?: RequestInit): Promise<RequestState<Data>> {
@@ -38,7 +39,7 @@ export async function request<Data>(path: string, init?: RequestInit): Promise<R
           error = await response.text();
         }
       } else {
-        console.info(path, init?.method || 'GET', response.status, response.statusText);
+        Logger.appendLine(`${path}:${init?.method || 'GET'} ${response.status}-${response.statusText}`);
       }
     } else {
       error = await response.text();
@@ -47,10 +48,11 @@ export async function request<Data>(path: string, init?: RequestInit): Promise<R
           error = JSON.parse(error);
           error = error.message || error.error || error;
         } catch (e) {
-          console.error(path, init?.method || 'GET', e, response.status, response.statusText);
+          Logger.appendLine(`${path}:${init?.method || 'GET'} ${response.status}-${response.statusText}, ${e}, ${error}`);
         }
       }
       console.error(path, init?.method || 'GET', error, response.status, response.statusText);
+      Logger.appendLine(`${path}:${init?.method || 'GET'} ${response.status}-${response.statusText}, ${error}`);
     }
     return {
       status: response.status,
@@ -62,6 +64,7 @@ export async function request<Data>(path: string, init?: RequestInit): Promise<R
     };
   } catch (e: any) {
     console.error(path, init?.method || 'GET', e);
+    Logger.appendLine(`${path}:${init?.method || 'GET'} ${e}`);
     return {
       status: 0,
       statusText: '',

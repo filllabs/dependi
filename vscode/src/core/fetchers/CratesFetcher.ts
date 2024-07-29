@@ -4,6 +4,7 @@ import { queryMultiplePackageVulns } from "../../api/osv/vulnerability-service";
 import { Settings } from "../../config";
 import compareVersions from "../../semver/compareVersions";
 import { StatusBar } from "../../ui/status-bar";
+import { fetcherCatch } from "../../utils/errors";
 import Dependency from "../Dependency";
 import Item from "../Item";
 import { Fetcher } from "./fetcher";
@@ -32,13 +33,7 @@ export class CratesFetcher extends Fetcher {
             versions,
           };
         })
-        .catch((error: Error) => {
-          console.error(error);
-          return {
-            item,
-            error: item.key + ": " + error,
-          };
-        });
+        .catch(fetcherCatch(item));
     };
   }
 
