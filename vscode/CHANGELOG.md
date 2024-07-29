@@ -8,6 +8,7 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 - Updated "ignore line pattern" to support multiple patterns.
 - Logging added to output channel for better debugging and error handling.
+- Report , Update and Retry menu added to the title bar.
 
 ## 0.7.6
 
