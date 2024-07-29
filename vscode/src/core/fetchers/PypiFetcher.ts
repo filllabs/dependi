@@ -51,6 +51,7 @@ export class PypiFetcher extends Fetcher {
       version.indexOf(".experimental") !== -1 ||
       version.indexOf(".canary") !== -1 ||
       version.indexOf(".pre") !== -1 ||
+      version.indexOf("rc") !== -1 ||
       aORb.test(version)
 
 

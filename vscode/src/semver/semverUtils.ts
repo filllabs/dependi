@@ -6,13 +6,17 @@ import { CurrentLanguage, Language } from "../core/Language";
 export function checkVersion(version: string = "0.0.0", versions: string[]): [boolean, boolean, string | null] {
   let v = version;
 
-  versions = versions.map(normalizeVersion);
+  if (CurrentLanguage === Language.Python) {
+    v = convertPythonVersionToSemver(v);
+    versions = versions.map(convertPythonVersionToSemver);
+    version = convertPythonVersionToSemver(version);
+  }
   let prefix = v.charCodeAt(0);
   if (prefix > 47 && prefix < 58)
     v = "^" + v;
   const max = versions[0];
   if (maxSatisfying(versions, v) === null) {
-    if (valid(normalizeVersion(version)) === null) {
+    if (valid(version) === null) {
       return [false, false, null];
     }
     // TODO: ask this test with kaan
@@ -44,11 +48,33 @@ export function checkVersion(version: string = "0.0.0", versions: string[]): [bo
   return [satisfies(max, v), pathUpdated, maxSatisfying(versions, v)];
 }
 
-function normalizeVersion(version: string): string {
-  if (!version.includes(".")) {
-    return `${version}.0.0`;
-  } else if (version.split(".").length === 2) {
-    return `${version}.0`;
+function convertPythonVersion(version: string): string {
+  return version
+      .replace(/\.dev(\d+)/, '-dev.$1')
+      .replace(/\.post(\d+)/, '-post.$1')
+      .replace(/\.a(\d+)/, '-alpha.$1')
+      .replace(/\.b(\d+)/, '-beta.$1')
+      .replace(/\.rc(\d+)/, '-rc.$1')
+      .replace(/a(\d+)/, '-alpha.$1')
+      .replace(/b(\d+)/, '-beta.$1')
+      .replace(/rc(\d+)/, '-rc.$1')
+      .replace(/c(\d+)/, '-c.$1')
+}
+
+export function convertPythonVersionToSemver(version: string): string {
+  const v = convertPythonVersion(version);
+  const pattern = /^(\d+)\.(\d+)(?:\.(\d+))?([-a-zA-Z0-9.]+)?$/;
+  const match = v.match(pattern);
+
+  if (match) {
+    const major = match[1]; 
+    const minor = match[2];
+    const patch = match[3] || 0;
+    const preRelease = match[4]? `-${match[4].slice(1)}`  :"";
+
+    const normalizedVersion = `${major}.${minor}.${patch}${preRelease}`;
+    return normalizedVersion;
+  } else {
+    return v;
   }
-  return version;
 }
