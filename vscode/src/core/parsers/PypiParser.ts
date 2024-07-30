@@ -82,7 +82,7 @@ function parseDependencyLine(line: TextLine): Item {
 
   const item = new Item();
   item.copyFrom(
-    name,
+    name.trim(),
     version,
     startOfVersion,
     endOfVersion,
