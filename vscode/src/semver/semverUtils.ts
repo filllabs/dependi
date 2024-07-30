@@ -6,11 +6,10 @@ import { CurrentLanguage, Language } from "../core/Language";
 export function checkVersion(version: string = "0.0.0", versions: string[]): [boolean, boolean, string | null] {
   let v = version;
 
-  if (CurrentLanguage === Language.Python) {
-    v = convertPythonVersionToSemver(v);
-    versions = versions.map(convertPythonVersionToSemver);
-    version = convertPythonVersionToSemver(version);
-  }
+  v = versionToSemver(v);
+  version = versionToSemver(version);
+  versions = versions.map(versionToSemver);
+  
   let prefix = v.charCodeAt(0);
   if (prefix > 47 && prefix < 58)
     v = "^" + v;
@@ -46,6 +45,22 @@ export function checkVersion(version: string = "0.0.0", versions: string[]): [bo
   }
   const pathUpdated = shouldPatchBeChecked ? compare(max, minVersion(v) ?? '0.0.0') === 1 : false;
   return [satisfies(max, v), pathUpdated, maxSatisfying(versions, v)];
+}
+
+function versionToSemver(version: string): string {
+  if (CurrentLanguage === Language.Python) {
+    return convertPythonVersionToSemver(version);
+  }
+  return normalizeVersion(version);
+}
+
+function normalizeVersion(version: string): string {
+  if (!version.includes(".")) {
+    return `${version}.0.0`;
+  } else if (version.split(".").length === 2) {
+    return `${version}.0`;
+  }
+  return version;
 }
 
 function convertPythonVersion(version: string): string {
