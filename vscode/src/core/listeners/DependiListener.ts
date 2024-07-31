@@ -2,46 +2,23 @@ import { TextEditor } from "vscode";
 import { Logger } from "../../extension";
 import decorate from "../../ui/decorator";
 import Dependency from "../Dependency";
-import Item from "../Item";
 import { CurrentLanguage } from "../Language";
-import { Fetcher } from "../fetchers/fetcher";
-import { Parser } from "../parsers/parser";
-import { Listener, replaceItemList } from "./listener";
+import { Listener } from "./listener";
 
-export class DependiListener implements Listener {
-  parser: Parser;
-  fetcher: Fetcher;
-
-  constructor(fetcher: Fetcher, parser: Parser) {
-    this.fetcher = fetcher;
-    this.parser = parser;
-  }
+export class DependiListener extends Listener {
 
   async parseAndDecorate(editor: TextEditor) {
     try {
-      dependencies = this.parser.parse(editor.document);
-      if (!fetchedDeps || !fetchedDepsMap) {
-        // parallel fetch versions
-        // create initial fetchedDeps from dependencies
-        fetchedDeps = dependencies.map(
-          (i) => ({ item: i, versions: [i.value] } as Dependency)
-        );
+      let dependencies = this.parse(editor);
+      // parallel fetch versions
+      // create initial fetchedDeps from dependencies
+      const versions: Dependency[] = await this.fetcher.versions(dependencies);
+      // this.fillCache(CurrentLanguage, versions);
+      decorate(editor, versions, CurrentLanguage);
 
-
-        const versionResults: Dependency[] = await this.fetcher.versions(dependencies);
-        fetchedDeps = versionResults;
-
-        replaceItemList(fetchedDeps);
-        decorate(editor, fetchedDeps, CurrentLanguage);
-      }
     } catch (e) {
       console.error(e);
       Logger.appendLine(`Failed to parse and decorate ${e}`);
     }
   }
 }
-var dependencies: Item[];
-var fetchedDeps: Dependency[];
-var fetchedVulns: Dependency[];
-var fetchedDepsMap: Map<string, Dependency[]>;
-export { dependencies, fetchedDeps, fetchedDepsMap, fetchedVulns };

@@ -211,7 +211,7 @@
             "scope": "resource",
             "description": "The API URL for the index server.",
             "format": "url",
-            "pattern": "^https?:\/\/(?!.*\/\/)([^\/]+\/)*[^\/]+$",
+            "pattern": "^https?://(?!.*//)([^/]+/)*[^/]+$",
             "default": "https://index.dependi.io",
             "order": 1
           },
@@ -239,7 +239,7 @@
             "scope": "resource",
             "description": "The URL for the Rust package index server.",
             "format": "url",
-            "pattern": "^https?:\/\/(?!.*\/\/)([^\/]+\/)*[^\/]+$",
+            "pattern": "^https?://(?!.*//)([^/]+/)*[^/]+$",
             "default": "https://index.crates.io",
             "order": 5
           },
@@ -282,7 +282,7 @@
             "description": "The URL for the NPM package index server.",
             "format": "url",
             "default": "https://registry.npmjs.org",
-            "pattern": "^https?:\/\/(?!.*\/\/)([^\/]+\/)*[^\/]+$",
+            "pattern": "^https?://(?!.*//)([^/]+/)*[^/]+$",
             "order": 10
           },
           "dependi.npm.excludeUnstableVersions": {
@@ -323,7 +323,7 @@
             "scope": "resource",
             "description": "The URL for the Go package index server.",
             "format": "url",
-            "pattern": "^https?:\/\/(?!.*\/\/)([^\/]+\/)*[^\/]+$",
+            "pattern": "^https?://(?!.*//)([^/]+/)*[^/]+$",
             "default": "https://proxy.golang.org",
             "order": 15
           },
@@ -365,7 +365,7 @@
             "scope": "resource",
             "description": "The URL for the Python package index server.",
             "format": "url",
-            "pattern": "^https?:\/\/(?!.*\/\/)([^\/]+\/)*[^\/]+$",
+            "pattern": "^https?://(?!.*//)([^/]+/)*[^/]+$",
             "default": "https://pypi.org/pypi",
             "order": 20
           },
@@ -407,7 +407,7 @@
             "scope": "resource",
             "description": "The URL for the PHP package index server.",
             "format": "url",
-            "pattern": "^https?:\/\/(?!.*\/\/)([^\/]+\/)*[^\/]+$",
+            "pattern": "^https?://(?!.*//)([^/]+/)*[^/]+$",
             "default": "https://repo.packagist.org",
             "order": 26
           },
@@ -456,7 +456,7 @@
             "scope": "resource",
             "description": "The URL for batch querying vulnerabilities via OSV.",
             "format": "url",
-            "pattern": "^https?:\/\/(?!.*\/\/)([^\/]+\/)*[^\/]+$",
+            "pattern": "^https?://(?!.*//)([^/]+/)*[^/]+$",
             "default": "https://api.osv.dev/v1/querybatch",
             "order": 32
           },
@@ -465,7 +465,7 @@
             "scope": "resource",
             "description": "The URL for querying single vulnerabilities via OSV.",
             "format": "url",
-            "pattern": "^https?:\/\/(?!.*\/\/)([^\/]+\/)*[^\/]+$",
+            "pattern": "^https?://(?!.*//)([^/]+/)*[^/]+$",
             "default": "https://api.osv.dev/v1/query",
             "order": 33
           }

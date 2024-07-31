@@ -1,19 +1,15 @@
-import Item from "../core/Item";
+import Dependency from "../core/Dependency";
 import { Logger } from "../extension";
 
-export function fetcherCatch(item: Item): any {
+export function fetcherCatch(dep: Dependency): any {
   return (error: Error) => {
     console.error(error);
-    Logger.appendLine("Error fetching versions for " + item.key);
+    Logger.appendLine("Error fetching versions for " + dep.item.key + ": " + error);
     return {
-      item,
-      error: item.key + ": " + error,
+      item: dep,
+      error: dep.item.key + ": " + error,
     };
   };
 };
 
 
-export function listernerCatch(): any {
-
-
-};

@@ -1,7 +1,6 @@
 import { RequestOptions } from "http";
 import os from 'os';
 import { Settings } from "../config";
-const semverMajor = require("semver/functions/major");
 
 function getOSInfo(): string {
   const platform = os.platform();
@@ -47,6 +46,7 @@ export function getReqOptions(url: string): RequestOptions {
     headers: {
       'User-Agent': UserAgent
     },
+    timeout: 1000
   };
   return options;
 }

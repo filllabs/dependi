@@ -17,8 +17,8 @@ import { generateCurrentVulnReport } from "./commands/report-generator/generateC
 import { generateVulnerabilityReport } from "./commands/report-generator/generateVulnerabilityReport";
 import { retry } from "./commands/retry";
 import { Settings } from "./config";
-import { setLanguage } from "./core/Language";
-import listener from "./core/listeners/listener";
+import { CurrentLanguage, Language, setLanguage } from "./core/Language";
+import listener from "./core/listeners";
 import { WelcomePagePanel } from "./panels/WelcomePanel";
 import { ExtensionStorage } from "./storage";
 
@@ -51,8 +51,11 @@ export function activate(context: ExtensionContext) {
     // Add active text editor listener and run once on start.
     window.onDidChangeActiveTextEditor(
       (e) => {
-        console.debug("Active text editor changed");
         setLanguage(window.activeTextEditor?.document.fileName);
+        if (CurrentLanguage === Language.None) {
+          return;
+        }
+        console.debug("Active text editor changed", CurrentLanguage);
         return listener(e);
       }),
     // When the text document is changed, fetch + check dependencies
@@ -60,8 +63,11 @@ export function activate(context: ExtensionContext) {
       if (e.document.fileName !== window.activeTextEditor?.document.fileName) {
         return;
       }
-      console.debug("Text document changed");
+      if (CurrentLanguage === Language.None) {
+        return;
+      }
       setLanguage(window.activeTextEditor?.document.fileName);
+      console.debug("Text document changed", CurrentLanguage);
       if (!e.document.isDirty) {
         listener(window.activeTextEditor);
       }

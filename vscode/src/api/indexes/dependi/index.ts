@@ -1,11 +1,12 @@
 import { Settings } from "../../../config";
 import { Logger } from "../../../extension";
 import { UserAgent } from "../../utils";
+import { cleanURL } from "../utils";
 
 export async function request<Data>(path: string, init?: RequestInit): Promise<RequestState<Data>> {
 
   try {
-    const response = await fetch(`${Settings.api.url}/${path}`, {
+    const response = await fetch(getURL(path), {
       method: 'GET',
       credentials: 'include',
       cache: 'default',
@@ -83,4 +84,8 @@ export interface RequestState<T> {
   headers?: Headers;
   error?: string;
   isLoading?: boolean;
+}
+
+function getURL(path: string): string | URL | Request {
+  return cleanURL(`${Settings.api.url}/${path}`);
 }

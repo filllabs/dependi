@@ -1,7 +1,10 @@
 import { Range, TextEditor, TextEditorEdit, commands, workspace } from "vscode";
 import { Configs } from "../../config";
+import Dependency from "../../core/Dependency";
+import { CurrentLanguage } from "../../core/Language";
+import { DependencyCache } from "../../core/listeners/listener";
 import { Logger } from "../../extension";
-import { ReplaceItem, status } from "./replace";
+import { CommandData, status } from "./replace";
 
 /**
  * Replace the version of the dependency at the given range.
@@ -11,27 +14,31 @@ import { ReplaceItem, status } from "./replace";
  */
 export const replaceVersion = commands.registerTextEditorCommand(
   Configs.REPLACE_VERSIONS,
-  (editor: TextEditor, edit: TextEditorEdit, info: ReplaceItem) => {
-    if (editor && info && !status.inProgress) {
+  (editor: TextEditor, edit: TextEditorEdit, data: CommandData) => {
+    if (editor && data && !status.inProgress) {
 
       status.inProgress = true;
+
+      const dep = DependencyCache.get(CurrentLanguage)?.get<Dependency>(data.key);
+
+      if (!dep) {
+        status.inProgress = false;
+        return;
+      }
       const range = new Range(
-        info.range.start.line,
-        info.range.start.character,
-        info.range.end.line,
-        info.range.end.character,
+        dep.item.range.start.line,
+        dep.item.range.start.character,
+        dep.item.range.end.line,
+        dep.item.range.end.character,
       );
-      edit.replace(range, info.value);
+      edit.replace(range, data.version);
       status.inProgress = false;
     }
     workspace.save(editor.document.uri).then((uri) => {
-      if (uri)
-        console.debug("Saved", uri);
-      else {
+      if (!uri) {
         console.error("Failed to save", uri);
         Logger.appendLine(`Failed to save ${uri}`);
       }
     });
-
   },
 );

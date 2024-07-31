@@ -10,7 +10,7 @@ import {
 } from "vscode";
 
 import { validRange } from "semver";
-import { ReplaceItem } from "../commands/replacers/replace";
+import { CommandData, ReplaceItem } from "../commands/replacers/replace";
 import { Configs } from "../config";
 import Item from "../core/Item";
 import { CurrentLanguage, Language } from "../core/Language";
@@ -206,6 +206,7 @@ function appendVulnerabilities(hoverMessage: MarkdownString, vuln: Map<string, s
 
 
 function appendVersions(hoverMessage: MarkdownString, versions: string[], item: Item, maxSatisfying: string, vuln: Map<string, string[]> | undefined, decorationPreferences: DecorationPreferences, lang: Language) {
+
   for (let i = 0; i < versions.length; i++) {
     const version = versions[i];
     const v = vuln?.get(version);
@@ -216,9 +217,13 @@ function appendVersions(hoverMessage: MarkdownString, versions: string[], item: 
         end: { line: item.range.end.line, character: item.range.end.character },
       }
     };
+    const data: CommandData = {
+      key: item.key,
+      version: version
+    };
 
     const isCurrent = version === maxSatisfying;
-    const encoded = encodeURI(JSON.stringify(replaceData));
+    const encoded = encodeURI(JSON.stringify(data));
     const docs = (i === 0 || isCurrent) ? (' ' + getDocsLink(lang, item.key, version)) : "";
     const vulnText = v?.length ? decorationPreferences.vulnText.replace("${count}", `${v?.length}`) : "";
     const command = `${isCurrent ? "**" : ""}[${version}](command:${Configs.REPLACE_VERSIONS}?${encoded})${docs}${isCurrent ? "**" : ""}  ${vulnText}`;

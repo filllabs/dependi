@@ -1,7 +1,7 @@
 import {
   window,
 } from "vscode";
-import { ReportItem, VulnReq, getCurrentVulnReport, getLangIdFromName, getVulnReport } from "../../api/index/dependi-index-server/reports";
+import { ReportItem, VulnReq, getCurrentVulnReport, getLangIdFromName, getVulnReport } from "../../api/indexes/dependi/reports";
 import { Settings } from "../../config";
 import Item from "../../core/Item";
 import { Parser } from "../../core/parsers/parser";
@@ -143,7 +143,7 @@ export async function generateCurrentReport(progress: any) {
 
     const vulnRequest: VulnReq = {
       RepoName: "",
-      Commits:  [],
+      Commits: [],
       PreviousItems: [],
       CurrentItems: reportItems,
       Language: getLangIdFromName(fileName),
@@ -173,7 +173,7 @@ async function parseFile(parser: Parser) {
 
   const reportItems: ReportItem[] = items.map((item) => ({
     Key: item.key,
-    Value: item.value?.replace(/[=><]/g, "")  || "",
+    Value: item.value?.replace(/[=><]/g, "") || "",
   }));
 
   return { reportItems };
