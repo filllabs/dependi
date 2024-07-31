@@ -1,10 +1,10 @@
 import { Range, TextEditor, TextEditorEdit, commands, workspace } from "vscode";
+import { CommandData, status } from ".";
 import { Configs } from "../../config";
 import Dependency from "../../core/Dependency";
 import { CurrentLanguage } from "../../core/Language";
 import { DependencyCache } from "../../core/listeners/listener";
 import { Logger } from "../../extension";
-import { CommandData, status } from "./replace";
 
 /**
  * Replace the version of the dependency at the given range.

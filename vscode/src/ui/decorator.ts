@@ -2,7 +2,6 @@ import {
   DecorationOptions,
   TextEditor,
 } from "vscode";
-import { status } from "../commands/replacers/replace";
 import Dependency from "../core/Dependency";
 import { Language } from "../core/Language";
 import { Logger } from "../extension";
@@ -39,9 +38,6 @@ export default function decorate(
   const compOptions: DecorationOptions[] = [];
   const inCompOptions: DecorationOptions[] = [];
   const errOptions: DecorationOptions[] = [];
-
-  //clear replace items
-  status.replaceItems = [];
 
   for (let i = filtered.length - 1; i > -1; i--) {
     const dependency: Dependency = filtered[i];

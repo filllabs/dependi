@@ -1,6 +1,6 @@
 import path from "path";
 import { TextEditor } from "vscode";
-import { status } from "../../commands/replacers/replace";
+import { status } from "../../commands/replacers";
 import { Configs, Settings } from "../../config";
 import { StatusBar } from "../../ui/status-bar";
 import { CurrentLanguage, Language } from "../Language";

@@ -10,7 +10,7 @@ import {
 } from "vscode";
 
 import { validRange } from "semver";
-import { CommandData, ReplaceItem } from "../commands/replacers/replace";
+import { CommandData } from "../commands/replacers";
 import { Configs } from "../config";
 import Item from "../core/Item";
 import { CurrentLanguage, Language } from "../core/Language";
@@ -78,12 +78,8 @@ export default function decoration(
 
     if (version == "?") {
       const version = versions[0];
-      const info: ReplaceItem = {
-        value: version,
-        range: item.range,
-      };
       editor.edit((edit) => {
-        edit.replace(item.range, info.value.substr(1, info.value.length - 2));
+        edit.replace(item.range, version.slice(1, version.length - 2));
       });
       editor.document.save();
     }
@@ -210,16 +206,9 @@ function appendVersions(hoverMessage: MarkdownString, versions: string[], item: 
   for (let i = 0; i < versions.length; i++) {
     const version = versions[i];
     const v = vuln?.get(version);
-    const replaceData: ReplaceItem = {
-      value: version,
-      range: {
-        start: { line: item.range.start.line, character: item.range.start.character },
-        end: { line: item.range.end.line, character: item.range.end.character },
-      }
-    };
     const data: CommandData = {
       key: item.key,
-      version: version
+      version
     };
 
     const isCurrent = version === maxSatisfying;

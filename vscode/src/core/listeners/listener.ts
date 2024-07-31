@@ -4,6 +4,7 @@
  */
 import NodeCache from "node-cache";
 import { TextEditor } from "vscode";
+import { status } from "../../commands/replacers";
 import { Settings } from "../../config";
 import decorate from "../../ui/decorator";
 import Dependency from "../Dependency";
@@ -23,17 +24,6 @@ export abstract class Listener {
     this.parser = parser;
   }
 
-  // fillCache(lang: Language, deps: Dependency[]) {
-  //   let cache = DependencyCache.get(lang);
-  //   if (!cache) {
-  //     cache = new NodeCache({ stdTTL: 5 * 60, checkperiod: 5 * 30, useClones: false });
-  //     DependencyCache.set(lang, cache);
-  //   }
-  //   deps.forEach(dep => {
-  //     if (!dep.item.key) return;
-  //     cache.set(dep.item.key, dep);
-  //   });
-  // }
 
   parse(editor: TextEditor): Dependency[] {
     let items = this.parser.parse(editor.document);
@@ -74,14 +64,9 @@ export abstract class Listener {
       // versions and vulnerabilities of current version.
       await Promise.all(promises);
 
-      // merge both versions and vulnerabilities
-      // if (vulnerabilities) {
-      //   versions.forEach((dep, i) => {
-      //     dep.vulns = vulnerabilities[i].vulns;
-      //   });
-      // }
+      // clear replaceAllData set new data
+      status.updateAllData = dependencies.map((d) => ({ key: d.item.key, version: d.versions?.[0] ?? "" }));
 
-      // this.fillCache(CurrentLanguage, versions);
 
       // parallel fetch vulns for current versions
       decorate(editor, dependencies, CurrentLanguage);
@@ -91,11 +76,6 @@ export abstract class Listener {
         this.fetcher.vulns(dependencies).then(() => {
           decorate(editor, dependencies, CurrentLanguage);
         });
-        // merge vulnData with fetchedDeps set vulns
-        // versions.forEach((dep, i) => {
-        //   dep.vulns = vulnData[i].vulns;
-        // });
-        // this.fillCache(CurrentLanguage, versions);
       }
 
     } catch (e) {

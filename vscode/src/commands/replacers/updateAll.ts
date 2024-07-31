@@ -2,46 +2,57 @@
  * Commands related to TOML files.
  */
 import { commands, Range, TextEditor, TextEditorEdit, workspace } from "vscode";
+import { status } from ".";
 import { Configs } from "../../config";
+import Dependency from "../../core/Dependency";
+import { CurrentLanguage } from "../../core/Language";
+import { DependencyCache } from "../../core/listeners/listener";
 import { Logger } from "../../extension";
-import { status } from "./replace";
 
 
 
 export const updateAll = commands.registerTextEditorCommand(
   Configs.UPDATE_ALL,
   (editor: TextEditor, edit: TextEditorEdit) => {
-    if (
-      editor &&
-      !status.inProgress &&
-      status.replaceItems &&
-      status.replaceItems.length > 0
-    ) {
-      status.inProgress = true;
-      console.debug("Replacing All");
-      for (let i = status.replaceItems.length - 1; i > -1; i--) {
-        const rItem = status.replaceItems[i];
-        edit.replace(
-          new Range(
-            rItem.range.start.line,
-            rItem.range.start.character,
-            rItem.range.end.line,
-            rItem.range.end.character,
-          ),
-          rItem.value,
-        );
-      }
-      status.inProgress = false;
-
-      workspace.save(editor.document.uri).then((uri) => {
-        if (uri)
-          console.debug("Saved", uri);
-        else {
-          console.error("Failed to save", uri);
-          Logger.appendLine(`Failed to save ${uri}`);
-        }
-      });
+    if (!editor || status.inProgress) {
+      console.debug("Editor is undefined or in progress", editor, status.inProgress);
+      return;
     }
+    status.inProgress = true;
+    console.debug("Replacing All");
+    for (let i = status.updateAllData.length - 1; i > -1; i--) {
+      const rItem = status.updateAllData[i];
+      if (rItem.version === "") {
+        console.debug("Version is empty", rItem);
+        Logger.appendLine(`Version is empty ${rItem}`);
+        continue;
+      }
+      const dep = DependencyCache.get(CurrentLanguage)?.get<Dependency>(rItem.key);
+      if (!dep) {
+        console.error("Dependency not found", rItem.key);
+        Logger.appendLine(`Dependency not found ${rItem.key}`);
+        continue;
+      }
+      edit.replace(
+        new Range(
+          dep.item.range.start.line,
+          dep.item.range.start.character,
+          dep.item.range.end.line,
+          dep.item.range.end.character,
+        ),
+        rItem.version,
+      );
+    }
+    status.inProgress = false;
+
+    workspace.save(editor.document.uri).then((uri) => {
+      if (uri)
+        console.debug("Saved", uri);
+      else {
+        console.error("Failed to save", uri);
+        Logger.appendLine(`Failed to save ${uri}`);
+      }
+    });
   },
 );
 
