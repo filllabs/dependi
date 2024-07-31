@@ -21,7 +21,7 @@ export abstract class Fetcher {
     const missingVulns = dependencies.filter(
       (dep) => !dep.vulns || dep.vulns?.size === 0
     );
-    const chunkedArrays = chunkDataArray(missingVulns, 1000);
+    const chunkedArrays = chunkDataArray(missingVulns, 500);
     const promises = chunkedArrays.map(async (chunk) => {
       return queryMultiplePackageVulns(chunk, CurrentEnvironment);
     });
