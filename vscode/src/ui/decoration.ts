@@ -13,8 +13,8 @@ import { validRange } from "semver";
 import { ReplaceItem } from "../commands/replacers/replace";
 import { Configs } from "../config";
 import Item from "../core/Item";
-import { Language } from "../core/Language";
-import { checkVersion } from "../semver/semverUtils";
+import { CurrentLanguage, Language } from "../core/Language";
+import { checkVersion, convertPythonVersionToSemver } from "../semver/semverUtils";
 import DecorationPreferences from "./pref";
 
 type DecorationType = "COMP" | "PATCH" | "INCOMP" | "ERROR";
@@ -36,7 +36,7 @@ export default function decoration(
   error?: string,
 ): [DecorationOptions, DecorationType] {
   // Also handle json valued dependencies
-  const version = item.value?.replace(",", "");
+  let version = item.value?.replace(",", "");
   const [satisfies, hasPatchUpdate, maxSatisfying] = checkVersion(version, versions);
 
   const formatError = (error: string) => {
@@ -86,6 +86,9 @@ export default function decoration(
         edit.replace(item.range, info.value.substr(1, info.value.length - 2));
       });
       editor.document.save();
+    }
+    if (CurrentLanguage === Language.Python) {
+      version = convertPythonVersionToSemver(version!);
     }
     if (!validRange(version)) {
       type = "ERROR";
