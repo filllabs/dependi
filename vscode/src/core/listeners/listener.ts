@@ -44,6 +44,10 @@ export abstract class Listener {
       return cached || dep;
     });
 
+    dependencies.forEach((dep) => {
+      dep = dep.versions ? this.modifyDependecy(dep) : dep;
+    });
+
     return dependencies;
   };
 
@@ -81,5 +85,9 @@ export abstract class Listener {
     } catch (e) {
       console.error(e);
     }
+  }
+
+  modifyDependecy(dep: Dependency): Dependency {
+    return dep;
   }
 }
