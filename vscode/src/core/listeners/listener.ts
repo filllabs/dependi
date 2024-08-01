@@ -18,6 +18,7 @@ export abstract class Listener {
   fetcher: Fetcher;
   parser: Parser;
   // abstract parseAndDecorate(editor: TextEditor): Promise<void>;
+  abstract modifyDependecy(dep: Dependency): void;
 
   constructor(fetcher: Fetcher, parser: Parser) {
     this.fetcher = fetcher;
@@ -85,9 +86,5 @@ export abstract class Listener {
     } catch (e) {
       console.error(e);
     }
-  }
-
-  modifyDependecy(dep: Dependency): void {
-
   }
 }
