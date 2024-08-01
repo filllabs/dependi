@@ -5,10 +5,9 @@ import { Listener } from "./listener";
 export class PypiListener extends Listener {
 
 
-  modifyDependecy(dep: Dependency): Dependency {
+  modifyDependecy(dep: Dependency): void {
     const constrains = splitByComma(dep.item.value ?? "");
     const currVersion = possibleLatestVersion(constrains, dep.versions ?? []);
     dep.item.value = currVersion ? currVersion : dep.item.value;
-    return dep;
   }
 }

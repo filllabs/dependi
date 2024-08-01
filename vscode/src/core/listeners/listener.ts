@@ -45,7 +45,7 @@ export abstract class Listener {
     });
 
     dependencies.forEach((dep) => {
-      dep = dep.versions ? this.modifyDependecy(dep) : dep;
+      dep.versions ? this.modifyDependecy(dep) : dep;
     });
 
     return dependencies;
@@ -87,7 +87,7 @@ export abstract class Listener {
     }
   }
 
-  modifyDependecy(dep: Dependency): Dependency {
-    return dep;
+  modifyDependecy(dep: Dependency): void {
+
   }
 }
