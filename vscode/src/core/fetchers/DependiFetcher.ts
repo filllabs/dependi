@@ -1,4 +1,4 @@
-import { Indexes, VersionsReq } from "../../api/index/dependi-index-server/indexes";
+import { Indexes, VersionsReq } from "../../api/indexes/dependi/indexes";
 import { Settings } from "../../config";
 import { Logger } from "../../extension";
 import compareVersions from "../../semver/compareVersions";
@@ -10,15 +10,31 @@ import { Fetcher } from "./fetcher";
 
 
 export class DependiFetcher extends Fetcher {
-  async versions(dependencies: Item[]): Promise<Dependency[]> {
 
+  async versions(dependencies: Dependency[]): Promise<Dependency[]> {
+    let ignoreUnstable = false;
+    switch (CurrentLanguage) {
+      case Language.Python:
+        ignoreUnstable = Settings.python.ignoreUnstable;
+        break;
+      case Language.JS:
+        ignoreUnstable = Settings.npm.ignoreUnstable;
+        break;
+      case Language.Golang:
+        ignoreUnstable = Settings.go.ignoreUnstable;
+        break;
+      case Language.PHP:
+        ignoreUnstable = Settings.php.ignoreUnstable;
+        break;
+      case Language.Rust:
+        ignoreUnstable = Settings.rust.ignoreUnstable;
+        break;
+    }
     const req: VersionsReq = {
       Language: CurrentLanguage,
-      Packages: dependencies.map((d) => d.key),
-      Dependencies: dependencies.map(
-        (i) => ({ item: i, versions: [i.value] } as Dependency)
-      ),
-      IgnoreUnstables: this.ignoreUnstable,
+      Packages: dependencies.map((d) => d.item.key),
+      Dependencies: dependencies,
+      IgnoreUnstables: ignoreUnstable,
       VulnerabilityCheck: Settings.vulnerability.enabled,
       GhsaCheck: Settings.vulnerability.ghsa
     };
@@ -48,9 +64,6 @@ export class DependiFetcher extends Fetcher {
   async vulns(dependencies: Dependency[]): Promise<Dependency[]> {
     throw new Error("Method not implemented.");
   }
-  checkPreRelease(version: string): boolean {
-    throw new Error("Method not implemented.");
-  }
 
   mapVersions(dep: Dependency, item?: Item): Dependency {
     const versions = dep
@@ -71,5 +84,9 @@ export class DependiFetcher extends Fetcher {
     dep.item.value = currVersion ? currVersion : dep.item.value;
     dep.versions = versions;
     return dep;
+  }
+
+  fetch(isLatest?: boolean): (d: Dependency) => Promise<Dependency> {
+    throw new Error("Method not implemented.");
   }
 }

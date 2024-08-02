@@ -10,7 +10,7 @@ import {
 } from "vscode";
 
 import { validRange } from "semver";
-import { ReplaceItem } from "../commands/replacers/replace";
+import { CommandData } from "../commands/replacers";
 import { Configs } from "../config";
 import Item from "../core/Item";
 import { CurrentLanguage, Language } from "../core/Language";
@@ -78,12 +78,8 @@ export default function decoration(
 
     if (version == "?") {
       const version = versions[0];
-      const info: ReplaceItem = {
-        value: version,
-        range: item.range,
-      };
       editor.edit((edit) => {
-        edit.replace(item.range, info.value.substr(1, info.value.length - 2));
+        edit.replace(item.range, version.slice(1, version.length - 2));
       });
       editor.document.save();
     }
@@ -206,19 +202,17 @@ function appendVulnerabilities(hoverMessage: MarkdownString, vuln: Map<string, s
 
 
 function appendVersions(hoverMessage: MarkdownString, versions: string[], item: Item, maxSatisfying: string, vuln: Map<string, string[]> | undefined, decorationPreferences: DecorationPreferences, lang: Language) {
+
   for (let i = 0; i < versions.length; i++) {
     const version = versions[i];
     const v = vuln?.get(version);
-    const replaceData: ReplaceItem = {
-      value: version,
-      range: {
-        start: { line: item.range.start.line, character: item.range.start.character },
-        end: { line: item.range.end.line, character: item.range.end.character },
-      }
+    const data: CommandData = {
+      key: item.key,
+      version
     };
 
     const isCurrent = version === maxSatisfying;
-    const encoded = encodeURI(JSON.stringify(replaceData));
+    const encoded = encodeURI(JSON.stringify(data));
     const docs = (i === 0 || isCurrent) ? (' ' + getDocsLink(lang, item.key, version)) : "";
     const vulnText = v?.length ? decorationPreferences.vulnText.replace("${count}", `${v?.length}`) : "";
     const command = `${isCurrent ? "**" : ""}[${version}](command:${Configs.REPLACE_VERSIONS}?${encoded})${docs}${isCurrent ? "**" : ""}  ${vulnText}`;

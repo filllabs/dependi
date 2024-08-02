@@ -1,64 +1,29 @@
-import { CrateMetadatas } from "../../api/crateMetadatas";
-import * as API from "../../api/index/sparse-index-server";
-import { queryMultiplePackageVulns } from "../../api/osv/vulnerability-service";
+import { versions } from "../../api/indexes/crates";
 import { Settings } from "../../config";
 import compareVersions from "../../semver/compareVersions";
-import { StatusBar } from "../../ui/status-bar";
 import { fetcherCatch } from "../../utils/errors";
 import Dependency from "../Dependency";
-import Item from "../Item";
 import { Fetcher } from "./fetcher";
 
 export class CratesFetcher extends Fetcher {
-  async versions(dependencies: Item[]): Promise<Dependency[]> {
-    let transformer = this.transformServerResponse(API.versions, this.URL);
-    const responses = dependencies.map(transformer);
-    return Promise.all(responses);
-  }
-
-  transformServerResponse(
-    versions: (name: string, indexServerURL: string) => Promise<CrateMetadatas>,
-    indexServerURL: string
-  ): (i: Item) => Promise<Dependency> {
+  fetch(): (i: Dependency) => Promise<Dependency> {
     const base = this;
-    return function (item: Item): Promise<Dependency> {
-      return versions(item.key, indexServerURL)
-        .then((crate: any) => {
+    return function (dep: Dependency): Promise<Dependency> {
+      if (dep.versions && dep.versions.length > 0) {
+        return Promise.resolve(dep);
+      }
+      return versions(dep.item.key)
+        .then((crate) => {
           const versions = crate.versions
-            .filter((i: string) => i !== "" && i !== undefined && !base.checkPreRelease(i))
+            .filter((i: string) => i !== "" && i !== undefined && !base.checkPreRelease(Settings.rust.ignoreUnstable, i))
             .sort(compareVersions)
             .reverse();
-          return {
-            item,
-            versions,
-          };
+
+          dep.versions = versions;
+          return dep;
         })
-        .catch(fetcherCatch(item));
+        .catch(fetcherCatch(dep));
     };
   }
 
-  async vulns(dependencies: Dependency[]): Promise<Dependency[]> {
-    // Set status bar fetching vulnerabilities
-    StatusBar.setText("Loading", "👀 Fetching vulnerabilities");
-    const packageVulns = await queryMultiplePackageVulns(
-      dependencies,
-      "crates.io"
-    );
-    return packageVulns;
-  }
-
-  checkPreRelease(version: string): boolean {
-    if (!Settings.rust.ignoreUnstable) return false;
-    return (
-      version.indexOf("-alpha") !== -1 ||
-      version.indexOf("-beta") !== -1 ||
-      version.indexOf("-rc") !== -1 ||
-      version.indexOf("-SNAPSHOT") !== -1 ||
-      version.indexOf("-dev") !== -1 ||
-      version.indexOf("-preview") !== -1 ||
-      version.indexOf("-experimental") !== -1 ||
-      version.indexOf("-canary") !== -1 ||
-      version.indexOf("-pre") !== -1
-    );
-  }
 }

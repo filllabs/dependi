@@ -1,24 +1,16 @@
 import * as https from "https";
-import NodeCache from "node-cache";
 import { Settings } from "../../config";
 import { Logger } from "../../extension";
-import { CrateMetadatas } from "../crateMetadatas";
+import { DependencyInfo } from "../DepencencyInfo";
 import { getReqOptions } from "../utils";
-const cache = new NodeCache({ stdTTL: 60 * 10 });
+import { addResponseHandlers, cleanURL, isStatusInvalid, ResponseError } from "./utils";
 
 export const versions = (
   name: string,
-  indexServerURL: string,
   currentVersion?: string
 ) => {
-  return new Promise<CrateMetadatas>(function (resolve, reject) {
-    const cacheName = currentVersion ? name + "-latest" : name;
-    const cached = cache.get<CrateMetadatas>(cacheName);
-    if (cached) {
-      resolve(cached);
-      return;
-    }
-    const url = `${indexServerURL}/${currentVersion ? `-/package/${name}/dist-tags` : `${name}`}`;
+  return new Promise<DependencyInfo>(function (resolve, reject) {
+    const url = getURL(currentVersion, name);
     const options = getReqOptions(url);
     if (!currentVersion) {
       options.headers = {
@@ -26,55 +18,31 @@ export const versions = (
       };
     }
     var req = https.get(options, function (res) {
-      // reject on bad status
-      if (!res.statusCode) {
-        reject(
-          new Error(
-            `statusCode=${res.statusCode}: ${options.hostname}${options.path}`
-          )
-        );
-        return;
+      if (isStatusInvalid(res)) {
+        return reject(ResponseError(res));
       }
-      if (res.statusCode < 200 || res.statusCode >= 300) {
-        return reject(
-          new Error(
-            `statusCode=${res.statusCode}: ${options.hostname}${options.path}`
-          )
-        );
-      }
-      // cumulate data
-      var crate_metadatas: CrateMetadatas;
-      let data = "";
-      res.on("data", (chunk) => {
-        data += chunk;
-      });
+      var info: DependencyInfo;
+      let body = addResponseHandlers(name, res, req, reject);
       res.on("end", () => {
         try {
-          const response = JSON.parse(data);
+          const response = JSON.parse(Buffer.concat(body).toString());
           let versions: string[] = [];
           versions = currentVersion
             ? setLatestVersion(response, currentVersion)
             : setVersions(response, versions);
-          crate_metadatas = {
+          info = {
             name: name,
-            versions: versions,
-            features: [],
+            versions: versions
           };
-          cache.set(cacheName, crate_metadatas);
         } catch (error) {
           console.error("Error parsing response:", error);
           Logger.appendLine("Error parsing response: " + error);
           reject(error);
         }
-        resolve(crate_metadatas);
+        resolve(info);
       });
     });
-    // reject on request error
-    req.on("error", function (err) {
-      // This is not a "Second reject", just a different sort of failure
-      reject(err);
-    });
-    // IMPORTANT
+
     req.end();
   });
 };
@@ -101,3 +69,7 @@ const setLatestVersion = (response: any, currentVersion: string) => {
     ? [currentVersion]
     : [currentVersion, response.latest];
 };
+function getURL(currentVersion: string | undefined, name: string) {
+  return cleanURL(`${Settings.npm.index}/${currentVersion ? `-/package/${name}/dist-tags` : `${name}`}`);
+}
+

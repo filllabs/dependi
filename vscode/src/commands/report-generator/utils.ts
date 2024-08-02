@@ -1,15 +1,15 @@
-import { Errors, getError } from "../../api/index/dependi-index-server/errors";
+import os from "os";
+import { window } from "vscode";
+import { RequestState } from "../../api/indexes/dependi";
+import { Errors, getError } from "../../api/indexes/dependi/errors";
+import { Configs } from "../../config";
 import { CargoTomlParser } from "../../core/parsers/CargoTomlParser";
 import { GoModParser } from "../../core/parsers/GoModParser";
 import { NpmParser } from "../../core/parsers/NpmParser";
 import { PhpParser } from "../../core/parsers/PhpParser";
 import { PypiParser } from "../../core/parsers/PypiParser";
-import os from "os";
-import { openDeviceLimitDialog, openPaymentRequiredDialog, openSettingsDialog } from "../../ui/dialogs";
-import { Configs } from "../../config";
-import { RequestState } from "../../api/index/dependi-index-server";
-import { window } from "vscode";
 import { PyProjectParser } from "../../core/parsers/PyProjectParser";
+import { openDeviceLimitDialog, openPaymentRequiredDialog, openSettingsDialog } from "../../ui/dialogs";
 
 export const parserInvoker = (language: string) => {
   switch (language) {
@@ -28,7 +28,7 @@ export const parserInvoker = (language: string) => {
     default:
       throw Error("Language not supported");
   }
-}
+};
 
 export const winHelper = (path: string) => {
   if (os.platform() !== "win32") {
@@ -36,7 +36,7 @@ export const winHelper = (path: string) => {
   }
   let newPath = path.slice(1);
   return newPath = newPath.replace(/\\/g, "/");
-}
+};
 
 export function handleReportError(reportResp: RequestState<string>) {
   if (reportResp.status !== 200) {

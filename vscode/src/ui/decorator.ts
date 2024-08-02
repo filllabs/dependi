@@ -21,6 +21,7 @@ export default function decorate(
   dependencies: Array<Dependency>,
   lang: Language
 ) {
+  console.debug("Decorating", editor.document.fileName);
   // vulns (params)
   const pref = loadPref();
 
@@ -41,7 +42,6 @@ export default function decorate(
   for (let i = filtered.length - 1; i > -1; i--) {
     const dependency: Dependency = filtered[i];
 
-    const vuln: Dependency = dependencies[i];
     try {
       let deco = decoration(
         editor,
@@ -71,17 +71,18 @@ export default function decorate(
       }
     } catch (e) {
       console.error(e);
-      Logger.appendLine(`Failed to build build decorator (${dependency.item.value})`);
-      errors.push(`Failed to build build decorator (${dependency.item.value})`);
+      Logger.appendLine(`Failed to build decorator (${dependency.item.value})`);
+      errors.push(`Failed to build decorator (${dependency.item.value})`);
     }
   }
   // dispose old decorations
+  // compare with previous pref if changed dispose old decoration and set new ones else dont dispose and set
   if (previousPref) {
+    previousPref.compatibleType;
     previousPref.compatibleType.dispose();
     previousPref.incompatibleType.dispose();
     previousPref.errorType.dispose();
   }
-
   editor.setDecorations(pref.compatibleType, compOptions);
   editor.setDecorations(pref.incompatibleType, inCompOptions);
   editor.setDecorations(pref.errorType, errOptions);

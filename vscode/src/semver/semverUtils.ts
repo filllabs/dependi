@@ -55,6 +55,16 @@ function versionToSemver(version: string): string {
 }
 
 function normalizeVersion(version: string): string {
+  // count the number of dots in the version string
+  let dotCount = 0;
+  for (let i = 0; i < version.length; i++) {
+    if (version[i] === '.') {
+      dotCount++;
+      if (dotCount > 1) {
+        return version;
+      }
+    }
+  }
   if (!version.includes(".")) {
     return `${version}.0.0`;
   } else if (version.split(".").length === 2) {

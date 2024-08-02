@@ -1,6 +1,6 @@
 import { commands, TextEditor, TextEditorEdit } from "vscode";
 import { Configs } from "../config";
-import listener from "../core/listeners/listener";
+import listener from "../core/listeners";
 
 export const retry = commands.registerTextEditorCommand(
   Configs.RETRY,
