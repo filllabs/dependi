@@ -138,9 +138,7 @@ export class TomlParser implements Parser {
     const commentIndex = line.indexOf("#");
     item.key = clearText(line.substring(0, eqIndex));
     item.key = item.key.replace(".version", "");
-    item.value = clearText(
-      line.substring(eqIndex + 1, commentIndex > -1 ? commentIndex : line.length)
-    );
+    item.value = line.substring(eqIndex + 1, commentIndex > -1 ? commentIndex : line.length).trim().replace(/^"|"$|'/g, '');
   
     if (isBoolean(item.value) || item.value.includes("path")) {
       return undefined;
@@ -206,7 +204,7 @@ function parseVersionValue(line: string, item: Item) {
   if (isBoolean(found)) {
     return;
   }
-  item.value = clearText(found);
+  item.value = found;
   item.start = foundAt;
   item.end = item.start + item.value.length;
 }
