@@ -11,7 +11,7 @@ export class PyProjectParser extends TomlParser {
     if (!state.currentItem.isValid()) {
       return;
     }
-    if (state.currentItem.key === "python") {
+    if (state.currentItem.key === "python" || state.currentItem.key === "requires-python" || state.currentItem.key === 'dependencies') {
       return;
     }
     state.currentItem.createRange();
@@ -59,5 +59,8 @@ export class PyProjectParser extends TomlParser {
     }
 
     return item.start > -1 ? item : undefined;
+  }
+  isDependencyTable(line: string): boolean {
+    return line.includes("dependencies]") || line.includes("[project]");
   }
 }

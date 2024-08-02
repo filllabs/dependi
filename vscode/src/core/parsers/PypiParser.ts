@@ -79,6 +79,9 @@ function parseDependencyLine(line: TextLine): Item {
     startOfVersion++;
     endOfVersion--;
   }
+  if (name.includes("[")) {
+    name = name.split("[")[0];
+  }
 
   const item = new Item();
   item.copyFrom(

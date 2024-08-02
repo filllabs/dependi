@@ -42,7 +42,7 @@ export class TomlParser implements Parser {
         if (state.isSingle) {
           this.addItem(state, items);
         }
-        if (isDependencyTable(line.text)) {
+        if (this.isDependencyTable(line.text)) {
           state.isMultipleDepTable = true;
           state.isSingle = false;
         } else if (isDependencySingle(line.text)) {
@@ -153,6 +153,10 @@ export class TomlParser implements Parser {
     item.end = item.start + item.value.length;
     return item.start > -1 ? item : undefined;
   }
+
+  isDependencyTable(line: string): boolean {
+    return line.includes("dependencies]");
+  }
 }
 
 export function parseVersion(line: string, item: Item) {
@@ -245,10 +249,6 @@ function parsePackageValue(line: string, item: Item, start: number) {
 
 function isWhiteSpace(ch: string) {
   return ch === " " || ch === "\t";
-}
-
-function isDependencyTable(line: string): boolean {
-  return line.includes("dependencies]");
 }
 
 function isDependencySingle(line: string): boolean {

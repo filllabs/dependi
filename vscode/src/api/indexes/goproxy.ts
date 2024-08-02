@@ -19,7 +19,7 @@ export const versions = (name: string) => { // name eg: github.com/gorilla/mux
         try {
           info = {
             name: name,
-            versions: body
+            versions: body.toString().split('\n')
           };
         } catch (e) {
           reject(e);
