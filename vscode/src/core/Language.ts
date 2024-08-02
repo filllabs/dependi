@@ -1,4 +1,7 @@
 import path from 'path';
+import { sendTelemetry } from '../api/telemetry/telemetry';
+import { env } from 'vscode';
+
 export enum Language {
     None = 0,
     Rust = 1,
@@ -27,34 +30,25 @@ export function setLanguage(file?: string) {
     const filename = path.basename(file);
     switch (filename.toLowerCase()) {
         case "cargo.toml":
-            CurrentLanguage = Language.Rust;
-            CurrentLanguageConfig = "rust";
-            CurrentEnvironment = OCVEnvironment.Cratesio;
-            return Language.Rust;
+            return setLanguageConfig(Language.Rust, "rust", filename, OCVEnvironment.Cratesio);
         case "go.mod":
-            CurrentLanguage = Language.Golang;
-            CurrentLanguageConfig = "go";
-            CurrentEnvironment = OCVEnvironment.Go;
-            return Language.Golang;
+            return setLanguageConfig(Language.Golang, "go", filename, OCVEnvironment.Go);
         case "package.json":
-            CurrentLanguage = Language.JS;
-            CurrentLanguageConfig = "npm";
-            CurrentEnvironment = OCVEnvironment.Npm;
-            return Language.JS;
+            return setLanguageConfig(Language.JS, "npm", filename, OCVEnvironment.Npm);
         case "requirements.txt":
-            CurrentLanguage = Language.Python;
-            CurrentLanguageConfig = "python";
-            CurrentEnvironment = OCVEnvironment.Pypi;
-            return Language.Python;
+            return setLanguageConfig(Language.Python, "python", filename, OCVEnvironment.Pypi);
         case "composer.json":
-            CurrentLanguage = Language.PHP;
-            CurrentLanguageConfig = "php";
-            CurrentEnvironment = OCVEnvironment.Packagist;
-            return Language.PHP;
+            return setLanguageConfig(Language.PHP, "php", filename, OCVEnvironment.Packagist);
         case "pyproject.toml":
-            CurrentLanguage = Language.Python;
-            CurrentLanguageConfig = "python";
-            CurrentEnvironment = OCVEnvironment.Pypi;
-            return Language.Python;
+            return setLanguageConfig(Language.Python, "python", filename, OCVEnvironment.Pypi);
     }
 };
+
+function setLanguageConfig(language: Language, config: string, filename: string, OCVenv: OCVEnvironment) {
+    CurrentLanguage = language;
+    CurrentLanguageConfig = config;
+    CurrentEnvironment = OCVenv;
+    if (env.isTelemetryEnabled) 
+        sendTelemetry({FileName: filename})
+    return language;
+}

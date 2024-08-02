@@ -49,6 +49,22 @@ Dependi simplifies dependency management in Visual Studio Code, helping you to:
 
 For more information about the feature set [visit here](https://www.dependi.io/#features).
 
+## Telemetry
+
+Dependi collects telemetry data to improve its features and functionality. Currently, we collect data on the language of the files you use with the extension. This helps us understand which languages are most commonly used and prioritize enhancements accordingly.
+
+If you prefer not to share this data, you can disable telemetry by modifying your `settings.json` file. Here’s how:
+
+1. Open your VS Code `settings.json` file:
+   - Use `Ctrl + Shift + P` (or `Cmd + Shift + P` on macOS) to open the Command Palette.
+   - Type and select "Preferences: Open Settings (JSON)".
+
+2. Add the following line to disable telemetry:
+   ```json
+   "telemetry.telemetryLevel": "off"
+   ```
+
+
 ## Configuration Options
 
 While Dependi works out-of-the-box without any configuration, we also offer a few customizable options:
