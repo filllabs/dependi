@@ -45,6 +45,10 @@ function compareVersions(v1: string, v2: string) {
     if (n1 > n2) return 1;
     if (n2 > n1) return -1;
   }
+  if (s1.length !== s2.length) {
+    if (s1.length > s2.length) return 1;
+    return -1;
+  }
 
   var sp1 = s1[s1.length - 1];
   var sp2 = s2[s2.length - 1];
