@@ -63,7 +63,7 @@ function parseDependencyLine(line: TextLine): Item {
   ) {
     startOfVersion += 2;
   }
-  if (
+  else if (
     version.startsWith(">") ||
     version.startsWith("<") ||
     version.startsWith("!")

@@ -11,7 +11,8 @@ export class PyProjectParser extends TomlParser {
     if (!state.currentItem.isValid()) {
       return;
     }
-    if (state.currentItem.key === "python" || state.currentItem.key === "requires-python" || state.currentItem.key === 'dependencies') {
+    const ingoreKey = ["python", "requires-python", "dependencies", "version"];
+    if (ingoreKey.includes(state.currentItem.key)) {
       return;
     }
     state.currentItem.createRange();

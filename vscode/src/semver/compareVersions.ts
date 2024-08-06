@@ -16,7 +16,10 @@ function lastIndexOrEnd(str: string, q: string) {
 function split(v: string) {
   const c = v.replace(/^v/, "").replace(/\+.*$/, "");
 
-  const patchIndex = CurrentLanguage === Language.Python ? lastIndexOrEnd(c, '.') : indexOrEnd(c, "-");
+  const patchIndex =
+    CurrentLanguage === Language.Python
+      ? lastIndexOrEnd(c, ".")
+      : indexOrEnd(c, "-");
   const arr = c.substring(0, patchIndex).split(".");
   arr.push(c.substring(patchIndex + 1));
   return arr;
@@ -61,16 +64,20 @@ function compareVersions(v1: string, v2: string) {
       .map((str) => (/^\d+$/.test(str) ? parseInt(str, 10) : str));
     const maxLimit = Math.max(p1.length, p2.length);
     for (let i = 0; i < maxLimit; i++) {
-      if (
-        p1[i] === undefined ||
-        (typeof p1[i] === "string" && typeof p2[i] === "number")
-      )
+      if (p1[i] === undefined) return -1;
+      if (p2[i] === undefined) return 1;
+
+      if (typeof p1[i] === "string" && typeof p2[i] === "number") {
+        if (parseInt(p1[i].toString()) >= parseInt(p2[i].toString())) {
+          return 1;
+        }
         return -1;
-      if (
-        p2[i] === undefined ||
-        (typeof p2[i] === "string" && typeof p1[i] === "number")
-      )
+      } else if (typeof p2[i] === "string" && typeof p1[i] === "number") {
+        if (parseInt(p2[i].toString()) >= parseInt(p1[i].toString())) {
+          return -1;
+        }
         return 1;
+      }
 
       if (p1[i] > p2[i]) return 1;
       if (p2[i] > p1[i]) return -1;
