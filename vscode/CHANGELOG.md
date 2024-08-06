@@ -14,6 +14,10 @@ All notable changes to the "dependi" extension will be documented in this file.
 ### Bug Fixes
 
 - Fixed parsing issue with certain version strings. [Issue #77](https://github.com/filllabs/dependi/issues/77)
+- Fixed the bug in the dependency module to ensure correct functionality. [Issue #80](https://github.com/filllabs/dependi/issues/80)
+- Fixed bug in the dependency resolution module. [Issue #74](https://github.com/filllabs/dependi/issues/74)
+- Fixed: Added an output channel for improved logging and debugging. [Issue #84](https://github.com/filllabs/dependi/issues/82)
+- Fixed: Issue with changing versions in requirements.txt. [Issue #76](https://github.com/filllabs/dependi/issues/76)
 
 ## 0.7.6
 
