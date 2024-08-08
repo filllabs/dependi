@@ -32,14 +32,14 @@ export abstract class Fetcher {
     // merge vulns with dependencies
     resp.forEach((dep) => {
       let cached = DependencyCache.get(CurrentLanguage)?.get<Dependency>(
-        dep.item.key
+        dep.item.key + dep.item.range.start.line
       );
       if (cached) {
         console.log("cached vulns", dep.item.key, dep.vulns);
         cached.vulns = dep.vulns;
       } else {
         console.log("new vulns", dep.item.key);
-        DependencyCache.get(CurrentLanguage)?.set(dep.item.key, dep);
+        DependencyCache.get(CurrentLanguage)?.set(dep.item.key + dep.item.range.start.line, dep);
       }
     });
     return resp;
@@ -53,7 +53,7 @@ export abstract class Fetcher {
     const responses = dependencies.map((dep) => {
       // check if the dependency is already fetched from cache
       let resp = DependencyCache.get(CurrentLanguage)?.get<Dependency>(
-        dep.item.key
+        dep.item.key + dep.item.range.start.line
       );
       if (!resp || !resp.versions) {
         // if not found in cache, fetch from the source

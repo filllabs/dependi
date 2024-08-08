@@ -19,7 +19,7 @@ export const replaceVersion = commands.registerTextEditorCommand(
 
       status.inProgress = true;
 
-      const dep = DependencyCache.get(CurrentLanguage)?.get<Dependency>(data.key);
+      const dep = DependencyCache.get(CurrentLanguage)?.get<Dependency>(data.key + data.startLine);
 
       if (!dep) {
         status.inProgress = false;

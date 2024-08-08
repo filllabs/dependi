@@ -208,7 +208,8 @@ function appendVersions(hoverMessage: MarkdownString, versions: string[], item: 
     const v = vuln?.get(version);
     const data: CommandData = {
       key: item.key,
-      version
+      version,
+      startLine: item.range.start.line,
     };
 
     const isCurrent = version === maxSatisfying;
