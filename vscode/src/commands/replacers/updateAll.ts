@@ -27,7 +27,7 @@ export const updateAll = commands.registerTextEditorCommand(
         Logger.appendLine(`Version is empty ${rItem}`);
         continue;
       }
-      const dep = DependencyCache.get(CurrentLanguage)?.get<Dependency>(rItem.key);
+      const dep = DependencyCache.get(CurrentLanguage)?.get<Dependency>(rItem.key + rItem.startLine);
       if (!dep) {
         console.error("Dependency not found", rItem.key);
         Logger.appendLine(`Dependency not found ${rItem.key}`);

@@ -23,7 +23,6 @@ export abstract class Listener {
     this.parser = parser;
   }
 
-
   parse(editor: TextEditor): Dependency[] {
     let items = this.parser.parse(editor.document);
     let dependencies = items.map((i) => new Dependency(i));
@@ -34,11 +33,11 @@ export abstract class Listener {
       DependencyCache.set(CurrentLanguage, cache);
     }
     dependencies = dependencies.map(dep => {
-      let cached = cache.get<Dependency>(dep.item.key);
+      let cached = cache.get<Dependency>(dep.item.key + dep.item.range.start.line);
       if (cached) {
         cached.item = dep.item;
       } else {
-        cache.set(dep.item.key, dep);
+        cache.set(dep.item.key + dep.item.range.start.line, dep);
       }
       return cached || dep;
     });
@@ -68,7 +67,7 @@ export abstract class Listener {
       await Promise.all(promises);
 
       // clear replaceAllData set new data
-      status.updateAllData = dependencies.map((d) => ({ key: d.item.key, version: d.versions?.[0] ?? "" }));
+      status.updateAllData = dependencies.map((d) => ({ key: d.item.key, version: d.versions?.[0] ?? "", startLine: d.item.range.start.line }));
 
 
       // parallel fetch vulns for current versions
@@ -80,10 +79,9 @@ export abstract class Listener {
           decorate(editor, dependencies, CurrentLanguage);
         });
       }
-
     } catch (e) {
       console.error(e);
     }
   }
-  modifyDependecy(dep: Dependency): void {};
+  modifyDependecy(dep: Dependency): void {}
 }
