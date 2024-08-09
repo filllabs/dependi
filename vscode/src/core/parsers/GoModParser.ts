@@ -26,7 +26,8 @@ export class GoModParser {
       if (state.bypass) {
         continue;
       }
-      if (isRequire(line)) {
+      const requireType = isRequireLine(line)
+      if (requireType === "block") {
         // from now on we are in require block read every line until we find the end of the block as dependencies
         state.inRequire = true;
         continue;
@@ -41,15 +42,28 @@ export class GoModParser {
         item.createDecoRange();
         state.items.push(item);
       }
+      if (requireType === 'single' && !state.inRequire) {
+        let item = parseDependencyLine(line);
+        item.createRange();
+        item.createDecoRange();
+        state.items.push(item);
+      }
     }
 
     return state.items;
   }
 }
 
-function isRequire(line: TextLine) {
+function isRequireLine(line: TextLine): "block" | "single" | null {
   const start = line.firstNonWhitespaceCharacterIndex;
-  return line.text.substring(start, start + 9) === "require (";
+  const text = line.text.substring(start);
+  if (text.startsWith("require (")) {
+    return "block";
+  }
+  if (text.startsWith("require")) {
+    return "single";
+  }
+  return null;
 }
 
 function isBlockEnd(line: TextLine): boolean {
@@ -68,6 +82,9 @@ function parseDependencyLine(line: TextLine): Item {
     line.firstNonWhitespaceCharacterIndex,
     endOfName
   );
+  if (name.startsWith("require")) {
+    name = name.substring(7).trim();
+  }
   let version = line.text.substring(startOfVersion, endOfVersion);
 
   if (isQuote(name[0]) && isQuote(name[name.length - 1])) {
