@@ -1,4 +1,4 @@
-import Item from "../../Item";
+import Item from "../Item";
 import { setLockValue, JsonLockParser, State } from "./JsonLockParser";
 import { isPackagePresent } from "./TomlLockParser";
 

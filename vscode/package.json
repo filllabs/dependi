@@ -264,10 +264,10 @@
             "description": "Inform about available patch updates for Rust packages via decoration.",
             "order": 8
           },
-          "dependi.rust.enabledLockFile": {
+          "dependi.rust.lockFileEnabled": {
             "type": "boolean",
             "scope": "resource",
-            "default": false,
+            "default": true,
             "description": "Enable checking for Rust dependencies in lockfiles.",
             "order": 9
           }
@@ -313,10 +313,10 @@
             "description": "Inform about available patch updates for NPM packages via decoration.",
             "order": 14
           },
-          "dependi.npm.enabledLockFile": {
+          "dependi.npm.lockFileEnabled": {
             "type": "boolean",
             "scope": "resource",
-            "default": false,
+            "default": true,
             "description": "Enable checking for Npm dependencies in lockfiles.",
             "order": 15
           }
@@ -404,10 +404,10 @@
             "description": "Inform about available patch updates for Python packages via decoration.",
             "order": 25
           },
-          "dependi.python.enabledLockFile": {
+          "dependi.python.lockFileEnabled": {
             "type": "boolean",
             "scope": "resource",
-            "default": false,
+            "default": true,
             "description": "Enable checking for Python dependencies in lockfiles.",
             "order": 26
           }
@@ -453,10 +453,10 @@
             "description": "Inform about available patch updates for PHP packages via decoration.",
             "order": 31
           },
-          "dependi.php.enabledLockFile": {
+          "dependi.php.lockFileEnabled": {
             "type": "boolean",
             "scope": "resource",
-            "default": false,
+            "default": true,
             "description": "Enable checking for PHP dependencies in lockfiles.",
             "order": 32
           }

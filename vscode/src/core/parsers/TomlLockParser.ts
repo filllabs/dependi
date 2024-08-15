@@ -1,4 +1,4 @@
-import Item from "../../Item";
+import Item from "../Item";
 
 export class State {
   isTable: boolean;
@@ -45,7 +45,7 @@ export class TomlLockFileParser {
   setLockValue(state: State, items: Item[]): void {
     let foundItem = items.find((item) => item.key === state.dependency);
     if (foundItem) {
-      foundItem.locked = state.lockedValue;
+      foundItem.lockedAt = state.lockedValue;
     }
     state.lockedValue = "";
     state.dependency = "";

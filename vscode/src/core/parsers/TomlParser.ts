@@ -4,7 +4,7 @@ import { Parser } from "./parser";
 import { isQuote, shouldIgnoreLine } from "./utils";
 import path from "path";
 import fs from "fs";
-import { TomlLockFileParser } from "./lock-file-parsers/TomlLockParser";
+import { TomlLockFileParser } from "./TomlLockParser";
 
 export class State {
   inInlineTable: boolean;

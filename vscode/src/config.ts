@@ -10,21 +10,21 @@ export enum Configs {
   RUST_IGNORE_UNSTABLES = `rust.excludeUnstableVersions`,
   RUST_IGNORE_LINE_PATTERN = `rust.ignoreLinePattern`,
   RUST_INFORM_PATCH_UPDATES = `rust.informPatchUpdates`,
-  RUST_ENABLED_LOCK_FILE = `rust.enabledLockFile`,
+  RUST_ENABLED_LOCK_FILE = `rust.lockFileEnabled`,
 
   NPM_ENABLED = `npm.enabled`,
   NPM_INDEX_SERVER_URL = `npm.indexServerURL`,
   NPM_IGNORE_UNSTABLES = `npm.excludeUnstableVersions`,
   NPM_IGNORE_LINE_PATTERN = `npm.ignoreLinePattern`,
   NPM_INFORM_PATCH_UPDATES = `npm.informPatchUpdates`,
-  NPM_ENABLED_LOCK_FILE = `npm.enabledLockFile`,
+  NPM_ENABLED_LOCK_FILE = `npm.lockFileEnabled`,
 
   PHP_ENABLED = `php.enabled`,
   PHP_INDEX_SERVER_URL = `php.indexServerURL`,
   PHP_IGNORE_UNSTABLES = `php.excludeUnstableVersions`,
   PHP_IGNORE_LINE_PATTERN = `php.ignoreLinePattern`,
   PHP_INFORM_PATCH_UPDATES = `php.informPatchUpdates`,
-  PHP_ENABLED_LOCK_FILE = `php.enabledLockFile`,
+  PHP_ENABLED_LOCK_FILE = `php.lockFileEnabled`,
 
   GO_ENABLED = `go.enabled`,
   GO_INDEX_SERVER_URL = `go.indexServerURL`,
@@ -37,7 +37,7 @@ export enum Configs {
   PYTHON_IGNORE_UNSTABLES = `python.excludeUnstableVersions`,
   PYTHON_IGNORE_LINE_PATTERN = `python.ignoreLinePattern`,
   PYTHON_INFORM_PATCH_UPDATES = `python.informPatchUpdates`,
-  PYTHON_ENABLED_LOCK_FILE = `python.enabledLockFile`,
+  PYTHON_ENABLED_LOCK_FILE = `python.lockFileEnabled`,
 
   VULS_ENABLED = `vulnerability.enabled`,
   VULS_GHSA_ENABLED = `vulnerability.ghsa.enabled`,
@@ -82,7 +82,7 @@ export const Settings = {
     ignoreUnstable: false,
     ignoreLinePattern: "",
     informPatchUpdates: false,
-    enabledLockFile: false
+    lockFileEnabled: true
 
   },
   npm: {
@@ -91,7 +91,7 @@ export const Settings = {
     ignoreUnstable: false,
     ignoreLinePattern: "",
     informPatchUpdates: false,
-    enabledLockFile: false
+    lockFileEnabled: true
   },
   php: {
     enabled: true,
@@ -99,14 +99,14 @@ export const Settings = {
     ignoreUnstable: false,
     ignoreLinePattern: "",
     informPatchUpdates: false,
-    enabledLockFile: false
+    lockFileEnabled: true
   },
   go: {
     enabled: true,
     index: "",
     ignoreUnstable: false,
     ignoreLinePattern: "",
-    informPatchUpdates: false
+    informPatchUpdates: true
   },
   python: {
     enabled: true,
@@ -114,7 +114,7 @@ export const Settings = {
     ignoreUnstable: false,
     ignoreLinePattern: "",
     informPatchUpdates: false,
-    enabledLockFile: false
+    lockFileEnabled: true
   },
   vulnerability: {
     enabled: false,
@@ -161,21 +161,21 @@ export const Settings = {
     this.rust.ignoreUnstable = config.get<boolean>(Configs.RUST_IGNORE_UNSTABLES) ?? true;
     this.rust.ignoreLinePattern = config.get<string>(Configs.RUST_IGNORE_LINE_PATTERN) || "";
     this.rust.informPatchUpdates = config.get<boolean>(Configs.RUST_INFORM_PATCH_UPDATES) ?? false;
-    this.rust.enabledLockFile = config.get<boolean>(Configs.RUST_ENABLED_LOCK_FILE) ?? false;
+    this.rust.lockFileEnabled = config.get<boolean>(Configs.RUST_ENABLED_LOCK_FILE) ?? true;
 
     this.npm.enabled = config.get<boolean>(Configs.NPM_ENABLED) ?? true;
     this.npm.index = config.get<string>(Configs.NPM_INDEX_SERVER_URL) || "https://registry.npmjs.org";
     this.npm.ignoreUnstable = config.get<boolean>(Configs.NPM_IGNORE_UNSTABLES) ?? true;
     this.npm.ignoreLinePattern = config.get<string>(Configs.NPM_IGNORE_LINE_PATTERN) || "";
     this.npm.informPatchUpdates = config.get<boolean>(Configs.NPM_INFORM_PATCH_UPDATES) ?? false;
-    this.npm.enabledLockFile = config.get<boolean>(Configs.NPM_ENABLED_LOCK_FILE) ?? false;
+    this.npm.lockFileEnabled = config.get<boolean>(Configs.NPM_ENABLED_LOCK_FILE) ?? true;
 
     this.php.enabled = config.get<boolean>(Configs.PHP_ENABLED) ?? true;
     this.php.index = config.get<string>(Configs.PHP_INDEX_SERVER_URL) || "https://repo.packagist.org";
     this.php.ignoreUnstable = config.get<boolean>(Configs.PHP_IGNORE_UNSTABLES) ?? true;
     this.php.ignoreLinePattern = config.get<string>(Configs.PHP_IGNORE_LINE_PATTERN) || "";
     this.php.informPatchUpdates = config.get<boolean>(Configs.PHP_INFORM_PATCH_UPDATES) ?? false;
-    this.php.enabledLockFile = config.get<boolean>(Configs.PHP_ENABLED_LOCK_FILE) ?? false;
+    this.php.lockFileEnabled = config.get<boolean>(Configs.PHP_ENABLED_LOCK_FILE) ?? true;
 
     this.go.enabled = config.get<boolean>(Configs.GO_ENABLED) ?? true;
     this.go.index = config.get<string>(Configs.GO_INDEX_SERVER_URL) || "https://proxy.golang.org";
@@ -188,7 +188,7 @@ export const Settings = {
     this.python.ignoreUnstable = config.get<boolean>(Configs.PYTHON_IGNORE_UNSTABLES) ?? true;
     this.python.ignoreLinePattern = config.get<string>(Configs.PYTHON_IGNORE_LINE_PATTERN) || "";
     this.python.informPatchUpdates = config.get<boolean>(Configs.PYTHON_INFORM_PATCH_UPDATES) ?? false;
-    this.python.enabledLockFile = config.get<boolean>(Configs.PYTHON_ENABLED_LOCK_FILE) ?? false;
+    this.python.lockFileEnabled = config.get<boolean>(Configs.PYTHON_ENABLED_LOCK_FILE) ?? true;
 
     this.vulnerability.enabled = config.get<boolean>(Configs.VULS_ENABLED) ?? true;
     this.vulnerability.ghsa = config.get<boolean>(Configs.VULS_GHSA_ENABLED) ?? false;

@@ -4,7 +4,7 @@ import { clearText, isBoolean, parsePackage, parseVersion, State, TomlParser } f
 
 export class PyProjectParser extends TomlParser {
   constructor() {
-    super(Settings.python.ignoreLinePattern, Settings.python.enabledLockFile);
+    super(Settings.python.ignoreLinePattern, Settings.python.lockFileEnabled);
   }
 
   addItem(state: State, items: Item[]) {
