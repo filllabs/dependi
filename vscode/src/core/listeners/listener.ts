@@ -34,6 +34,7 @@ export abstract class Listener {
     }
     dependencies = dependencies.map(dep => {
       let cached = cache.get<Dependency>(dep.item.key + dep.item.range.start.line);
+      dep.item.value = dep.item.locked ?? dep.item.value;
       if (cached) {
         cached.item = dep.item;
       } else {

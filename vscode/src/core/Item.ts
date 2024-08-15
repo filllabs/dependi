@@ -15,6 +15,7 @@ export default class Item {
   endOfLine: number = -1;
   range: Range = new Range(0, 0, 0, 0);
   decoRange: Range = new Range(0, 0, 0, 0);
+  locked?: string;
   constructor(item?: Item) {
     if (item) {
       this.key = item.key;
@@ -28,13 +29,14 @@ export default class Item {
   /**
    * Copy value, start,end ,line from
    */
-  copyFrom(key?: string, value?: string, start?: number, end?: number, line?: number, endOfLine?: number) {
+  copyFrom(key?: string, value?: string, start?: number, end?: number, line?: number, endOfLine?: number, locked?: string) {
     if (key) this.key = key;
     if (value) this.value = value;
     if (start) this.start = start;
     if (end) this.end = end;
     if (line) this.line = line;
     if (endOfLine) this.endOfLine = endOfLine;
+    if (locked) this.locked = locked;
   }
 
   /**Create Range */

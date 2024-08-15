@@ -1,8 +1,10 @@
-import { TextDocument, TextLine } from "vscode";
+import { TextDocument, TextLine, window } from "vscode";
 import Item from "../Item";
 import { isQuote, shouldIgnoreLine } from "./utils";
 import { Settings } from "../../config";
 import { CurrentLanguageConfig } from "../Language";
+import path from "path";
+import * as fs from "fs";
 
 class State {
   inDependencies: boolean;
@@ -21,6 +23,9 @@ export class JsonParser {
 	constructor(
 		private depsKey: string,
 		private devDepsKey: string,
+    private enableLockFileParsing: boolean,
+    private lockFileKey: string,
+    private lockParser: any
 	) {}
 
   parse(doc: TextDocument): Item[] {
@@ -47,7 +52,7 @@ export class JsonParser {
 				this.addDependency(item)
       }
     }
-    return this.state.items;
+    return this.enableLockFileParsing ? this.parseLockedFile(this.state.items) : this.state.items;
   }
 
   addDependency(item: Item) {
@@ -63,7 +68,26 @@ export class JsonParser {
 			line.text.substring(start, start + this.devDepsKey.length + 3) === `"${this.devDepsKey}":`
     );
   }
+  parseLockedFile(item: Item[]): Item[] {
+    const filePath = window.activeTextEditor?.document.uri.fsPath;
+    const dirName = path.dirname(filePath || "");
+    try {
+      const files = fs.readdirSync(dirName);
+      const lockFile = files.find((file) => file === this.lockFileKey);
+      if (lockFile) {
+        const lockFilePath = path.join(dirName, lockFile);
+        const fileContent = fs.readFileSync(lockFilePath, 'utf8');
+        const LockFileParser = this.lockParser;
+        item = LockFileParser.parse(fileContent, item);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+    return item;
+  }
+  
 }
+
 
 function isBlockEnd(line: TextLine): boolean {
   return line.text[line.firstNonWhitespaceCharacterIndex] === "}";

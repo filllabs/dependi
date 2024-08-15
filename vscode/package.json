@@ -263,6 +263,13 @@
             "default": false,
             "description": "Inform about available patch updates for Rust packages via decoration.",
             "order": 8
+          },
+          "dependi.rust.enabledLockFile": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": false,
+            "description": "Enable checking for Rust dependencies in lockfiles.",
+            "order": 9
           }
         }
       },
@@ -274,7 +281,7 @@
             "scope": "resource",
             "default": true,
             "description": "Enable checking for Npm dependencies.",
-            "order": 9
+            "order": 10
           },
           "dependi.npm.indexServerURL": {
             "type": "string",
@@ -283,20 +290,20 @@
             "format": "url",
             "default": "https://registry.npmjs.org",
             "pattern": "^https?://(?!.*//)([^/]+/)*[^/]+$",
-            "order": 10
+            "order": 11
           },
           "dependi.npm.excludeUnstableVersions": {
             "type": "boolean",
             "scope": "resource",
             "default": true,
             "description": "Exclude unstable versions from NPM package lists.",
-            "order": 11
+            "order": 12
           },
           "dependi.npm.ignoreLinePatterns": {
             "type": "string",
             "scope": "resource",
             "default": "",
-            "order": 12,
+            "order": 13,
             "markdownDescription": "Matches lines based on `*` position: `text*`, `*text`, `*text*`. Multiple patterns can be used, separated by commas."
           },
           "dependi.npm.informPatchUpdates": {
@@ -304,7 +311,14 @@
             "scope": "resource",
             "default": false,
             "description": "Inform about available patch updates for NPM packages via decoration.",
-            "order": 13
+            "order": 14
+          },
+          "dependi.npm.enabledLockFile": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": false,
+            "description": "Enable checking for Npm dependencies in lockfiles.",
+            "order": 15
           }
         }
       },
@@ -316,7 +330,7 @@
             "scope": "resource",
             "default": true,
             "description": "Enable checking for Go dependencies.",
-            "order": 14
+            "order": 16
           },
           "dependi.go.indexServerURL": {
             "type": "string",
@@ -325,28 +339,28 @@
             "format": "url",
             "pattern": "^https?://(?!.*//)([^/]+/)*[^/]+$",
             "default": "https://proxy.golang.org",
-            "order": 15
+            "order": 17
           },
           "dependi.go.excludeUnstableVersions": {
             "type": "boolean",
             "scope": "resource",
             "default": true,
             "description": "Exclude unstable versions from Go package lists.",
-            "order": 16
+            "order": 18
           },
           "dependi.go.ignoreLinePatterns": {
             "type": "string",
             "scope": "resource",
             "default": "",
             "markdownDescription": "Matches lines based on `*` position: `text*`, `*text`, `*text*`. Multiple patterns can be used, separated by commas.",
-            "order": 17
+            "order": 19
           },
           "dependi.go.informPatchUpdates": {
             "type": "boolean",
             "scope": "resource",
             "default": false,
             "description": "Inform about available patch updates for Go packages via decoration.",
-            "order": 18
+            "order": 20
           }
         }
       },
@@ -358,7 +372,7 @@
             "scope": "resource",
             "default": true,
             "description": "Enable checking for Python dependencies.",
-            "order": 19
+            "order": 21
           },
           "dependi.python.indexServerURL": {
             "type": "string",
@@ -367,28 +381,35 @@
             "format": "url",
             "pattern": "^https?://(?!.*//)([^/]+/)*[^/]+$",
             "default": "https://pypi.org/pypi",
-            "order": 20
+            "order": 22
           },
           "dependi.python.excludeUnstableVersions": {
             "type": "boolean",
             "scope": "resource",
             "default": true,
             "description": "Exclude unstable versions from Python package lists.",
-            "order": 21
+            "order": 23
           },
           "dependi.python.ignoreLinePatterns": {
             "type": "string",
             "scope": "resource",
             "default": "",
             "markdownDescription": "Matches lines based on `*` position: `text*`, `*text`, `*text*`. Multiple patterns can be used, separated by commas.",
-            "order": 22
+            "order": 24
           },
           "dependi.python.informPatchUpdates": {
             "type": "boolean",
             "scope": "resource",
             "default": false,
             "description": "Inform about available patch updates for Python packages via decoration.",
-            "order": 23
+            "order": 25
+          },
+          "dependi.python.enabledLockFile": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": false,
+            "description": "Enable checking for Python dependencies in lockfiles.",
+            "order": 26
           }
         }
       },
@@ -400,7 +421,7 @@
             "scope": "resource",
             "default": true,
             "description": "Enable checking for PHP dependencies.",
-            "order": 25
+            "order": 27
           },
           "dependi.php.indexServerURL": {
             "type": "string",
@@ -409,28 +430,35 @@
             "format": "url",
             "pattern": "^https?://(?!.*//)([^/]+/)*[^/]+$",
             "default": "https://repo.packagist.org",
-            "order": 26
+            "order": 28
           },
           "dependi.php.excludeUnstableVersions": {
             "type": "boolean",
             "scope": "resource",
             "default": true,
             "description": "Exclude unstable versions from PHP package lists.",
-            "order": 27
+            "order": 29
           },
           "dependi.php.ignoreLinePatterns": {
             "type": "string",
             "scope": "resource",
             "default": "",
             "markdownDescription": "Matches lines based on `*` position: `text*`, `*text`, `*text*`. Multiple patterns can be used, separated by commas.",
-            "order": 28
+            "order": 30
           },
           "dependi.php.informPatchUpdates": {
             "type": "boolean",
             "scope": "resource",
             "default": false,
             "description": "Inform about available patch updates for PHP packages via decoration.",
-            "order": 29
+            "order": 31
+          },
+          "dependi.php.enabledLockFile": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": false,
+            "description": "Enable checking for PHP dependencies in lockfiles.",
+            "order": 32
           }
         }
       },
@@ -442,14 +470,14 @@
             "scope": "resource",
             "default": true,
             "description": "Enable checking for vulnerabilities in dependencies.",
-            "order": 30
+            "order": 33
           },
           "dependi.vulnerability.ghsa.enabled": {
             "type": "boolean",
             "scope": "resource",
             "default": false,
             "description": "Include GitHub Security Advisory vulnerabilities in checks.",
-            "order": 31
+            "order": 34
           },
           "dependi.vulnerability.osvQueryURL.batch": {
             "type": "string",
@@ -458,7 +486,7 @@
             "format": "url",
             "pattern": "^https?://(?!.*//)([^/]+/)*[^/]+$",
             "default": "https://api.osv.dev/v1/querybatch",
-            "order": 32
+            "order": 35
           },
           "dependi.vulnerability.osvQueryURL.single": {
             "type": "string",
@@ -467,7 +495,7 @@
             "format": "url",
             "pattern": "^https?://(?!.*//)([^/]+/)*[^/]+$",
             "default": "https://api.osv.dev/v1/query",
-            "order": 33
+            "order": 36
           }
         }
       },

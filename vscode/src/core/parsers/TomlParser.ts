@@ -1,7 +1,10 @@
-import { TextDocument, TextLine } from "vscode";
+import { TextDocument, TextLine, window } from "vscode";
 import Item from "../Item";
 import { Parser } from "./parser";
 import { isQuote, shouldIgnoreLine } from "./utils";
+import path from "path";
+import fs from "fs";
+import { TomlLockFileParser } from "./lock-file-parsers/TomlLockParser";
 
 export class State {
   inInlineTable: boolean;
@@ -25,7 +28,8 @@ export class State {
 export class TomlParser implements Parser {
   constructor(
     private pattern: string,
-  ) { }
+    private enableLockFileParsing: boolean
+  ) {}
 
   parse(doc: TextDocument): Item[] {
     let items: Item[] = [];
@@ -115,7 +119,7 @@ export class TomlParser implements Parser {
       }
     }
     this.addItem(state, items);
-    return items;
+    return this.enableLockFileParsing ? parseLockFile(items) : items;
   }
 
   addItem(state: State, items: Item[]) {
@@ -138,8 +142,11 @@ export class TomlParser implements Parser {
     const commentIndex = line.indexOf("#");
     item.key = clearText(line.substring(0, eqIndex));
     item.key = item.key.replace(".version", "");
-    item.value = line.substring(eqIndex + 1, commentIndex > -1 ? commentIndex : line.length).trim().replace(/^"|"$|'/g, '');
-  
+    item.value = line
+      .substring(eqIndex + 1, commentIndex > -1 ? commentIndex : line.length)
+      .trim()
+      .replace(/^"|"$|'/g, "");
+
     if (isBoolean(item.value) || item.value.includes("path")) {
       return undefined;
     }
@@ -266,4 +273,22 @@ function isTable(line: TextLine) {
   let column = line.firstNonWhitespaceCharacterIndex;
   const firstChar = line.text[column];
   return firstChar === "[";
+}
+
+function parseLockFile(item: Item[]): Item[] {
+  const filePath = window.activeTextEditor?.document.uri.fsPath;
+  const dirName = path.dirname(filePath || "");
+  try {
+    const files = fs.readdirSync(dirName);
+    const lockFile = files.find((file) => file.endsWith(".lock"));
+    if (lockFile) {
+      const lockFilePath = path.join(dirName, lockFile);
+      const fileContent = fs.readFileSync(lockFilePath, "utf8");
+      const LockFileParser = new TomlLockFileParser();
+      item = LockFileParser.parse(fileContent, item);
+    }
+  } catch (err) {
+    console.error(err);
+  }
+  return item;
 }
