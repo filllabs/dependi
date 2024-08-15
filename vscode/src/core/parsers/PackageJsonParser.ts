@@ -1,7 +1,7 @@
 import { Settings } from "../../config";
 import Item from "../Item";
 import { JsonParser } from "./JsonParser";
-import { PackageLockParser } from "./PackageLockParser";
+import { PackageLockJsonParser } from "./PackageLockJsonParser";
 
 export class NpmParser extends JsonParser {
   constructor() {
@@ -10,7 +10,7 @@ export class NpmParser extends JsonParser {
       "devDependencies",
       Settings.npm.lockFileEnabled,
       "package-lock.json",
-      new PackageLockParser()
+      new PackageLockJsonParser()
     );
   }
 

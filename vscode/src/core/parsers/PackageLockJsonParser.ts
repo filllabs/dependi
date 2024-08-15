@@ -2,7 +2,7 @@ import Item from "../Item";
 import { setLockValue, JsonLockParser, State } from "./JsonLockParser";
 import { isPackagePresent } from "./TomlLockParser";
 
-export class PackageLockParser extends JsonLockParser {
+export class PackageLockJsonParser extends JsonLockParser {
   constructor() {
     super();
   }
