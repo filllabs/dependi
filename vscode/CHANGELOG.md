@@ -2,6 +2,16 @@
 
 All notable changes to the "dependi" extension will be documented in this file.
 
+## 0.7.8
+
+### New Features
+
+- Version checks now use lock file versions instead of manifest file versions.
+
+### Added
+
+- Telemetry support added. Details are documented in the [`README.md`](https://github.com/filllabs/dependi/blob/main/vscode/README.md) file.
+
 ## 0.7.7
 
 ### New Features
