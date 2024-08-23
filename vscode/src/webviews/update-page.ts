@@ -2,7 +2,7 @@ import { readFileSync } from "fs";
 import { Uri, Webview } from "vscode";
 import { markdownToHTML } from "./utils";
 
-export function getWelcomePage(
+export function getChangelogPage(
   webview: Webview,
   extensionUri: Uri,
   version: string
@@ -18,18 +18,11 @@ export function getWelcomePage(
     "welcome-page",
     "style.css"
   );
-  const featuresPath = Uri.joinPath(
-    extensionUri,
-    "templates",
-    "welcome-page",
-    "features.html"
-  );
+
   const styleUri = webview.asWebviewUri(stylePath);
-  const featuresHTML = readFileSync(featuresPath.fsPath, "utf8");
 
   return `<!DOCTYPE html>
   <html lang="en">
-  
   <head>
           <meta charset="UTF-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -48,16 +41,11 @@ export function getWelcomePage(
           <p>Welcome to <b>Dependi</b>. Empowers developers to efficiently manage dependencies and address vulnerabilities in Rust, Go, JavaScript, TypeScript, Python and PHP projects.</p>
           </div>
     </div>
-    <div class="split">
-      <div class="features">
-          <h1>Features</h1>   
-          ${featuresHTML}
-      </div>
+    <p>  Don\`t forget that a <b><a href="https://www.dependi.io/#pricing" class="cta">Free trial</a> of PRO</b> is waiting for you.
       <div class="changelog" >
           ${changelogHTML}
       </div>
-    </div>
-  
+    </p>
   </body>
   </html>`;
 }

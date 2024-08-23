@@ -6,7 +6,6 @@ import {
   commands,
   ExtensionContext,
   OutputChannel,
-  ProgressLocation,
   TextDocumentChangeEvent,
   window,
   workspace,
@@ -19,13 +18,13 @@ import { retry } from "./commands/retry";
 import { Settings } from "./config";
 import { CurrentLanguage, Language, setLanguage } from "./core/Language";
 import listener from "./core/listeners";
+import { ChangelogPanel } from "./panels/ChangelogPanel";
 import { WelcomePagePanel } from "./panels/WelcomePanel";
 import { ExtensionStorage } from "./storage";
 
 export var Logger: OutputChannel;
 
 export function activate(context: ExtensionContext) {
-
   Logger = window.createOutputChannel("Dependi");
   console.debug('Congratulations, your extension "dependi" is now active!');
   Logger.appendLine('Congratulations, your extension "dependi" is now active!');
@@ -40,24 +39,19 @@ export function activate(context: ExtensionContext) {
 
   setLanguage(window.activeTextEditor?.document.fileName);
 
-  configure(context).finally(
-    () => listener(window.activeTextEditor)
-  );
-
-
+  configure(context).finally(() => listener(window.activeTextEditor));
 
   // Add listeners
   context.subscriptions.push(
     // Add active text editor listener and run once on start.
-    window.onDidChangeActiveTextEditor(
-      (e) => {
-        setLanguage(window.activeTextEditor?.document.fileName);
-        if (CurrentLanguage === Language.None) {
-          return;
-        }
-        console.debug("Active text editor changed", CurrentLanguage);
-        return listener(e);
-      }),
+    window.onDidChangeActiveTextEditor((e) => {
+      setLanguage(window.activeTextEditor?.document.fileName);
+      if (CurrentLanguage === Language.None) {
+        return;
+      }
+      console.debug("Active text editor changed", CurrentLanguage);
+      return listener(e);
+    }),
     // When the text document is changed, fetch + check dependencies
     workspace.onDidChangeTextDocument((e: TextDocumentChangeEvent) => {
       if (e.document.fileName !== window.activeTextEditor?.document.fileName) {
@@ -71,16 +65,16 @@ export function activate(context: ExtensionContext) {
       if (!e.document.isDirty) {
         listener(window.activeTextEditor);
       }
-    }),
+    })
   );
   // add supported file names  according to the language settings
-  commands.executeCommand('setContext', 'dependi.supportedFiles', [
-    'Cargo.toml',
-    'go.mod',
-    'package.json',
-    'composer.json',
-    'requirements.txt',
-    'pyproject.toml'
+  commands.executeCommand("setContext", "dependi.supportedFiles", [
+    "Cargo.toml",
+    "go.mod",
+    "package.json",
+    "composer.json",
+    "requirements.txt",
+    "pyproject.toml",
   ]);
 
   console.debug("Adding commands");
@@ -95,7 +89,6 @@ export function deactivate() {
   Logger.dispose();
 }
 
-
 async function configure(context: ExtensionContext) {
   const lt = new ExtensionStorage(context);
   const deviceID = await lt.initDeviceID();
@@ -108,21 +101,17 @@ async function configure(context: ExtensionContext) {
     await lt.setShownVersion(Settings.version);
   } else if (lt.shouldShowWelcomePage(context.extension.packageJSON.version)) {
     Logger.appendLine("Updated version");
-    window.withProgress(
-      {
-        title: "Dependi has been updated to a new version. See the [CHANGELOG!](https://github.com/filllabs/dependi/blob/main/vscode/CHANGELOG.md)",
-        cancellable: true,
-        location: ProgressLocation.Notification,
-      },
-      async () => {
-        await new Promise<void>(async (resolve, reject) => {
-          setTimeout(() => {
-            resolve();
-          }, 3000);
-        });
-      }
-    );
+    window
+      .showInformationMessage(
+        "Dependi has been updated to a new version. See the CHANGELOG!",
+        "Show Changelog",
+        "Dismiss"
+      )
+      .then((selection) => {
+        if (selection === "Show Changelog") {
+          ChangelogPanel.render(context);
+        }
+      });
     await lt.setShownVersion(context.extension.packageJSON.version);
   }
 }
-
