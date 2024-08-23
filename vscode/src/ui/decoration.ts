@@ -107,7 +107,7 @@ export default function decoration(
   const contentText = getContentText(decorationPreferences, type);
   renderOptions[position]!.contentText = contentText.replace("${version}", versions[0]);
 
-  const vulnerabilities = vuln?.get(version!);
+  const vulnerabilities = vuln?.get(item.lockedAt ?? version!);
   if (vulnerabilities && vulnerabilities.length > 0) {
     const vulnText = decorationPreferences.vulnText.replace("${count}", `${vulnerabilities?.length}`);
     renderOptions[position]!.contentText = renderOptions[position]!.contentText! + "\t" + vulnText;
