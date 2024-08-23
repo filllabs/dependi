@@ -824,7 +824,7 @@
     "@types/mocha": "10.0.7",
     "@types/node": "22.5.0",
     "@types/semver": "7.5.8",
-    "@types/vscode": "1.92.0",
+    "@types/vscode": "1.87.0",
     "@types/vscode-webview": "1.57.5",
     "@typescript-eslint/eslint-plugin": "8.2.0",
     "@typescript-eslint/parser": "8.2.0",
