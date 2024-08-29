@@ -28,6 +28,7 @@ export interface VulnReq {
   CurrentItems: ReportItem[];
   Language: Language;
   GHSACheck: boolean;
+  Author?: string;
 }
 
 export enum Language {

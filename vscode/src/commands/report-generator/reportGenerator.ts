@@ -28,12 +28,13 @@ async function fetchRepositoryData() {
   const { commits } = await getCommitHistory(repo);
   const { repoName, repoRootUri } = await getRepoDetails();
   const commitId = commits[0]?.hash;
+  const author = commits[0]?.authorEmail;
 
   if (!commitId) {
     throw new Error("No commits found in the repository.");
   }
 
-  return { repo, commits, repoName, repoRootUri, commitId };
+  return { repo, commits, repoName, repoRootUri, commitId, author };
 }
 
 async function getActiveEditorLanguage() {
@@ -93,7 +94,7 @@ export async function generateMainReport(progress: any) {
 
   try {
     totalPercentage = incrementProgress(progress, "fetchingRepository", totalPercentage);
-    const { repo, commits, repoName, repoRootUri, commitId } = await fetchRepositoryData();
+    const { repo, commits, repoName, repoRootUri, commitId, author } = await fetchRepositoryData();
 
     const { fileName } = await getActiveEditorLanguage();
 
@@ -114,6 +115,7 @@ export async function generateMainReport(progress: any) {
       CurrentItems: currentReportItems,
       Language: getLangIdFromName(fileName),
       GHSACheck: Settings.vulnerability.ghsa,
+      Author: author,
     };
 
     const reportResp = await getVulnReport(vulnRequest);
@@ -134,6 +136,7 @@ export async function generateCurrentReport(progress: any) {
   let totalPercentage = 0;
   try {
     const { fileName } = await getActiveEditorLanguage();
+    const { commits, repoName, author } = await fetchRepositoryData();
 
     totalPercentage = incrementProgress(progress, "parsingFile", totalPercentage);
     const parser: Parser = parserInvoker(fileName);
@@ -142,12 +145,13 @@ export async function generateCurrentReport(progress: any) {
     totalPercentage = incrementProgress(progress, "generatingReport", totalPercentage);
 
     const vulnRequest: VulnReq = {
-      RepoName: "",
-      Commits: [],
+      RepoName: repoName || "",
+      Commits: commits || [],
       PreviousItems: [],
       CurrentItems: reportItems,
       Language: getLangIdFromName(fileName),
       GHSACheck: Settings.vulnerability.ghsa,
+      Author: author,
     };
 
     const reportResp = await getCurrentVulnReport(vulnRequest);
