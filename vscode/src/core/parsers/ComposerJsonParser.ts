@@ -6,11 +6,10 @@ import { ComposerLockParser } from "./ComposerLockParser";
 export class PhpParser extends JsonParser {
   constructor() {
     super(
-      "require",
-      "require-dev",
+      ["require", "require-dev"],
       Settings.php.lockFileEnabled,
       "composer.lock",
-      new ComposerLockParser()
+      new ComposerLockParser(),
     );
   }
 

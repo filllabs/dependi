@@ -6,11 +6,15 @@ import { PackageLockJsonParser } from "./PackageLockJsonParser";
 export class NpmParser extends JsonParser {
   constructor() {
     super(
-      "dependencies",
-      "devDependencies",
+      [
+        "dependencies",
+        "devDependencies",
+        "peerDependencies",
+        "optionalDependencies",
+      ],
       Settings.npm.lockFileEnabled,
       "package-lock.json",
-      new PackageLockJsonParser()
+      new PackageLockJsonParser(),
     );
   }
 
