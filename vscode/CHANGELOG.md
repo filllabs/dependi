@@ -40,7 +40,7 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 ### New Features
 
-- Added a report to list vulnerable library versions from the manifest file. [Issue #53](https://github.com/filllabs/dependi/issues/53)
+- [PRO](https://dependi.io): Added a report to list vulnerable library versions from the manifest file. [Issue #53](https://github.com/filllabs/dependi/issues/53)
 
 ### Bug Fixes
 
@@ -83,7 +83,7 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 ### Bug Fixes
 
-- Fixed vulnerability report generate command bug([#30](https://github.com/filllabs/dependi/pull/30))
+- [PRO](https://dependi.io): Fixed vulnerability report generate command bug([#30](https://github.com/filllabs/dependi/pull/30))
 - Fixed duplicate slashes in npm registry url([#31](https://github.com/filllabs/dependi/pull/31) Thanks to [Opportunity](https://github.com/OpportunityLiu))
 
 ## [v0.7.2](https://github.com/filllabs/dependi/compare/v0.7.1...v0.7.2)
@@ -107,7 +107,7 @@ All notable changes to the "dependi" extension will be documented in this file.
 ### New Features
 
 - Language Support: Dependi now supports Go, JavaScript, and Python!
-- Vulnerability Report: A new feature for Pro users.
+- [PRO](https://dependi.io): Vulnerability Report: A new feature for Pro users.
 
 ### Improvements
 
@@ -122,8 +122,6 @@ All notable changes to the "dependi" extension will be documented in this file.
 ### Other Changes
 
 - Version info decorator placement can now be changed from extension settings.
-- Language Support: Dependi now supports Go, JavaScript, and Python!
-- Vulnerability Report: A new feature for Pro users.
 
 ### Improvements
 
