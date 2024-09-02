@@ -10,6 +10,9 @@ export function markdownToHTML(markdown: string): string {
   html = html.replace(/^##\s(.*)$/gm, "<h2>$1</h2>");
   html = html.replace(/^###\s(.*)$/gm, "<h4>$1</h4>");
 
+  // Convert italic text to HTML
+  html = html.replace(/_([^_]+)_/g, "<em>$1</em>");
+
   // replace bullet points
   html = html.replace(/^\s*-\s(.*)$/gm, "<li>$1</li>");
   html = html.replace(/<li>(.*)<\/li>/g, "<ul>$&</ul>");
