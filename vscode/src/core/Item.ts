@@ -59,6 +59,6 @@ export default class Item {
   }
 
   isValid() {
-    return this.key.length > 0 && this.value?.length && this.start > -1 && this.end > -1 && /\d/.test(this.value);
+    return this.key.length > 0 && this.value?.length && this.start > -1 && this.end > -1 && (/\d/.test(this.value) || this.value === "*");
   }
 }

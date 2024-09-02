@@ -9,6 +9,10 @@ All notable changes to the "dependi" extension will be documented in this file.
 - CHANGELOG cleanup and formatting.
 - Notification for dependi updates now has a beaituful CHANGELOG view.
 
+### Bug Fixes
+
+- Fixed issue with `*` version not showing package versions. [Issue 118](https://github.com/filllabs/dependi/issues/118)
+
 ## [v0.7.8](https://github.com/filllabs/dependi/compare/v0.7.7...v0.7.8)
 
 ### New Features
