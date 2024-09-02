@@ -18,18 +18,20 @@ class State {
 }
 
 export class JsonParser {
-	protected state: State = new State()
+  protected state: State = new State();
 
-	constructor(
-		private depsKey: string,
-		private devDepsKey: string,
+  constructor(
+    private keys: string[],
     private enableLockFileParsing: boolean,
-    private lockFileKey: string,
-    private lockParser: any
-	) {}
+    private lockFileName: string,
+    private lockParser: any,
+  ) {}
 
   parse(doc: TextDocument): Item[] {
-    const pattern = CurrentLanguageConfig === "npm" ? Settings.npm.ignoreLinePattern : Settings.php.ignoreLinePattern;
+    const pattern =
+      CurrentLanguageConfig === "npm"
+        ? Settings.npm.ignoreLinePattern
+        : Settings.php.ignoreLinePattern;
     for (let row = 0; row < doc.lineCount; row++) {
       let line = doc.lineAt(row);
       if (shouldIgnoreLine(line, pattern)) {
@@ -49,10 +51,12 @@ export class JsonParser {
           continue;
         }
         let item = parseDependencyLine(line);
-				this.addDependency(item)
+        this.addDependency(item);
       }
     }
-    return this.enableLockFileParsing ? this.parseLockedFile(this.state.items) : this.state.items;
+    return this.enableLockFileParsing
+      ? this.parseLockedFile(this.state.items)
+      : this.state.items;
   }
 
   addDependency(item: Item) {
@@ -63,20 +67,19 @@ export class JsonParser {
 
   isDependencies(line: TextLine) {
     const start = line.firstNonWhitespaceCharacterIndex;
-    return (
-			line.text.substring(start, start + this.depsKey.length + 3) === `"${this.depsKey}":` ||
-			line.text.substring(start, start + this.devDepsKey.length + 3) === `"${this.devDepsKey}":`
-    );
+    return this.keys.some((key) => {
+      return line.text.substring(start, start + key.length + 3) === `"${key}":`;
+    });
   }
   parseLockedFile(item: Item[]): Item[] {
     const filePath = window.activeTextEditor?.document.uri.fsPath;
     const dirName = path.dirname(filePath || "");
     try {
       const files = fs.readdirSync(dirName);
-      const lockFile = files.find((file) => file === this.lockFileKey);
+      const lockFile = files.find((file) => file === this.lockFileName);
       if (lockFile) {
         const lockFilePath = path.join(dirName, lockFile);
-        const fileContent = fs.readFileSync(lockFilePath, 'utf8');
+        const fileContent = fs.readFileSync(lockFilePath, "utf8");
         const LockFileParser = this.lockParser;
         item = LockFileParser.parse(fileContent, item);
       }
@@ -85,9 +88,7 @@ export class JsonParser {
     }
     return item;
   }
-  
 }
-
 
 function isBlockEnd(line: TextLine): boolean {
   return line.text[line.firstNonWhitespaceCharacterIndex] === "}";
@@ -103,7 +104,7 @@ function parseDependencyLine(line: TextLine): Item {
   }
   let name = line.text.substring(
     line.firstNonWhitespaceCharacterIndex,
-    endOfName
+    endOfName,
   );
   let version = line.text.substring(startOfVersion, endOfVersion);
 
@@ -123,7 +124,7 @@ function parseDependencyLine(line: TextLine): Item {
     startOfVersion,
     endOfVersion,
     line.lineNumber,
-    line.range.end.character
+    line.range.end.character,
   );
   return item;
 }

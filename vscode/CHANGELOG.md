@@ -8,7 +8,8 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 - New advanced vulnerability report. (_Only for [Pro](https://dependi.io) version._)
 - CHANGELOG cleanup and formatting.
-- Notification for dependi updates now has a beaituful CHANGELOG view.
+- Notification for dependi updates now has a beautiful CHANGELOG view.
+- Added `peerDependencies` and `optionalDependencies` to package.json for better dependency resolution.
 
 ### Bug Fixes
 
