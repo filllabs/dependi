@@ -1,6 +1,7 @@
 import path from 'path';
 import { sendTelemetry } from '../api/telemetry/telemetry';
-import { env } from 'vscode';
+import { commands, env } from 'vscode';
+import { Settings } from '../config';
 
 export enum Language {
     None = 0,
@@ -30,25 +31,27 @@ export function setLanguage(file?: string) {
     const filename = path.basename(file);
     switch (filename.toLowerCase()) {
         case "cargo.toml":
-            return setLanguageConfig(Language.Rust, "rust", filename, OCVEnvironment.Cratesio);
+            return setLanguageConfig(Language.Rust, "rust", filename, OCVEnvironment.Cratesio, Settings.rust.lockFileEnabled);
         case "go.mod":
             return setLanguageConfig(Language.Golang, "go", filename, OCVEnvironment.Go);
         case "package.json":
-            return setLanguageConfig(Language.JS, "npm", filename, OCVEnvironment.Npm);
+            return setLanguageConfig(Language.JS, "npm", filename, OCVEnvironment.Npm, Settings.npm.lockFileEnabled);
         case "requirements.txt":
             return setLanguageConfig(Language.Python, "python", filename, OCVEnvironment.Pypi);
         case "composer.json":
-            return setLanguageConfig(Language.PHP, "php", filename, OCVEnvironment.Packagist);
+            return setLanguageConfig(Language.PHP, "php", filename, OCVEnvironment.Packagist, Settings.php.lockFileEnabled);
         case "pyproject.toml":
-            return setLanguageConfig(Language.Python, "python", filename, OCVEnvironment.Pypi);
+            return setLanguageConfig(Language.Python, "python", filename, OCVEnvironment.Pypi, Settings.python.lockFileEnabled);
     }
 };
 
-function setLanguageConfig(language: Language, config: string, filename: string, OCVenv: OCVEnvironment) {
+function setLanguageConfig(language: Language, config: string, filename: string, OCVenv: OCVEnvironment, isLocked?: boolean) {
     CurrentLanguage = language;
     CurrentLanguageConfig = config;
     CurrentEnvironment = OCVenv;
     if (env.isTelemetryEnabled) 
         sendTelemetry({FileName: filename})
+    if (isLocked !== undefined)
+        commands.executeCommand("setContext", "dependi.isLock", isLocked);
     return language;
 }

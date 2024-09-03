@@ -138,6 +138,16 @@
     "menus": {
       "editor/title": [
         {
+          "when": "dependi.isLock && resourceFilename in dependi.supportedFiles && resourceFilename != 'go.mod' && resourceFilename != 'requirements.txt'",
+          "command": "dependi.commands.disableLockFileParsing",
+          "group": "navigation"
+        },
+        {
+          "when": "!dependi.isLock && resourceFilename in dependi.supportedFiles && resourceFilename != 'go.mod' && resourceFilename != 'requirements.txt'",
+          "command": "dependi.commands.enableLockFileParsing",
+          "group": "navigation"
+        },
+        {
           "when": "resourceFilename in dependi.supportedFiles",
           "command": "dependi.commands.vulnerability.report",
           "group": "navigation"
@@ -200,6 +210,18 @@
           "dark": "./icons/vuln-rep-dark.svg",
           "light": "./icons/vuln-rep-light.svg"
         }
+      },
+      {
+        "command": "dependi.commands.enableLockFileParsing",
+        "title": "Enable Lock File Parsing",
+        "category": "Dependi",
+        "icon": "$(unlock)"
+      },
+      {
+        "command": "dependi.commands.disableLockFileParsing",
+        "title": "Disable Lock File Parsing",
+        "category": "Dependi",
+        "icon": "$(lock)"
       }
     ],
     "configuration": [

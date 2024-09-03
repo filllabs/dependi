@@ -4,6 +4,10 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 ## [v0.7.9](https://github.com/filllabs/dependi/compare/v0.7.8...v0.7.9)
 
+### New Features
+
+- Added commands to toggle Lock File Parsing in the title bar.
+
 ### Improvements
 
 - CHANGELOG cleanup and formatting.
