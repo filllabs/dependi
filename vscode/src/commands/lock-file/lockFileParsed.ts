@@ -1,11 +1,12 @@
 import path from "path";
 import { commands, TextEditor, TextEditorEdit, workspace } from "vscode";
-import { Configs } from "../config";
-import listener from "../core/listeners";
+import listener from "../../core/listeners";
+import { Configs } from "../../config";
+
 const config = workspace.getConfiguration("dependi");
 
-export const disableLockFileParsing = commands.registerTextEditorCommand(
-  "dependi.commands.disableLockFileParsing",
+export const lockFileParsed = commands.registerTextEditorCommand(
+  Configs.LOCK_FILE_PARSED,
   (editor: TextEditor, edit: TextEditorEdit, info) => {
     if (editor) {
       const filename = path.basename(editor.document.fileName);
@@ -29,8 +30,12 @@ export const disableLockFileParsing = commands.registerTextEditorCommand(
         default:
           break;
       }
-      listener(editor);
+
+      commands.executeCommand("setContext", "dependi.hasLockFile", false);
       commands.executeCommand("setContext", "dependi.isLock", false);
+      setTimeout(() => {
+        listener(editor);
+      }, 1000);
     }
   }
 );

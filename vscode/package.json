@@ -138,12 +138,17 @@
     "menus": {
       "editor/title": [
         {
-          "when": "dependi.isLock && resourceFilename in dependi.supportedFiles && resourceFilename != 'go.mod' && resourceFilename != 'requirements.txt'",
+          "when": "dependi.hasLockFile && resourceFilename != 'go.mod' && resourceFilename != 'requirements.txt'",
+          "command": "dependi.commands.lockFileParsed",
+          "group": "navigation"
+        },
+        {
+          "when": "!dependi.hasLockFile && dependi.isLock && resourceFilename in dependi.supportedFiles && resourceFilename != 'go.mod' && resourceFilename != 'requirements.txt'",
           "command": "dependi.commands.disableLockFileParsing",
           "group": "navigation"
         },
         {
-          "when": "!dependi.isLock && resourceFilename in dependi.supportedFiles && resourceFilename != 'go.mod' && resourceFilename != 'requirements.txt'",
+          "when": "!dependi.hasLockFile && !dependi.isLock && resourceFilename in dependi.supportedFiles && resourceFilename != 'go.mod' && resourceFilename != 'requirements.txt'",
           "command": "dependi.commands.enableLockFileParsing",
           "group": "navigation"
         },
@@ -222,6 +227,15 @@
         "title": "Disable Lock File Parsing",
         "category": "Dependi",
         "icon": "$(lock)"
+      },
+      {
+        "command": "dependi.commands.lockFileParsed",
+        "title": "Disable Lock File Parsing",
+        "category": "Dependi",
+        "icon": {
+          "dark": "./icons/lock-doc-dark.svg",
+          "light": "./icons/lock-doc-light.svg"
+        }
       }
     ],
     "configuration": [

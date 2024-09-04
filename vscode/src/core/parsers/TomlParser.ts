@@ -1,4 +1,4 @@
-import { TextDocument, TextLine, window } from "vscode";
+import { commands, TextDocument, TextLine, window } from "vscode";
 import Item from "../Item";
 import { Parser } from "./parser";
 import { isQuote, shouldIgnoreLine } from "./utils";
@@ -286,6 +286,7 @@ function parseLockFile(item: Item[]): Item[] {
       const fileContent = fs.readFileSync(lockFilePath, "utf8");
       const LockFileParser = new TomlLockFileParser();
       item = LockFileParser.parse(fileContent, item);
+      commands.executeCommand("setContext", "dependi.hasLockFile", true); 
     }
   } catch (err) {
     console.error(err);

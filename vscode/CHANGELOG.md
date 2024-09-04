@@ -6,7 +6,11 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 ### New Features
 
-- Added commands to toggle Lock File Parsing in the title bar.
+- Commands to toggle Lock File Parsing in the title bar.
+  - ![Lock Icon](https://www.dependi.io/screenshots/lock.png)  Lock File Parsing enabled.
+  - ![Unlock Icon](https://www.dependi.io/screenshots/unlock.png)  Lock File Parsing disabled.
+  - ![Doc-Lock Icon](https://www.dependi.io/screenshots/lock-doc.png)  A lock file has been found and parsed.
+
 
 ### Improvements
 
