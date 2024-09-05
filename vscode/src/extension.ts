@@ -21,6 +21,10 @@ import listener from "./core/listeners";
 import { ChangelogPanel } from "./panels/ChangelogPanel";
 import { WelcomePagePanel } from "./panels/WelcomePanel";
 import { ExtensionStorage } from "./storage";
+import { disableLockFileParsing } from "./commands/lock-file/disableLockFileParsing";
+import { enableLockFileParsing } from "./commands/lock-file/enableLockFileParsing";
+import { lockFileParsed } from "./commands/lock-file/lockFileParsed";
+
 
 export var Logger: OutputChannel;
 
@@ -83,6 +87,9 @@ export function activate(context: ExtensionContext) {
   context.subscriptions.push(updateAll);
   context.subscriptions.push(generateVulnerabilityReport(context));
   context.subscriptions.push(generateCurrentVulnReport(context));
+  context.subscriptions.push(disableLockFileParsing);
+  context.subscriptions.push(enableLockFileParsing);
+  context.subscriptions.push(lockFileParsed);
 }
 
 export function deactivate() {

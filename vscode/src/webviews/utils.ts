@@ -1,9 +1,12 @@
 export function markdownToHTML(markdown: string): string {
-  // Convert links to HTML
+  // Convert images to HTML
   let html = markdown.replace(
-    /\[([^\]]+)\]\(([^)]+)\)/g,
-    '<a href="$2">$1</a>'
+    /!\[([^\]]+)\]\(([^)]+)\)/g,
+    '<img src="$2" alt="$1">'
   );
+
+  // Convert links to HTML
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
 
   // Convert headings to HTML"
   html = html.replace(/^#\s(.*)$/gm, "<h1>$1</h1>");

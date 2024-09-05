@@ -67,6 +67,9 @@ export enum Configs {
   // CREATE_CHANGELOG = `${DEPENDI}createChangelog`,
   UPDATE_ALL = `${DEPENDI}commands.updateAll`,
   RETRY = `${DEPENDI}commands.retry`,
+  ENABLE_LOCK_FILE_PARSING = `${DEPENDI}commands.enableLockFileParsing`,
+  DISABLE_LOCK_FILE_PARSING = `${DEPENDI}commands.disableLockFileParsing`,
+  LOCK_FILE_PARSED = `${DEPENDI}commands.lockFileParsed`,
 
 
   //Storage

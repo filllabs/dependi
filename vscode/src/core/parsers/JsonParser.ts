@@ -1,4 +1,4 @@
-import { TextDocument, TextLine, window } from "vscode";
+import { commands, TextDocument, TextLine, window } from "vscode";
 import Item from "../Item";
 import { isQuote, shouldIgnoreLine } from "./utils";
 import { Settings } from "../../config";
@@ -82,6 +82,7 @@ export class JsonParser {
         const fileContent = fs.readFileSync(lockFilePath, "utf8");
         const LockFileParser = this.lockParser;
         item = LockFileParser.parse(fileContent, item);
+        commands.executeCommand("setContext", "dependi.hasLockFile", true); 
       }
     } catch (err) {
       console.error(err);
