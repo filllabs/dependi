@@ -27,7 +27,7 @@ export const lockFileParsed = commands.registerTextEditorCommand(
       }
 
       commands.executeCommand("setContext", "dependi.hasLockFile", false);
-      commands.executeCommand("setContext", "dependi.isLock", false);
+      commands.executeCommand("setContext", "dependi.isLockFileEnabled", false);
       setTimeout(() => {
         listener(editor);
       }, 1000);

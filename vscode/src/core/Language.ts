@@ -45,13 +45,13 @@ export function setLanguage(file?: string) {
     }
 };
 
-function setLanguageConfig(language: Language, config: string, filename: string, OCVenv: OCVEnvironment, isLocked?: boolean) {
+function setLanguageConfig(language: Language, config: string, filename: string, OCVenv: OCVEnvironment, isLockFileEnabled?: boolean) {
     CurrentLanguage = language;
     CurrentLanguageConfig = config;
     CurrentEnvironment = OCVenv;
     if (env.isTelemetryEnabled) 
         sendTelemetry({FileName: filename})
-    if (isLocked !== undefined)
-        commands.executeCommand("setContext", "dependi.isLock", isLocked);
+    if (isLockFileEnabled !== undefined)
+        commands.executeCommand("setContext", "dependi.isEnableLockParsing", isLockFileEnabled);
     return language;
 }

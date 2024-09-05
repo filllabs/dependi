@@ -24,7 +24,7 @@ export const disableLockFileParsing = commands.registerTextEditorCommand(
         default:
           break;
       }
-      commands.executeCommand("setContext", "dependi.isLock", false);
+      commands.executeCommand("setContext", "dependi.isLockFileEnabled", false);
       setTimeout(() => {
         listener(editor);
       }, 1000);

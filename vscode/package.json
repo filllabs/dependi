@@ -143,12 +143,12 @@
           "group": "navigation"
         },
         {
-          "when": "!dependi.hasLockFile && dependi.isLock && resourceFilename in dependi.supportedFiles && resourceFilename != 'go.mod' && resourceFilename != 'requirements.txt'",
+          "when": "!dependi.hasLockFile && dependi.isLockFileEnabled && resourceFilename in dependi.supportedFiles && resourceFilename != 'go.mod' && resourceFilename != 'requirements.txt'",
           "command": "dependi.commands.disableLockFileParsing",
           "group": "navigation"
         },
         {
-          "when": "!dependi.hasLockFile && !dependi.isLock && resourceFilename in dependi.supportedFiles && resourceFilename != 'go.mod' && resourceFilename != 'requirements.txt'",
+          "when": "!dependi.hasLockFile && !dependi.isLockFileEnabled && resourceFilename in dependi.supportedFiles && resourceFilename != 'go.mod' && resourceFilename != 'requirements.txt'",
           "command": "dependi.commands.enableLockFileParsing",
           "group": "navigation"
         },
