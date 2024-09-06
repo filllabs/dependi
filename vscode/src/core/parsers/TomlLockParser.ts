@@ -1,3 +1,4 @@
+import { satisfies } from "semver";
 import Item from "../Item";
 
 export class State {
@@ -44,7 +45,11 @@ export class TomlLockFileParser {
 
   setLockValue(state: State, items: Item[]): void {
     let foundItem = items.find((item) => item.key === state.dependency);
-    if (foundItem) {
+    if (
+      foundItem &&
+      (!foundItem.lockedAt ||
+        (foundItem.value && satisfies(state.lockedValue, foundItem.value)))
+    ) {
       foundItem.lockedAt = state.lockedValue;
     }
     state.lockedValue = "";
