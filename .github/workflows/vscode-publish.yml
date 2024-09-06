@@ -19,7 +19,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: 18
+          node-version: 22
       - name: Install Dependencies
         run: npm install --save-exact --save-dev esbuild
       - name: Publish VS Code Extension
