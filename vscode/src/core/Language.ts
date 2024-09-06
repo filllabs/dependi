@@ -51,7 +51,9 @@ function setLanguageConfig(language: Language, config: string, filename: string,
     CurrentEnvironment = OCVenv;
     if (env.isTelemetryEnabled) 
         sendTelemetry({FileName: filename})
-    if (isLockFileEnabled !== undefined)
+    if (isLockFileEnabled !== undefined) {
+        commands.executeCommand("setContext", "dependi.hasLockFile", false);
         commands.executeCommand("setContext", "dependi.isEnableLockParsing", isLockFileEnabled);
+    }
     return language;
 }

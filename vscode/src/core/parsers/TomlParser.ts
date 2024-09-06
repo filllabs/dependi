@@ -287,6 +287,8 @@ function parseLockFile(item: Item[]): Item[] {
       const LockFileParser = new TomlLockFileParser();
       item = LockFileParser.parse(fileContent, item);
       commands.executeCommand("setContext", "dependi.hasLockFile", true); 
+    } else {
+      commands.executeCommand("setContext", "dependi.hasLockFile", false);
     }
   } catch (err) {
     console.error(err);
