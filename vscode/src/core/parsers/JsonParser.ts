@@ -83,6 +83,8 @@ export class JsonParser {
         const LockFileParser = this.lockParser;
         item = LockFileParser.parse(fileContent, item);
         commands.executeCommand("setContext", "dependi.hasLockFile", true); 
+      } else {
+        commands.executeCommand("setContext", "dependi.hasLockFile", false);
       }
     } catch (err) {
       console.error(err);
