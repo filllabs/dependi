@@ -14,6 +14,7 @@ export class State {
   items: Item[];
   currentItem: Item;
   bypass: boolean;
+  isSubTable: boolean;
   constructor() {
     this.inInlineTable = false;
     this.inArray = false;
@@ -22,6 +23,7 @@ export class State {
     this.items = [] as Item[];
     this.currentItem = new Item();
     this.bypass = false;
+    this.isSubTable = false;
   }
 }
 
@@ -46,12 +48,14 @@ export class TomlParser implements Parser {
         if (state.isSingle) {
           this.addItem(state, items);
         }
-        if (this.isDependencyTable(line.text)) {
+        if (isDependencyTable(line.text)) {
           state.isMultipleDepTable = true;
           state.isSingle = false;
+          state.isSubTable = false;
         } else if (isDependencySingle(line.text)) {
           // if it is single dependency, create a new item and start parsing we need to get crate name from here
           state.isMultipleDepTable = false;
+          state.isSubTable = false;
           state.isSingle = true;
           state.currentItem = new Item();
           // crate name is the last part of the table name
@@ -62,15 +66,20 @@ export class TomlParser implements Parser {
         } else {
           state.isMultipleDepTable = false;
           state.isSingle = false;
+          state.isSubTable = false;
           state.bypass = true;
         }
+        continue;
+      } else if (this.isSubTable(line.text, state)) {
+        state.bypass = false;
+        state.isSubTable = true;
         continue;
       }
       // if bypass is true, we need to skip the next line until new table is found
       if (state.bypass) {
         continue;
       }
-      if (state.isMultipleDepTable) {
+      if (state.isMultipleDepTable || state.isSubTable) {
         // if it is multiple dependency table, we need to read pairs until we find another table
         const pair = this.parsePair(line.text, row);
         if (!pair) {
@@ -161,9 +170,9 @@ export class TomlParser implements Parser {
     return item.start > -1 ? item : undefined;
   }
 
-  isDependencyTable(line: string): boolean {
-    return line.includes("dependencies]");
-  }
+  isSubTable(line: string, state: State): boolean {
+    return false;
+  } 
 }
 
 export function parseVersion(line: string, item: Item) {
@@ -184,6 +193,11 @@ export function parseVersion(line: string, item: Item) {
   }
   return;
 }
+
+function isDependencyTable(line: string): boolean {
+  return line.includes("dependencies]");
+}
+
 function parseVersionValue(line: string, item: Item) {
   let i = item.start;
   let foundAt = -1;
