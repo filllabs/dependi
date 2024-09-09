@@ -72,69 +72,6 @@
     "workspaceContains:**/pyproject.toml"
   ],
   "contributes": {
-    "languages": [
-      {
-        "id": "toml",
-        "aliases": [
-          "TOML"
-        ],
-        "extensions": [
-          ".toml"
-        ],
-        "filenames": [
-          "Cargo.toml",
-          "pyproject.toml"
-        ]
-      },
-      {
-        "id": "go.mod",
-        "filenames": [
-          "go.mod"
-        ],
-        "aliases": [
-          "Go Module File"
-        ],
-        "extensions": [
-          ".mod"
-        ]
-      },
-      {
-        "id": "json",
-        "filenames": [
-          "package.json"
-        ],
-        "aliases": [
-          "Package JSON"
-        ],
-        "extensions": [
-          ".json"
-        ]
-      },
-      {
-        "id": "json",
-        "filenames": [
-          "composer.json"
-        ],
-        "aliases": [
-          "Composer JSON"
-        ],
-        "extensions": [
-          ".json"
-        ]
-      },
-      {
-        "id": "requirements.txt",
-        "filenames": [
-          "requirements.txt"
-        ],
-        "aliases": [
-          "TXT"
-        ],
-        "extensions": [
-          ".txt"
-        ]
-      }
-    ],
     "menus": {
       "editor/title": [
         {
