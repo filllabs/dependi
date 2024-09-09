@@ -32,7 +32,8 @@ export const versions = (
             : setVersions(response, versions);
           info = {
             name: name,
-            versions: versions
+            versions: versions,
+            latestVersion: currentVersion ? response.latest : response["dist-tags"].latest,
           };
         } catch (error) {
           console.error("Error parsing response:", error);

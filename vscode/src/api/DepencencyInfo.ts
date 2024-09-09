@@ -16,4 +16,9 @@ export type DependencyInfo = {
      * Optional features that the package supports (for Crates).
      */
     features?: Array<string>;
+
+    /**
+     * Optional latest version of the dependency.
+     */
+    latestVersion?: string;
 };
