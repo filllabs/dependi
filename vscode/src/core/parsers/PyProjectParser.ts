@@ -11,7 +11,7 @@ export class PyProjectParser extends TomlParser {
     if (!state.currentItem.isValid()) {
       return;
     }
-    const ingoreKey = ["python", "requires-python", "dependencies", "version"];
+    const ingoreKey = ["python"];
     if (ingoreKey.includes(state.currentItem.key)) {
       return;
     }
@@ -63,7 +63,15 @@ export class PyProjectParser extends TomlParser {
 
     return item.start > -1 ? item : undefined;
   }
-  isDependencyTable(line: string): boolean {
-    return line.includes("dependencies]") || line.includes("[project]");
+
+  isSubTable(line: string, state: State): boolean {
+    if (line.trim() === "]") {
+      state.isSubTable = false;
+      state.isSingle = false;
+      state.isMultipleDepTable = false;
+      state.bypass = true;
+      return false;
+    }
+    return line.includes("dependencies = [") || line.includes("dev-dependencies = [");
   }
 }
