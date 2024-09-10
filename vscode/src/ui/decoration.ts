@@ -37,14 +37,7 @@ export default function decoration(
 ): [DecorationOptions, DecorationType] {
   // Also handle json valued dependencies
   let version = item.value?.replace(",", "");
-  let satisfies, hasPatchUpdate, maxSatisfying;
-  if (item.lockedAt) {
-    maxSatisfying = version;
-    satisfies = version === versions[0];
-    hasPatchUpdate = false;
-  } else {
-    [satisfies, hasPatchUpdate, maxSatisfying] = checkVersion(version, versions);
-  }
+  let [satisfies, hasPatchUpdate, maxSatisfying] = checkVersion(version, versions, item.lockedAt);
 
   const formatError = (error: string) => {
     // Markdown does not like newlines in middle of emphasis, or spaces next to emphasis characters.

@@ -3,7 +3,7 @@ import { Settings } from "../config";
 import { CurrentLanguage, Language } from "../core/Language";
 
 
-export function checkVersion(version: string = "0.0.0", versions: string[]): [boolean, boolean, string | null] {
+export function checkVersion(version: string = "0.0.0", versions: string[], lockedAt?: string): [boolean, boolean, string | null] {
   let v = version;
 
   v = versionToSemver(v);
@@ -14,16 +14,19 @@ export function checkVersion(version: string = "0.0.0", versions: string[]): [bo
   if (prefix > 47 && prefix < 58)
     v = "^" + v;
   const max = versions[0];
-  if (maxSatisfying(versions, v) === null) {
-    if (valid(version) === null) {
-      return [false, false, null];
+  if (lockedAt) {
+    if (!satisfies(lockedAt, v)) {
+      return [false, false, version];
     }
-    // TODO: ask this test with kaan
+    return [lockedAt === versions[0], false, lockedAt];
+  }
+  if (max) {
     const minV = minVersion(v)?.toString() ?? '0.0.0';
     if (gt(minV, max)) {
-      return [true, false, v];
+      return [true, false, version];
     }
   }
+
   // if check patch is true, check if the patch version is the same or higher than the current version
   let shouldPatchBeChecked = false;
   switch (CurrentLanguage) {
