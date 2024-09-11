@@ -20,28 +20,16 @@ export class PypiFetcher extends Fetcher {
     };
   }
 
-  checkPreRelease(ignoreUnstable: boolean, version: string): boolean {
-    if (!ignoreUnstable) return false;
-    // alpha and beta regexes for python
-    const aORb = /\..*a|b.*/;
-    return (
-      version.indexOf(".alpha") !== -1 ||
-      version.indexOf(".beta") !== -1 ||
-      version.indexOf(".rc") !== -1 ||
-      version.indexOf(".SNAPSHOT") !== -1 ||
-      version.indexOf(".dev") !== -1 ||
-      version.indexOf(".preview") !== -1 ||
-      version.indexOf(".experimental") !== -1 ||
-      version.indexOf(".canary") !== -1 ||
-      version.indexOf(".pre") !== -1 ||
-      version.indexOf("rc") !== -1 ||
-      aORb.test(version)
-    );
+  checkUnstables(unstableFilter: string, version: string, currentVersion: string): boolean {
+    if (unstableFilter === "includeAlways") return false;
+    if (unstableFilter === "includeIfUnstable" && checkPreRelease(currentVersion)) return false;
+    return checkPreRelease(version);
   }
+
   mapVersions(di: DependencyInfo, dep: Dependency): Dependency {
     const versions = di
       .versions!
-      .filter((i: string) => i !== "" && i !== undefined && !this.checkPreRelease(Settings.python.ignoreUnstable, i))
+      .filter((i: string) => i !== "" && i !== undefined && !this.checkUnstables(Settings.python.unstableFilter, i, dep.item.value!))
       .sort(compareVersions)
       .reverse();
     // if (dep) {
@@ -59,3 +47,19 @@ export class PypiFetcher extends Fetcher {
   }
 }
 
+function checkPreRelease(version: string): boolean {
+  const aORb = /\..*a|b.*/;
+  return (
+    version.indexOf(".alpha") !== -1 ||
+    version.indexOf(".beta") !== -1 ||
+    version.indexOf(".rc") !== -1 ||
+    version.indexOf(".SNAPSHOT") !== -1 ||
+    version.indexOf(".dev") !== -1 ||
+    version.indexOf(".preview") !== -1 ||
+    version.indexOf(".experimental") !== -1 ||
+    version.indexOf(".canary") !== -1 ||
+    version.indexOf(".pre") !== -1 ||
+    version.indexOf("rc") !== -1 ||
+    aORb.test(version)
+  );
+}

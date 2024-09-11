@@ -15,7 +15,7 @@ export class CratesFetcher extends Fetcher {
       return versions(dep.item.key)
         .then((crate) => {
           const versions = crate.versions
-            .filter((i: string) => i !== "" && i !== undefined && !base.checkPreRelease(Settings.rust.ignoreUnstable, i))
+            .filter((i: string) => i !== "" && i !== undefined && !base.checkUnstables(Settings.rust.unstableFilter, i, dep.item.value!))
             .sort(compareVersions)
             .reverse();
 

@@ -14,7 +14,7 @@ export class PackagistFetcher extends Fetcher {
       const checkVersion = isLatest ? versions(dep.item.key) : versions(dep.item.key);
       return checkVersion.then((mod: any) => {
         const versions = mod.versions
-          .filter((i: string) => i !== "" && i !== undefined && !base.checkPreRelease(Settings.php.ignoreUnstable, i))
+          .filter((i: string) => i !== "" && i !== undefined && !base.checkUnstables(Settings.php.unstableFilter, i, dep.item.value!))
           .sort(compareVersions)
           .reverse();
         dep.versions = versions;

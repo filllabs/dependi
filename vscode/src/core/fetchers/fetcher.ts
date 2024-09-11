@@ -73,19 +73,10 @@ export abstract class Fetcher {
     return Promise.all(responses);
   }
 
-  checkPreRelease(ignoreUnstable: boolean, version: string): boolean {
-    if (!ignoreUnstable) return false;
-    return (
-      version.indexOf("-alpha") !== -1 ||
-      version.indexOf("-beta") !== -1 ||
-      version.indexOf("-rc") !== -1 ||
-      version.indexOf("-SNAPSHOT") !== -1 ||
-      version.indexOf("-dev") !== -1 ||
-      version.indexOf("-preview") !== -1 ||
-      version.indexOf("-experimental") !== -1 ||
-      version.indexOf("-canary") !== -1 ||
-      version.indexOf("-pre") !== -1
-    );
+  checkUnstables(unstableFilter: string, version: string, currentVersion: string): boolean {
+    if (unstableFilter === "includeAlways") return false;
+    if (unstableFilter === "includeIfUnstable" && checkPreRelease(currentVersion)) return false;
+    return checkPreRelease(version);
   }
 }
 function chunkDataArray(data: Dependency[], chunkSize: number) {
@@ -110,4 +101,20 @@ function chunkDataArray(data: Dependency[], chunkSize: number) {
     chunkedData.push(currentChunk);
   }
   return chunkedData;
+}
+
+function checkPreRelease(version: string): boolean {
+  return (
+    version.indexOf("-alpha") !== -1 ||
+    version.indexOf("-beta") !== -1 ||
+    version.indexOf("-rc") !== -1 ||
+    version.indexOf("-SNAPSHOT") !== -1 ||
+    version.indexOf("-dev") !== -1 ||
+    version.indexOf("-preview") !== -1 ||
+    version.indexOf("-experimental") !== -1 ||
+    version.indexOf("-canary") !== -1 ||
+    version.indexOf("-pre") !== -1 ||
+    version.indexOf("-next") !== -1 ||
+    version.indexOf("-nightly") !== -1
+  );
 }

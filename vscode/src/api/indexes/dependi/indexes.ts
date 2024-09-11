@@ -7,6 +7,7 @@ import { Logger } from "../../../extension";
 import { openDeviceLimitDialog, openPaymentRequiredDialog, openSettingsDialog } from "../../../ui/dialogs";
 import { Errors, getError } from "./errors";
 import { Language } from "./reports";
+import Item from "../../../core/Item";
 
 export interface VersionsResp {
   Name: string;
@@ -18,8 +19,8 @@ export interface VersionsResp {
 
 export interface VersionsReq {
   Language: Language;
-  Packages: string[];
-  IgnoreUnstables: boolean;
+  Packages: Item[];
+  IgnoreUnstables: string;
   Dependencies?: Dependency[] | VersionsResp[];
   VulnerabilityCheck: boolean;
   GhsaCheck?: boolean;

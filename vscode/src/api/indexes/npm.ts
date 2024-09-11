@@ -55,7 +55,7 @@ const setVersions = (response: any, versions: string[]) => {
       versionData.forEach(([key, value]: [string, any]) => {
         if (
           !value.deprecated &&
-          (!Settings.npm.ignoreUnstable || !key.includes("-"))
+          (Settings.npm.unstableFilter !== "exclude" || !key.includes("-"))
         ) {
           versions.push(key);
         }

@@ -76,26 +76,26 @@ While Dependi works out-of-the-box without any configuration, we also offer a fe
 - `dependi.rust.enabled`: Enable Rust package management.
 - `dependi.rust.lockFileEnabled` : Enable checking for Rust dependencies in lockfiles.
 - `dependi.rust.indexServerURL`: The URL for the Rust package index server.
-- `dependi.rust.excludeUnstableVersions`: Exclude unstable versions from Rust package lists.
+- `dependi.rust.unstableFilter`: Filter unstable versions: Exclude, Include Always, or Include If Unstable.
 - `dependi.rust.ignoreLinePattern`: Matches lines based on `*` position: `text*`, `*text`, `*text*`. Multiple patterns can be used, separated by commas.
 - `dependi.npm.enabled`: Enable NPM package management.
 - `dependi.npm.lockFileEnabled`:  Enable checking for Npm dependencies in lockfiles.
 - `dependi.npm.indexServerURL`: The URL for the NPM package index server.
-- `dependi.npm.excludeUnstableVersions`: Exclude unstable versions from NPM package lists.
+- `dependi.npm.unstableFilter`: Filter unstable versions: Exclude, Include Always, or Include If Unstable.
 - `dependi.npm.ignoreLinePattern`: Matches lines based on `*` position: `text*`, `*text`, `*text*`. Multiple patterns can be used, separated by commas.
 - `dependi.go.enabled`: Enable Go package management.
 - `dependi.go.indexServerURL`: The URL for the Go package index server.
-- `dependi.go.excludeUnstableVersions`: Exclude unstable versions from Go package lists.
+- `dependi.go.unstableFilter`: Filter unstable versions: Exclude, Include Always, or Include If Unstable.
 - `dependi.go.ignoreLinePattern`: Matches lines based on `*` position: `text*`, `*text`, `*text*`. Multiple patterns can be used, separated by commas.
 - `dependi.python.enabled`: Enable Python package management.
 - `dependi.python.lockFileEnabled`: Enable checking for Python dependencies in lockfiles.
 - `dependi.python.indexServerURL`: The URL for the Python package index server.
-- `dependi.python.excludeUnstableVersions`: Exclude unstable versions from Python package lists.
+- `dependi.python.unstableFilter`: Filter unstable versions: Exclude, Include Always, or Include If Unstable.
 - `dependi.python.ignoreLinePattern`: Matches lines based on `*` position: `text*`, `*text`, `*text*`. Multiple patterns can be used, separated by commas.
 - `dependi.php.enabled`: Enable PHP package management.
 - `dependi.php.lockFileEnabled`: Enable checking for PHP dependencies in lockfiles.
 - `dependi.php.indexServerURL`: The URL for the PHP package index server.
-- `dependi.php.excludeUnstableVersions`: Exclude unstable versions from PHP package lists.
+- `dependi.php.unstableFilter`: Filter unstable versions: Exclude, Include Always, or Include If Unstable.
 - `dependi.php.ignoreLinePattern`: Matches lines based on `*` position: `text*`, `*text`, `*text*`. Multiple patterns can be used, separated by commas.
 - `dependi.vulnerability.enabled`: Enable checking for vulnerabilities in dependencies.
 - `dependi.vulnerability.ghsa.enabled`: Include GitHub Security Advisory vulnerabilities in checks.

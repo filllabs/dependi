@@ -216,11 +216,21 @@
             "default": "https://index.crates.io",
             "order": 5
           },
-          "dependi.rust.excludeUnstableVersions": {
-            "type": "boolean",
+          "dependi.rust.unstableFilter": {
+            "type": "string",
+            "enum": [
+              "exclude",
+              "includeAlways",
+              "includeIfUnstable"
+            ],
+            "default": "exclude",
             "scope": "resource",
-            "default": true,
-            "description": "Exclude unstable versions from Rust package lists.",
+            "enumDescriptions": [
+              "Exclude them (default)",
+              "Include them and always consider as latest",
+              "Include if the current version is already unstable"
+            ],
+            "description": "Filter unstable versions: Exclude, Include Always, or Include If Unstable.",
             "order": 6
           },
           "dependi.rust.ignoreLinePatterns": {
@@ -265,11 +275,21 @@
             "pattern": "^https?://(?!.*//)([^/]+/)*[^/]+$",
             "order": 11
           },
-          "dependi.npm.excludeUnstableVersions": {
-            "type": "boolean",
+          "dependi.npm.unstableFilter": {
+            "type": "string",
+            "enum": [
+              "exclude",
+              "includeAlways",
+              "includeIfUnstable"
+            ],
+            "default": "exclude",
             "scope": "resource",
-            "default": true,
-            "description": "Exclude unstable versions from NPM package lists.",
+            "enumDescriptions": [
+              "Exclude them (default)",
+              "Include them and always consider as latest",
+              "Include if the current version is already unstable"
+            ],
+            "description": "Filter unstable versions: Exclude, Include Always, or Include If Unstable.",
             "order": 12
           },
           "dependi.npm.ignoreLinePatterns": {
@@ -314,11 +334,21 @@
             "default": "https://proxy.golang.org",
             "order": 17
           },
-          "dependi.go.excludeUnstableVersions": {
-            "type": "boolean",
+          "dependi.go.unstableFilter": {
+            "type": "string",
+            "enum": [
+              "exclude",
+              "includeAlways",
+              "includeIfUnstable"
+            ],
+            "default": "exclude",
             "scope": "resource",
-            "default": true,
-            "description": "Exclude unstable versions from Go package lists.",
+            "enumDescriptions": [
+              "Exclude them (default)",
+              "Include them and always consider as latest",
+              "Include if the current version is already unstable"
+            ],
+            "description": "Filter unstable versions: Exclude, Include Always, or Include If Unstable.",
             "order": 18
           },
           "dependi.go.ignoreLinePatterns": {
@@ -356,11 +386,21 @@
             "default": "https://pypi.org/pypi",
             "order": 22
           },
-          "dependi.python.excludeUnstableVersions": {
-            "type": "boolean",
+          "dependi.python.unstableFilter": {
+            "type": "string",
+            "enum": [
+              "exclude",
+              "includeAlways",
+              "includeIfUnstable"
+            ],
+            "default": "exclude",
             "scope": "resource",
-            "default": true,
-            "description": "Exclude unstable versions from Python package lists.",
+            "enumDescriptions": [
+              "Exclude them (default)",
+              "Include them and always consider as latest",
+              "Include if the current version is already unstable"
+            ],
+            "description": "Filter unstable versions: Exclude, Include Always, or Include If Unstable.",
             "order": 23
           },
           "dependi.python.ignoreLinePatterns": {
@@ -405,11 +445,21 @@
             "default": "https://repo.packagist.org",
             "order": 28
           },
-          "dependi.php.excludeUnstableVersions": {
-            "type": "boolean",
+          "dependi.php.unstableFilter": {
+            "type": "string",
+            "enum": [
+              "exclude",
+              "includeAlways",
+              "includeIfUnstable"
+            ],
+            "default": "exclude",
             "scope": "resource",
-            "default": true,
-            "description": "Exclude unstable versions from PHP package lists.",
+            "enumDescriptions": [
+              "Exclude them (default)",
+              "Include them and always consider as latest",
+              "Include if the current version is already unstable"
+            ],
+            "description": "Filter unstable versions: Exclude, Include Always, or Include If Unstable.",
             "order": 29
           },
           "dependi.php.ignoreLinePatterns": {

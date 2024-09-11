@@ -12,27 +12,27 @@ import { Fetcher } from "./fetcher";
 export class DependiFetcher extends Fetcher {
 
   async versions(dependencies: Dependency[]): Promise<Dependency[]> {
-    let ignoreUnstable = false;
+    let ignoreUnstable = "exclude";
     switch (CurrentLanguage) {
       case Language.Python:
-        ignoreUnstable = Settings.python.ignoreUnstable;
+        ignoreUnstable = Settings.python.unstableFilter;
         break;
       case Language.JS:
-        ignoreUnstable = Settings.npm.ignoreUnstable;
+        ignoreUnstable = Settings.npm.unstableFilter;
         break;
       case Language.Golang:
-        ignoreUnstable = Settings.go.ignoreUnstable;
+        ignoreUnstable = Settings.go.unstableFilter;
         break;
       case Language.PHP:
-        ignoreUnstable = Settings.php.ignoreUnstable;
+        ignoreUnstable = Settings.php.unstableFilter;
         break;
       case Language.Rust:
-        ignoreUnstable = Settings.rust.ignoreUnstable;
+        ignoreUnstable = Settings.rust.unstableFilter;
         break;
     }
     const req: VersionsReq = {
       Language: CurrentLanguage,
-      Packages: dependencies.map((d) => d.item.key),
+      Packages: dependencies.map((d) => d.item),
       Dependencies: dependencies,
       IgnoreUnstables: ignoreUnstable,
       VulnerabilityCheck: Settings.vulnerability.enabled,
