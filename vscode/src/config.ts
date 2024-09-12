@@ -4,37 +4,43 @@ import { DecorationPosition } from "./ui/pref";
 export const DEPENDI = "dependi.";
 const WORKBENCH_ACTIONS = "workbench.action.";
 
+export enum UnstableFilter {
+  Exclude,
+  IncludeAlways,
+  IncludeIfUnstable
+}
+
 export enum Configs {
   RUST_ENABLED = `rust.enabled`,
   RUST_INDEX_SERVER_URL = `rust.indexServerURL`,
-  RUST_IGNORE_UNSTABLES = `rust.excludeUnstableVersions`,
+  RUST_UNSTABLE_FILTER = `rust.unstableFilter`,
   RUST_IGNORE_LINE_PATTERN = `rust.ignoreLinePattern`,
   RUST_INFORM_PATCH_UPDATES = `rust.informPatchUpdates`,
   RUST_ENABLED_LOCK_FILE = `rust.lockFileEnabled`,
 
   NPM_ENABLED = `npm.enabled`,
   NPM_INDEX_SERVER_URL = `npm.indexServerURL`,
-  NPM_IGNORE_UNSTABLES = `npm.excludeUnstableVersions`,
+  NPM_UNSTABLE_FILTER = `npm.unstableFilter`,
   NPM_IGNORE_LINE_PATTERN = `npm.ignoreLinePattern`,
   NPM_INFORM_PATCH_UPDATES = `npm.informPatchUpdates`,
   NPM_ENABLED_LOCK_FILE = `npm.lockFileEnabled`,
 
   PHP_ENABLED = `php.enabled`,
   PHP_INDEX_SERVER_URL = `php.indexServerURL`,
-  PHP_IGNORE_UNSTABLES = `php.excludeUnstableVersions`,
+  PHP_UNSTABLE_FILTER = `php.unstableFilter`,
   PHP_IGNORE_LINE_PATTERN = `php.ignoreLinePattern`,
   PHP_INFORM_PATCH_UPDATES = `php.informPatchUpdates`,
   PHP_ENABLED_LOCK_FILE = `php.lockFileEnabled`,
 
   GO_ENABLED = `go.enabled`,
   GO_INDEX_SERVER_URL = `go.indexServerURL`,
-  GO_IGNORE_UNSTABLES = `go.excludeUnstableVersions`,
+  GO_UNSTABLE_FILTER = `go.unstableFilter`,
   GO_IGNORE_LINE_PATTERN = `go.ignoreLinePattern`,
   GO_INFORM_PATCH_UPDATES = `go.informPatchUpdates`,
 
   PYTHON_ENABLED = `python.enabled`,
   PYTHON_INDEX_SERVER_URL = `python.indexServerURL`,
-  PYTHON_IGNORE_UNSTABLES = `python.excludeUnstableVersions`,
+  PYTHON_UNSTABLE_FILTER = `python.unstableFilter`,
   PYTHON_IGNORE_LINE_PATTERN = `python.ignoreLinePattern`,
   PYTHON_INFORM_PATCH_UPDATES = `python.informPatchUpdates`,
   PYTHON_ENABLED_LOCK_FILE = `python.lockFileEnabled`,
@@ -75,6 +81,13 @@ export enum Configs {
   //Storage
   DEVICE_ID = `${DEPENDI}deviceID`,
   SHOWN_VERSION = `${DEPENDI}shownVersion`,
+
+  // Old Settings 
+  RUST_UNSTABLE_OLD = `rust.excludeUnstableVersions`,
+  NPM_UNSTABLE_OLD = `npm.excludeUnstableVersions`,
+  PHP_UNSTABLE_OLD = `php.excludeUnstableVersions`,
+  GO_UNSTABLE_OLD = `go.excludeUnstableVersions`,
+  PYTHON_UNSTABLE_OLD = `python.excludeUnstableVersions`
 }
 
 export const Settings = {
@@ -82,7 +95,7 @@ export const Settings = {
   rust: {
     enabled: true,
     index: "",
-    ignoreUnstable: false,
+    unstableFilter: UnstableFilter.Exclude,
     ignoreLinePattern: "",
     informPatchUpdates: false,
     lockFileEnabled: true
@@ -91,7 +104,7 @@ export const Settings = {
   npm: {
     enabled: true,
     index: "",
-    ignoreUnstable: false,
+    unstableFilter: UnstableFilter.Exclude,
     ignoreLinePattern: "",
     informPatchUpdates: false,
     lockFileEnabled: true
@@ -99,7 +112,7 @@ export const Settings = {
   php: {
     enabled: true,
     index: "",
-    ignoreUnstable: false,
+    unstableFilter: UnstableFilter.Exclude,
     ignoreLinePattern: "",
     informPatchUpdates: false,
     lockFileEnabled: true
@@ -107,14 +120,14 @@ export const Settings = {
   go: {
     enabled: true,
     index: "",
-    ignoreUnstable: false,
+    unstableFilter: UnstableFilter.Exclude,
     ignoreLinePattern: "",
     informPatchUpdates: true
   },
   python: {
     enabled: true,
     index: "",
-    ignoreUnstable: false,
+    unstableFilter: UnstableFilter.Exclude,
     ignoreLinePattern: "",
     informPatchUpdates: false,
     lockFileEnabled: true
@@ -157,38 +170,38 @@ export const Settings = {
 
   load: function () {
     const config = workspace.getConfiguration("dependi");
-
+    console.log(this.version);
     // fill in the settings
     this.rust.enabled = config.get<boolean>(Configs.RUST_ENABLED) ?? true;
     this.rust.index = config.get<string>(Configs.RUST_INDEX_SERVER_URL) || "https://index.crates.io";
-    this.rust.ignoreUnstable = config.get<boolean>(Configs.RUST_IGNORE_UNSTABLES) ?? true;
+    this.rust.unstableFilter = migrateUnstableSettings(Configs.RUST_UNSTABLE_FILTER, Configs.RUST_UNSTABLE_OLD);
     this.rust.ignoreLinePattern = config.get<string>(Configs.RUST_IGNORE_LINE_PATTERN) || "";
     this.rust.informPatchUpdates = config.get<boolean>(Configs.RUST_INFORM_PATCH_UPDATES) ?? false;
     this.rust.lockFileEnabled = config.get<boolean>(Configs.RUST_ENABLED_LOCK_FILE) ?? true;
-
+    
     this.npm.enabled = config.get<boolean>(Configs.NPM_ENABLED) ?? true;
     this.npm.index = config.get<string>(Configs.NPM_INDEX_SERVER_URL) || "https://registry.npmjs.org";
-    this.npm.ignoreUnstable = config.get<boolean>(Configs.NPM_IGNORE_UNSTABLES) ?? true;
+    this.npm.unstableFilter = migrateUnstableSettings(Configs.NPM_UNSTABLE_FILTER, Configs.NPM_UNSTABLE_OLD);
     this.npm.ignoreLinePattern = config.get<string>(Configs.NPM_IGNORE_LINE_PATTERN) || "";
     this.npm.informPatchUpdates = config.get<boolean>(Configs.NPM_INFORM_PATCH_UPDATES) ?? false;
     this.npm.lockFileEnabled = config.get<boolean>(Configs.NPM_ENABLED_LOCK_FILE) ?? true;
 
     this.php.enabled = config.get<boolean>(Configs.PHP_ENABLED) ?? true;
     this.php.index = config.get<string>(Configs.PHP_INDEX_SERVER_URL) || "https://repo.packagist.org";
-    this.php.ignoreUnstable = config.get<boolean>(Configs.PHP_IGNORE_UNSTABLES) ?? true;
+    this.php.unstableFilter = migrateUnstableSettings(Configs.PHP_UNSTABLE_FILTER, Configs.PHP_UNSTABLE_OLD);
     this.php.ignoreLinePattern = config.get<string>(Configs.PHP_IGNORE_LINE_PATTERN) || "";
     this.php.informPatchUpdates = config.get<boolean>(Configs.PHP_INFORM_PATCH_UPDATES) ?? false;
     this.php.lockFileEnabled = config.get<boolean>(Configs.PHP_ENABLED_LOCK_FILE) ?? true;
 
     this.go.enabled = config.get<boolean>(Configs.GO_ENABLED) ?? true;
     this.go.index = config.get<string>(Configs.GO_INDEX_SERVER_URL) || "https://proxy.golang.org";
-    this.go.ignoreUnstable = config.get<boolean>(Configs.GO_IGNORE_UNSTABLES) ?? true;
+    this.go.unstableFilter = migrateUnstableSettings(Configs.GO_UNSTABLE_FILTER, Configs.GO_UNSTABLE_OLD);
     this.go.ignoreLinePattern = config.get<string>(Configs.GO_IGNORE_LINE_PATTERN) || "";
     this.go.informPatchUpdates = config.get<boolean>(Configs.GO_INFORM_PATCH_UPDATES) ?? false;
 
     this.python.enabled = config.get<boolean>(Configs.PYTHON_ENABLED) ?? true;
     this.python.index = config.get<string>(Configs.PYTHON_INDEX_SERVER_URL) || "https://pypi.org/pypi";
-    this.python.ignoreUnstable = config.get<boolean>(Configs.PYTHON_IGNORE_UNSTABLES) ?? true;
+    this.python.unstableFilter = migrateUnstableSettings(Configs.PYTHON_UNSTABLE_FILTER, Configs.PYTHON_UNSTABLE_OLD);
     this.python.ignoreLinePattern = config.get<string>(Configs.PYTHON_IGNORE_LINE_PATTERN) || "";
     this.python.informPatchUpdates = config.get<boolean>(Configs.PYTHON_INFORM_PATCH_UPDATES) ?? false;
     this.python.lockFileEnabled = config.get<boolean>(Configs.PYTHON_ENABLED_LOCK_FILE) ?? true;
@@ -224,3 +237,17 @@ export const Settings = {
     }
   }
 };
+
+function migrateUnstableSettings(newSettingKey: string , oldSettingKey: string): UnstableFilter {
+  const config = workspace.getConfiguration("dependi");
+  const filter = config.get<string>(newSettingKey);
+  if (Settings.version > "0.7.9") {
+    const oldSetting = config.get<boolean>(oldSettingKey);
+    if (oldSetting !== undefined) {
+      config.update(oldSettingKey, undefined, true);
+      config.update(newSettingKey, oldSetting ? "Exclude" : "IncludeAlways", true);
+      return oldSetting ? UnstableFilter.Exclude : UnstableFilter.IncludeAlways;
+    }
+  }
+  return UnstableFilter[filter as keyof typeof UnstableFilter] || UnstableFilter.Exclude;
+}

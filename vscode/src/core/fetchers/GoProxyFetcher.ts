@@ -13,7 +13,7 @@ export class GoProxyFetcher extends Fetcher {
     return async function (dep: Dependency): Promise<Dependency> {
       return versions(dep.item.key).then((mod) => {
         const versions = mod.versions
-          .filter((i: string) => i !== "" && i !== undefined && !base.checkPreRelease(Settings.go.ignoreUnstable, i))
+          .filter((i: string) => i !== "" && i !== undefined && !base.checkUnstables(Settings.go.unstableFilter, i, dep.item.value!))
           .sort(compareVersions).reverse();
         dep.versions = versions;
         return dep;

@@ -1,12 +1,13 @@
 import { window } from "vscode";
 import { request } from ".";
 
-import { Configs } from "../../../config";
+import { Configs, UnstableFilter } from "../../../config";
 import Dependency from "../../../core/Dependency";
 import { Logger } from "../../../extension";
 import { openDeviceLimitDialog, openPaymentRequiredDialog, openSettingsDialog } from "../../../ui/dialogs";
 import { Errors, getError } from "./errors";
 import { Language } from "./reports";
+import Item from "../../../core/Item";
 
 export interface VersionsResp {
   Name: string;
@@ -18,8 +19,8 @@ export interface VersionsResp {
 
 export interface VersionsReq {
   Language: Language;
-  Packages: string[];
-  IgnoreUnstables: boolean;
+  Packages: Item[];
+  IgnoreUnstables: UnstableFilter;
   Dependencies?: Dependency[] | VersionsResp[];
   VulnerabilityCheck: boolean;
   GhsaCheck?: boolean;
