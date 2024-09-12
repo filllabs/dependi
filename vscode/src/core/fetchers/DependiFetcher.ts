@@ -1,5 +1,5 @@
 import { Indexes, VersionsReq } from "../../api/indexes/dependi/indexes";
-import { Settings } from "../../config";
+import { Settings, UnstableFilter } from "../../config";
 import { Logger } from "../../extension";
 import compareVersions from "../../semver/compareVersions";
 import Dependency from "../Dependency";
@@ -12,29 +12,29 @@ import { Fetcher } from "./fetcher";
 export class DependiFetcher extends Fetcher {
 
   async versions(dependencies: Dependency[]): Promise<Dependency[]> {
-    let ignoreUnstable = "exclude";
+    let unstableFilter = UnstableFilter.Exclude;
     switch (CurrentLanguage) {
       case Language.Python:
-        ignoreUnstable = Settings.python.unstableFilter;
+        unstableFilter = Settings.python.unstableFilter;
         break;
       case Language.JS:
-        ignoreUnstable = Settings.npm.unstableFilter;
+        unstableFilter = Settings.npm.unstableFilter;
         break;
       case Language.Golang:
-        ignoreUnstable = Settings.go.unstableFilter;
+        unstableFilter = Settings.go.unstableFilter;
         break;
       case Language.PHP:
-        ignoreUnstable = Settings.php.unstableFilter;
+        unstableFilter = Settings.php.unstableFilter;
         break;
       case Language.Rust:
-        ignoreUnstable = Settings.rust.unstableFilter;
+        unstableFilter = Settings.rust.unstableFilter;
         break;
     }
     const req: VersionsReq = {
       Language: CurrentLanguage,
       Packages: dependencies.map((d) => d.item),
       Dependencies: dependencies,
-      IgnoreUnstables: ignoreUnstable,
+      IgnoreUnstables: unstableFilter,
       VulnerabilityCheck: Settings.vulnerability.enabled,
       GhsaCheck: Settings.vulnerability.ghsa
     };

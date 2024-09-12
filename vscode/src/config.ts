@@ -4,6 +4,12 @@ import { DecorationPosition } from "./ui/pref";
 export const DEPENDI = "dependi.";
 const WORKBENCH_ACTIONS = "workbench.action.";
 
+export enum UnstableFilter {
+  Exclude,
+  IncludeAlways,
+  IncludeIfUnstable
+}
+
 export enum Configs {
   RUST_ENABLED = `rust.enabled`,
   RUST_INDEX_SERVER_URL = `rust.indexServerURL`,
@@ -75,6 +81,13 @@ export enum Configs {
   //Storage
   DEVICE_ID = `${DEPENDI}deviceID`,
   SHOWN_VERSION = `${DEPENDI}shownVersion`,
+
+  // Old Settings 
+  RUST_UNSTABLE_OLD = `rust.excludeUnstableVersions`,
+  NPM_UNSTABLE_OLD = `npm.excludeUnstableVersions`,
+  PHP_UNSTABLE_OLD = `php.excludeUnstableVersions`,
+  GO_UNSTABLE_OLD = `go.excludeUnstableVersions`,
+  PYTHON_UNSTABLE_OLD = `python.excludeUnstableVersions`
 }
 
 export const Settings = {
@@ -82,7 +95,7 @@ export const Settings = {
   rust: {
     enabled: true,
     index: "",
-    unstableFilter: "exclude",
+    unstableFilter: UnstableFilter.Exclude,
     ignoreLinePattern: "",
     informPatchUpdates: false,
     lockFileEnabled: true
@@ -91,7 +104,7 @@ export const Settings = {
   npm: {
     enabled: true,
     index: "",
-    unstableFilter: "exclude",
+    unstableFilter: UnstableFilter.Exclude,
     ignoreLinePattern: "",
     informPatchUpdates: false,
     lockFileEnabled: true
@@ -99,7 +112,7 @@ export const Settings = {
   php: {
     enabled: true,
     index: "",
-    unstableFilter: "exclude",
+    unstableFilter: UnstableFilter.Exclude,
     ignoreLinePattern: "",
     informPatchUpdates: false,
     lockFileEnabled: true
@@ -107,14 +120,14 @@ export const Settings = {
   go: {
     enabled: true,
     index: "",
-    unstableFilter: "exclude",
+    unstableFilter: UnstableFilter.Exclude,
     ignoreLinePattern: "",
     informPatchUpdates: true
   },
   python: {
     enabled: true,
     index: "",
-    unstableFilter: "exclude",
+    unstableFilter: UnstableFilter.Exclude,
     ignoreLinePattern: "",
     informPatchUpdates: false,
     lockFileEnabled: true
@@ -157,38 +170,38 @@ export const Settings = {
 
   load: function () {
     const config = workspace.getConfiguration("dependi");
-
+    console.log(this.version);
     // fill in the settings
     this.rust.enabled = config.get<boolean>(Configs.RUST_ENABLED) ?? true;
     this.rust.index = config.get<string>(Configs.RUST_INDEX_SERVER_URL) || "https://index.crates.io";
-    this.rust.unstableFilter = config.get<string>(Configs.RUST_UNSTABLE_FILTER) ?? "exclude";
+    this.rust.unstableFilter = updateUnstableSettings(Configs.RUST_UNSTABLE_FILTER, Configs.RUST_UNSTABLE_OLD);
     this.rust.ignoreLinePattern = config.get<string>(Configs.RUST_IGNORE_LINE_PATTERN) || "";
     this.rust.informPatchUpdates = config.get<boolean>(Configs.RUST_INFORM_PATCH_UPDATES) ?? false;
     this.rust.lockFileEnabled = config.get<boolean>(Configs.RUST_ENABLED_LOCK_FILE) ?? true;
-
+    
     this.npm.enabled = config.get<boolean>(Configs.NPM_ENABLED) ?? true;
     this.npm.index = config.get<string>(Configs.NPM_INDEX_SERVER_URL) || "https://registry.npmjs.org";
-    this.npm.unstableFilter = config.get<string>(Configs.NPM_UNSTABLE_FILTER) ?? "exclude";
+    this.npm.unstableFilter = updateUnstableSettings(Configs.NPM_UNSTABLE_FILTER, Configs.NPM_UNSTABLE_OLD);
     this.npm.ignoreLinePattern = config.get<string>(Configs.NPM_IGNORE_LINE_PATTERN) || "";
     this.npm.informPatchUpdates = config.get<boolean>(Configs.NPM_INFORM_PATCH_UPDATES) ?? false;
     this.npm.lockFileEnabled = config.get<boolean>(Configs.NPM_ENABLED_LOCK_FILE) ?? true;
 
     this.php.enabled = config.get<boolean>(Configs.PHP_ENABLED) ?? true;
     this.php.index = config.get<string>(Configs.PHP_INDEX_SERVER_URL) || "https://repo.packagist.org";
-    this.php.unstableFilter = config.get<string>(Configs.PHP_UNSTABLE_FILTER) ?? "exclude";
+    this.php.unstableFilter = updateUnstableSettings(Configs.PHP_UNSTABLE_FILTER, Configs.PHP_UNSTABLE_OLD);
     this.php.ignoreLinePattern = config.get<string>(Configs.PHP_IGNORE_LINE_PATTERN) || "";
     this.php.informPatchUpdates = config.get<boolean>(Configs.PHP_INFORM_PATCH_UPDATES) ?? false;
     this.php.lockFileEnabled = config.get<boolean>(Configs.PHP_ENABLED_LOCK_FILE) ?? true;
 
     this.go.enabled = config.get<boolean>(Configs.GO_ENABLED) ?? true;
     this.go.index = config.get<string>(Configs.GO_INDEX_SERVER_URL) || "https://proxy.golang.org";
-    this.go.unstableFilter = config.get<string>(Configs.GO_UNSTABLE_FILTER) ?? "exclude";
+    this.go.unstableFilter = updateUnstableSettings(Configs.GO_UNSTABLE_FILTER, Configs.GO_UNSTABLE_OLD);
     this.go.ignoreLinePattern = config.get<string>(Configs.GO_IGNORE_LINE_PATTERN) || "";
     this.go.informPatchUpdates = config.get<boolean>(Configs.GO_INFORM_PATCH_UPDATES) ?? false;
 
     this.python.enabled = config.get<boolean>(Configs.PYTHON_ENABLED) ?? true;
     this.python.index = config.get<string>(Configs.PYTHON_INDEX_SERVER_URL) || "https://pypi.org/pypi";
-    this.python.unstableFilter = config.get<string>(Configs.PYTHON_UNSTABLE_FILTER) ?? "exclude";
+    this.python.unstableFilter = updateUnstableSettings(Configs.PYTHON_UNSTABLE_FILTER, Configs.PYTHON_UNSTABLE_OLD);
     this.python.ignoreLinePattern = config.get<string>(Configs.PYTHON_IGNORE_LINE_PATTERN) || "";
     this.python.informPatchUpdates = config.get<boolean>(Configs.PYTHON_INFORM_PATCH_UPDATES) ?? false;
     this.python.lockFileEnabled = config.get<boolean>(Configs.PYTHON_ENABLED_LOCK_FILE) ?? true;
@@ -221,7 +234,29 @@ export const Settings = {
       //TODO: traverse all keys and update the settings if they are changed
       console.debug("Config changed");
       this.load();
-      const x = Settings.npm.unstableFilter
     }
   }
 };
+
+function updateUnstableSettings(newSettingKey: string , oldSettingKey: string): UnstableFilter {
+  const config = workspace.getConfiguration("dependi");
+  const filter = config.get<string>(newSettingKey);
+  if (Settings.version > "0.7.9") {
+    const oldSetting = config.get<boolean>(oldSettingKey);
+    if (oldSetting !== undefined) {
+      config.update(oldSettingKey, undefined, true);
+      config.update(newSettingKey, oldSetting ? "Exclude" : "IncludeAlways", true);
+      return oldSetting ? UnstableFilter.Exclude : UnstableFilter.IncludeAlways;
+    }
+  }
+  switch (filter) {
+    case "Exclude":
+      return UnstableFilter.Exclude;
+    case "IncludeAlways":
+      return UnstableFilter.IncludeAlways;
+    case "IncludeIfUnstable":
+      return UnstableFilter.IncludeIfUnstable;
+    default:
+      return UnstableFilter.Exclude;
+  }
+}

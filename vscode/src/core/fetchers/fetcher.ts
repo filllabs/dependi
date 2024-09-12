@@ -1,4 +1,5 @@
 import { queryMultiplePackageVulns } from "../../api/osv/vulnerability-service";
+import { UnstableFilter } from "../../config";
 import { openSettingsDialog } from "../../ui/dialogs";
 import { StatusBar } from "../../ui/status-bar";
 import Dependency from "../Dependency";
@@ -73,9 +74,9 @@ export abstract class Fetcher {
     return Promise.all(responses);
   }
 
-  checkUnstables(unstableFilter: string, version: string, currentVersion: string): boolean {
-    if (unstableFilter === "includeAlways") return false;
-    if (unstableFilter === "includeIfUnstable" && checkPreRelease(currentVersion)) return false;
+  checkUnstables(unstableFilter: UnstableFilter, version: string, currentVersion: string): boolean {
+    if (unstableFilter === UnstableFilter.IncludeAlways) return false;
+    if (unstableFilter === UnstableFilter.IncludeIfUnstable && checkPreRelease(currentVersion)) return false;
     return checkPreRelease(version);
   }
 }

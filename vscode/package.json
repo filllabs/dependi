@@ -219,11 +219,11 @@
           "dependi.rust.unstableFilter": {
             "type": "string",
             "enum": [
-              "exclude",
-              "includeAlways",
-              "includeIfUnstable"
+              "Exclude",
+              "IncludeAlways",
+              "IncludeIfUnstable"
             ],
-            "default": "exclude",
+            "default": "Exclude",
             "scope": "resource",
             "enumDescriptions": [
               "Exclude them (default)",
@@ -278,11 +278,11 @@
           "dependi.npm.unstableFilter": {
             "type": "string",
             "enum": [
-              "exclude",
-              "includeAlways",
-              "includeIfUnstable"
+              "Exclude",
+              "IncludeAlways",
+              "IncludeIfUnstable"
             ],
-            "default": "exclude",
+            "default": "Exclude",
             "scope": "resource",
             "enumDescriptions": [
               "Exclude them (default)",
@@ -337,11 +337,11 @@
           "dependi.go.unstableFilter": {
             "type": "string",
             "enum": [
-              "exclude",
-              "includeAlways",
-              "includeIfUnstable"
+              "Exclude",
+              "IncludeAlways",
+              "IncludeIfUnstable"
             ],
-            "default": "exclude",
+            "default": "Exclude",
             "scope": "resource",
             "enumDescriptions": [
               "Exclude them (default)",
@@ -389,11 +389,11 @@
           "dependi.python.unstableFilter": {
             "type": "string",
             "enum": [
-              "exclude",
-              "includeAlways",
-              "includeIfUnstable"
+              "Exclude",
+              "IncludeAlways",
+              "IncludeIfUnstable"
             ],
-            "default": "exclude",
+            "default": "Exclude",
             "scope": "resource",
             "enumDescriptions": [
               "Exclude them (default)",
@@ -448,11 +448,11 @@
           "dependi.php.unstableFilter": {
             "type": "string",
             "enum": [
-              "exclude",
-              "includeAlways",
-              "includeIfUnstable"
+              "Exclude",
+              "IncludeAlways",
+              "IncludeIfUnstable"
             ],
-            "default": "exclude",
+            "default": "Exclude",
             "scope": "resource",
             "enumDescriptions": [
               "Exclude them (default)",
