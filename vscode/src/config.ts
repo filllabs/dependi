@@ -174,34 +174,34 @@ export const Settings = {
     // fill in the settings
     this.rust.enabled = config.get<boolean>(Configs.RUST_ENABLED) ?? true;
     this.rust.index = config.get<string>(Configs.RUST_INDEX_SERVER_URL) || "https://index.crates.io";
-    this.rust.unstableFilter = updateUnstableSettings(Configs.RUST_UNSTABLE_FILTER, Configs.RUST_UNSTABLE_OLD);
+    this.rust.unstableFilter = migrateUnstableSettings(Configs.RUST_UNSTABLE_FILTER, Configs.RUST_UNSTABLE_OLD);
     this.rust.ignoreLinePattern = config.get<string>(Configs.RUST_IGNORE_LINE_PATTERN) || "";
     this.rust.informPatchUpdates = config.get<boolean>(Configs.RUST_INFORM_PATCH_UPDATES) ?? false;
     this.rust.lockFileEnabled = config.get<boolean>(Configs.RUST_ENABLED_LOCK_FILE) ?? true;
     
     this.npm.enabled = config.get<boolean>(Configs.NPM_ENABLED) ?? true;
     this.npm.index = config.get<string>(Configs.NPM_INDEX_SERVER_URL) || "https://registry.npmjs.org";
-    this.npm.unstableFilter = updateUnstableSettings(Configs.NPM_UNSTABLE_FILTER, Configs.NPM_UNSTABLE_OLD);
+    this.npm.unstableFilter = migrateUnstableSettings(Configs.NPM_UNSTABLE_FILTER, Configs.NPM_UNSTABLE_OLD);
     this.npm.ignoreLinePattern = config.get<string>(Configs.NPM_IGNORE_LINE_PATTERN) || "";
     this.npm.informPatchUpdates = config.get<boolean>(Configs.NPM_INFORM_PATCH_UPDATES) ?? false;
     this.npm.lockFileEnabled = config.get<boolean>(Configs.NPM_ENABLED_LOCK_FILE) ?? true;
 
     this.php.enabled = config.get<boolean>(Configs.PHP_ENABLED) ?? true;
     this.php.index = config.get<string>(Configs.PHP_INDEX_SERVER_URL) || "https://repo.packagist.org";
-    this.php.unstableFilter = updateUnstableSettings(Configs.PHP_UNSTABLE_FILTER, Configs.PHP_UNSTABLE_OLD);
+    this.php.unstableFilter = migrateUnstableSettings(Configs.PHP_UNSTABLE_FILTER, Configs.PHP_UNSTABLE_OLD);
     this.php.ignoreLinePattern = config.get<string>(Configs.PHP_IGNORE_LINE_PATTERN) || "";
     this.php.informPatchUpdates = config.get<boolean>(Configs.PHP_INFORM_PATCH_UPDATES) ?? false;
     this.php.lockFileEnabled = config.get<boolean>(Configs.PHP_ENABLED_LOCK_FILE) ?? true;
 
     this.go.enabled = config.get<boolean>(Configs.GO_ENABLED) ?? true;
     this.go.index = config.get<string>(Configs.GO_INDEX_SERVER_URL) || "https://proxy.golang.org";
-    this.go.unstableFilter = updateUnstableSettings(Configs.GO_UNSTABLE_FILTER, Configs.GO_UNSTABLE_OLD);
+    this.go.unstableFilter = migrateUnstableSettings(Configs.GO_UNSTABLE_FILTER, Configs.GO_UNSTABLE_OLD);
     this.go.ignoreLinePattern = config.get<string>(Configs.GO_IGNORE_LINE_PATTERN) || "";
     this.go.informPatchUpdates = config.get<boolean>(Configs.GO_INFORM_PATCH_UPDATES) ?? false;
 
     this.python.enabled = config.get<boolean>(Configs.PYTHON_ENABLED) ?? true;
     this.python.index = config.get<string>(Configs.PYTHON_INDEX_SERVER_URL) || "https://pypi.org/pypi";
-    this.python.unstableFilter = updateUnstableSettings(Configs.PYTHON_UNSTABLE_FILTER, Configs.PYTHON_UNSTABLE_OLD);
+    this.python.unstableFilter = migrateUnstableSettings(Configs.PYTHON_UNSTABLE_FILTER, Configs.PYTHON_UNSTABLE_OLD);
     this.python.ignoreLinePattern = config.get<string>(Configs.PYTHON_IGNORE_LINE_PATTERN) || "";
     this.python.informPatchUpdates = config.get<boolean>(Configs.PYTHON_INFORM_PATCH_UPDATES) ?? false;
     this.python.lockFileEnabled = config.get<boolean>(Configs.PYTHON_ENABLED_LOCK_FILE) ?? true;
@@ -238,7 +238,7 @@ export const Settings = {
   }
 };
 
-function updateUnstableSettings(newSettingKey: string , oldSettingKey: string): UnstableFilter {
+function migrateUnstableSettings(newSettingKey: string , oldSettingKey: string): UnstableFilter {
   const config = workspace.getConfiguration("dependi");
   const filter = config.get<string>(newSettingKey);
   if (Settings.version > "0.7.9") {
@@ -249,14 +249,5 @@ function updateUnstableSettings(newSettingKey: string , oldSettingKey: string): 
       return oldSetting ? UnstableFilter.Exclude : UnstableFilter.IncludeAlways;
     }
   }
-  switch (filter) {
-    case "Exclude":
-      return UnstableFilter.Exclude;
-    case "IncludeAlways":
-      return UnstableFilter.IncludeAlways;
-    case "IncludeIfUnstable":
-      return UnstableFilter.IncludeIfUnstable;
-    default:
-      return UnstableFilter.Exclude;
-  }
+  return UnstableFilter[filter as keyof typeof UnstableFilter] || UnstableFilter.Exclude;
 }
