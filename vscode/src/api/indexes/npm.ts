@@ -1,5 +1,5 @@
 import * as https from "https";
-import { Settings } from "../../config";
+import { Settings, UnstableFilter } from "../../config";
 import { Logger } from "../../extension";
 import { DependencyInfo } from "../DepencencyInfo";
 import { getReqOptions } from "../utils";
@@ -55,7 +55,7 @@ const setVersions = (response: any, versions: string[]) => {
       versionData.forEach(([key, value]: [string, any]) => {
         if (
           !value.deprecated &&
-          (Settings.npm.unstableFilter !== "exclude" || !key.includes("-"))
+          (Settings.npm.unstableFilter !== UnstableFilter.Exclude || !key.includes("-"))
         ) {
           versions.push(key);
         }
