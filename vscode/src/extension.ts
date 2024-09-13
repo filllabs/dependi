@@ -24,6 +24,7 @@ import { ExtensionStorage } from "./storage";
 import { disableLockFileParsing } from "./commands/lock-file/disableLockFileParsing";
 import { enableLockFileParsing } from "./commands/lock-file/enableLockFileParsing";
 import { lockFileParsed } from "./commands/lock-file/lockFileParsed";
+import { DependencyCache } from "./core/listeners/listener";
 
 
 export var Logger: OutputChannel;
@@ -39,6 +40,25 @@ export function activate(context: ExtensionContext) {
   Settings.load();
   workspace.onDidChangeConfiguration((e) => {
     Settings.onChange(e);
+    switch (true) {
+      case e.affectsConfiguration("dependi.npm.unstableFilter"):
+        DependencyCache.delete(Language.JS);
+        break;
+      case e.affectsConfiguration("dependi.python.unstableFilter"):
+        DependencyCache.delete(Language.Python);
+        break;
+      case e.affectsConfiguration("dependi.rust.unstableFilter"):
+        DependencyCache.delete(Language.Rust);
+        break;
+      case e.affectsConfiguration("dependi.go.unstableFilter"):
+        DependencyCache.delete(Language.Golang);
+        break;
+      case e.affectsConfiguration("dependi.php.unstableFilter"):
+        DependencyCache.delete(Language.PHP);
+        break;
+      default:
+        break;
+    }
   });
 
   setLanguage(window.activeTextEditor?.document.fileName);
