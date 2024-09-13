@@ -1,8 +1,9 @@
-import * as https from 'https';
 import { Settings } from "../../config";
 import { DependencyInfo } from '../DepencencyInfo';
 import { getReqOptions } from "../utils";
-import { addResponseHandlers, cleanURL, isStatusInvalid, ResponseError } from "./utils";
+import { addResponseHandlers, cleanURL, isStatusInvalid, isStatusRedirect, ResponseError } from "./utils";
+import { ClientRequest, IncomingMessage } from 'http';
+import { makeRequest } from './request';
 
 export const versions = (name: string) => {
   return new Promise<DependencyInfo>(function (resolve, reject) {
@@ -10,13 +11,13 @@ export const versions = (name: string) => {
     const url = getURL(name);
     const options = getReqOptions(url);
 
-    var req = https.get(options, function (res) {
+    const handleResponse = (res: IncomingMessage, req: ClientRequest) => {
       if (isStatusInvalid(res)) {
         return reject(ResponseError(res));
       }
       let body = addResponseHandlers(name, res, req, reject);
       let info: DependencyInfo;
-      res.on('end', function () {
+      res.on("end", () => {
         try {
           const bodyString = Buffer.concat(body).toString();
           const bodyArray = bodyString.split('\n').filter(n => n).map(line => JSON.parse(line));
@@ -26,13 +27,12 @@ export const versions = (name: string) => {
             features: Object.keys(bodyArray.at(-1).features).filter(feature => feature !== "default")
           };
         } catch (e) {
-          return reject(e);
+          reject(e);
         }
         resolve(info);
       });
-    });
-
-    req.end();
+    };
+    makeRequest(options, handleResponse, reject);
   });
 };
 
