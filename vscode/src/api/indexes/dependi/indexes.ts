@@ -15,6 +15,7 @@ export interface VersionsResp {
   Vulns?: Map<string, string[]>;
   ETag?: string;
   Error?: string;
+  LatestVersion?: string;
 }
 
 export interface VersionsReq {
@@ -73,6 +74,10 @@ export async function getVersions(value: VersionsReq, options?: RequestInit) {
           if (matchingVersion && matchingVersion.Versions) {
             // Update the 'versions' field with VersionsResp's 'Versions'
             dep.versions = matchingVersion.Versions;
+            dep.item.latestVersion = matchingVersion.LatestVersion;
+            if (dep.item.value === "latest") {
+              dep.item.value = dep.item.latestVersion;
+            }
 
             if (matchingVersion.Vulns) {
               const vulnEntries = Object.entries(matchingVersion.Vulns);
