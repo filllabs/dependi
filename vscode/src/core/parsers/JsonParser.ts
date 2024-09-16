@@ -68,7 +68,7 @@ export class JsonParser {
   isDependencies(line: TextLine) {
     const start = line.firstNonWhitespaceCharacterIndex;
     return this.keys.some((key) => {
-      return line.text.substring(start, start + key.length + 3) === `"${key}":`;
+      return (line.text.substring(start, start + key.length + 3) === `"${key}":` && !line.text.includes("}"));
     });
   }
   parseLockedFile(item: Item[]): Item[] {
