@@ -17,6 +17,7 @@ export class NpmFetcher extends Fetcher {
           .filter((i: string) => i !== "" && i !== undefined && !base.checkUnstables(Settings.npm.unstableFilter, i, dep.item.value!))
           .sort(compareVersions).reverse();
         dep.versions = versions;
+        dep.item.latestVersion = mod.latestVersion;
         dep.item.value = dep.item.value === "latest" ? mod.latestVersion : dep.item.value;
         return dep;
       }).catch(fetcherCatch(dep));
