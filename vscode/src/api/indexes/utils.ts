@@ -16,6 +16,13 @@ export function isStatusInvalid(res: IncomingMessage) {
   return false;
 }
 
+export function isStatusRedirect(res: IncomingMessage) {
+  if (!res.statusCode) {
+    return false;
+  }
+  return res.statusCode >= 300 && res.statusCode < 400;
+}
+
 export function addResponseHandlers(name: string, res: IncomingMessage, req: ClientRequest, reject: (reason?: any) => void) {
   let body: any[] = [];
   res.on('data', function (chunk) {

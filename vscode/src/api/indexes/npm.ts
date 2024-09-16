@@ -1,14 +1,12 @@
-import * as https from "https";
 import { Settings, UnstableFilter } from "../../config";
 import { Logger } from "../../extension";
 import { DependencyInfo } from "../DepencencyInfo";
 import { getReqOptions } from "../utils";
-import { addResponseHandlers, cleanURL, isStatusInvalid, ResponseError } from "./utils";
+import { addResponseHandlers, cleanURL, isStatusInvalid, isStatusRedirect, ResponseError } from "./utils";
+import { ClientRequest, IncomingMessage } from "http";
+import { makeRequest } from "./request";
 
-export const versions = (
-  name: string,
-  currentVersion?: string
-) => {
+export const versions = (name: string, currentVersion?: string) => {
   return new Promise<DependencyInfo>(function (resolve, reject) {
     const url = getURL(currentVersion, name);
     const options = getReqOptions(url);
@@ -17,7 +15,8 @@ export const versions = (
         Accept: "application/vnd.npm.install-v1+json",
       };
     }
-    var req = https.get(options, function (res) {
+
+    const handleResponse = (res: IncomingMessage, req: ClientRequest) => {
       if (isStatusInvalid(res)) {
         return reject(ResponseError(res));
       }
@@ -42,9 +41,8 @@ export const versions = (
         }
         resolve(info);
       });
-    });
-
-    req.end();
+    };
+    makeRequest(options, handleResponse, reject, !currentVersion ? "application/vnd.npm.install-v1+json": undefined);
   });
 };
 
@@ -73,4 +71,3 @@ const setLatestVersion = (response: any, currentVersion: string) => {
 function getURL(currentVersion: string | undefined, name: string) {
   return cleanURL(`${Settings.npm.index}/${currentVersion ? `-/package/${name}/dist-tags` : `${name}`}`);
 }
-
