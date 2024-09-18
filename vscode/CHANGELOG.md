@@ -2,6 +2,35 @@
 
 All notable changes to the "dependi" extension will be documented in this file.
 
+## [v0.7.10]((https://github.com/filllabs/dependi/compare/v0.7.9...v0.7.10))
+
+### New Features
+
+- Manifest usage percentage chart added to Pro Panel. (_Only for [Pro](https://dependi.io) version._)
+- Support for the `latest` tag in `package.json`.
+
+### Improvements
+
+- Parsing of dependencies in varied custom sections of configuration files.
+- Handling of 3xx redirects by following the `Location` header.
+- `ignoreUnstables` replaced with `unstableFilter` across all languages.
+	- `unstableFilter` options:
+	    - `exclude`: Excludes unstable versions.
+	    - `includeAlways`: Always includes unstable versions.
+	    - `includeIfUnstable`: Includes if the current version is unstable.
+- `retry` command now clears the cache for the relevant language.
+- Version-checking logic enhanced for locked values and manifest file comparisons.
+
+### Bug Fixes
+
+- Handling of empty dependency fields fixed to ensure proper processing. [Issue 143](https://github.com/filllabs/dependi/issues/143)
+- `Languages` section removed from `package.json` as it is no longer necessary. [Issue 127](https://github.com/filllabs/dependi/issues/127)
+
+### Other Changes
+
+- README and extension descriptions updated.
+
+
 ## [v0.7.9](https://github.com/filllabs/dependi/compare/v0.7.8...v0.7.9)
 
 ### New Features
