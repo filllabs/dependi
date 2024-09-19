@@ -6,7 +6,7 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 ### New Features
 
-- Manifest usage percentage chart added to Pro Panel. (_Only for [Pro](https://dependi.io) version._)
+- Manifest usage percentage chart added to Pro Panel. (_[Pro](https://dependi.io) version_)
 - Support for the `latest` tag in `package.json`.
 
 ### Improvements
@@ -43,7 +43,7 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 ### Improvements
 
-- New advanced vulnerability report. (_Only for [Pro](https://dependi.io) version._)
+- New advanced vulnerability report. (_[Pro](https://dependi.io) version_)
 - CHANGELOG cleanup and formatting.
 - Notification for dependi updates now has a beautiful CHANGELOG view.
 - Added `peerDependencies` and `optionalDependencies` to package.json for better dependency resolution.
@@ -83,7 +83,7 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 ### New Features
 
-- Added a report to list vulnerable library versions from the manifest file. (_Only for [Pro](https://dependi.io) version._) [Issue #53](https://github.com/filllabs/dependi/issues/53)
+- Added a report to list vulnerable library versions from the manifest file. (_[Pro](https://dependi.io) version_) [Issue #53](https://github.com/filllabs/dependi/issues/53)
 
 ### Bug Fixes
 
@@ -126,7 +126,7 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 ### Bug Fixes
 
-- Fixed vulnerability report generate command bug (_Only for [Pro](https://dependi.io) version._) ([#30](https://github.com/filllabs/dependi/pull/30))
+- Fixed vulnerability report generate command bug (_[Pro](https://dependi.io) version_) ([#30](https://github.com/filllabs/dependi/pull/30))
 - Fixed duplicate slashes in npm registry url([#31](https://github.com/filllabs/dependi/pull/31) Thanks to [Opportunity](https://github.com/OpportunityLiu))
 
 ## [v0.7.2](https://github.com/filllabs/dependi/compare/v0.7.1...v0.7.2)
@@ -150,7 +150,7 @@ All notable changes to the "dependi" extension will be documented in this file.
 ### New Features
 
 - Language Support: Dependi now supports Go, JavaScript, and Python!
-- Vulnerability Report: A new feature for Pro users. (_Only for [Pro](https://dependi.io) version._)
+- Vulnerability Report: A new feature for Pro users. (_[Pro](https://dependi.io) version_)
 
 ### Improvements
 
