@@ -1,25 +1,23 @@
-import { compare, gt, maxSatisfying, minVersion, satisfies, valid } from "semver";
+import { compare, gt, maxSatisfying, minVersion, satisfies } from "semver";
 import { Settings } from "../config";
 import { CurrentLanguage, Language } from "../core/Language";
 
 
 export function checkVersion(version: string = "0.0.0", versions: string[], lockedAt?: string): [boolean, boolean, string | null] {
-  let v = version;
+  let v = versionToSemver(version);
 
-  v = versionToSemver(v);
-  version = versionToSemver(version);
-  versions = versions.map(versionToSemver);
-  
-  let prefix = v.charCodeAt(0);
-  if (prefix > 47 && prefix < 58)
-    v = "^" + v;
-  const max = versions[0];
+  const semverVersions = versions.map(versionToSemver);
+  const versionMap = mapVersions(versions, semverVersions);
+
+  v = ensureCaretPrefix(v);
+
+  const max = semverVersions[0];
+
   if (lockedAt) {
-    if (!satisfies(lockedAt, v)) {
-      return [false, false, version];
-    }
-    return [lockedAt === versions[0], false, lockedAt];
+    const result = checkLockedVersion(lockedAt, v, semverVersions);
+    if (result) return result;
   }
+
   if (max) {
     const minV = minVersion(v)?.toString() ?? '0.0.0';
     if (gt(minV, max)) {
@@ -47,14 +45,37 @@ export function checkVersion(version: string = "0.0.0", versions: string[], lock
       break;
   }
   const pathUpdated = shouldPatchBeChecked ? compare(max, minVersion(v) ?? '0.0.0') === 1 : false;
-  return [satisfies(max, v), pathUpdated, maxSatisfying(versions, v)];
+  const maxSatisfyingVersion = maxSatisfying(semverVersions, v);
+  if (maxSatisfyingVersion && CurrentLanguage === Language.Python) {
+    return [satisfies(max, v), pathUpdated, versionMap[maxSatisfyingVersion]];
+  }
+
+  return [satisfies(max, v), pathUpdated, maxSatisfyingVersion];
+}
+
+function mapVersions(versions: string[], semverVersions: string[]): Record<string, string> {
+  if (CurrentLanguage !== Language.Python) return {};
+  return versions.reduce((acc, version, index) => {
+    acc[semverVersions[index]] = version;
+    return acc;
+  }, {} as Record<string, string>);
+}
+
+function ensureCaretPrefix(version: string): string {
+  const prefix = version.charCodeAt(0);
+  return (prefix > 47 && prefix < 58) ? `^${version}` : version;
+}
+
+function checkLockedVersion(lockedAt: string, version: string, semverVersions: string[]): [boolean, boolean, string | null] | null {
+  const semverLockedAt = versionToSemver(lockedAt);
+  if (!satisfies(semverLockedAt, version, { includePrerelease: true })) {
+    return [false, false, lockedAt];
+  }
+  return [semverLockedAt === semverVersions[0], false, lockedAt];
 }
 
 function versionToSemver(version: string): string {
-  if (CurrentLanguage === Language.Python) {
-    return convertPythonVersionToSemver(version);
-  }
-  return normalizeVersion(version);
+  return CurrentLanguage === Language.Python ? convertPythonVersionToSemver(version) : normalizeVersion(version);
 }
 
 function normalizeVersion(version: string): string {
