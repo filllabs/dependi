@@ -21,4 +21,9 @@ export type DependencyInfo = {
      * Optional latest version of the dependency.
      */
     latestVersion?: string;
+
+    /**
+     * Optional error message.
+     */
+    error?: string;
 };

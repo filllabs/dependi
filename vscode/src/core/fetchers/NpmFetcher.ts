@@ -19,6 +19,7 @@ export class NpmFetcher extends Fetcher {
         dep.versions = versions;
         dep.item.latestVersion = mod.latestVersion;
         dep.item.value = dep.item.value === "latest" ? mod.latestVersion : dep.item.value;
+        dep.error = mod.error;
         return dep;
       }).catch(fetcherCatch(dep));
     };

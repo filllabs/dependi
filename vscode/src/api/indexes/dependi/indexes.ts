@@ -70,7 +70,7 @@ export async function getVersions(value: VersionsReq, options?: RequestInit) {
       const deps = (value.Dependencies as Dependency[]).map(
         (dep: Dependency) => {
           const matchingVersion = versionsMap.get(dep.item.key);
-
+          dep.error = matchingVersion?.Error;
           if (matchingVersion && matchingVersion.Versions) {
             // Update the 'versions' field with VersionsResp's 'Versions'
             dep.versions = matchingVersion.Versions;
