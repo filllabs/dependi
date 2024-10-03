@@ -179,10 +179,15 @@ export function possibleLatestVersion(
     }
     return exactVersionConstraint.slice(2);
   } else if (constraints.some((constraint) => constraint.includes("*"))) {
-    const majorVersion = constraints
+    let majorVersion = constraints
       .find((constraint) => constraint.startsWith("=="))
       ?.slice(2)
       .split(".")[0];
+    if (majorVersion === undefined) {
+      majorVersion = constraints.find((constraint) => constraint.includes("*"))
+        ?.split(".")[0]
+        ?.replace(/[^0-9*]/g, "");
+    }
     const filteredVersions = versions.filter((version) =>
       version.startsWith(majorVersion || "")
     );
