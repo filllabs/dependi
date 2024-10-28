@@ -98,6 +98,7 @@ export function activate(context: ExtensionContext) {
     "package.json",
     "composer.json",
     "requirements.txt",
+    "requirements-dev.txt",
     "pyproject.toml",
   ]);
 

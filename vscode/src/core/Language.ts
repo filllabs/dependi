@@ -37,6 +37,7 @@ export function setLanguage(file?: string) {
         case "package.json":
             return setLanguageConfig(Language.JS, "npm", filename, OCVEnvironment.Npm, Settings.npm.lockFileEnabled);
         case "requirements.txt":
+        case "requirements-dev.txt":
             return setLanguageConfig(Language.Python, "python", filename, OCVEnvironment.Pypi);
         case "composer.json":
             return setLanguageConfig(Language.PHP, "php", filename, OCVEnvironment.Packagist, Settings.php.lockFileEnabled);
