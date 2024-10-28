@@ -34,7 +34,6 @@ export abstract class Listener {
     }
     dependencies = dependencies.map(dep => {
       let cached = cache.get<Dependency>(dep.item.key + dep.item.range.start.line);
-      dep.item.value = dep.item.lockedAt ?? dep.item.value;
       if (cached) {
         if (dep.item.value === "latest") {
           dep.item.value = cached.item.latestVersion

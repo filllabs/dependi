@@ -83,10 +83,7 @@ export default function decoration(
       });
       editor.document.save();
     }
-    if (CurrentLanguage === Language.Python) {
-      version = convertPythonVersionToSemver(version!);
-    }
-    if (!validRange(version)) {
+    if (!validRange(CurrentLanguage === Language.Python ? convertPythonVersionToSemver(version!) : version!)) {
       type = "ERROR";
     } else if (versions[0] !== maxSatisfying) {
       type = satisfies ? "COMP" : "INCOMP";
