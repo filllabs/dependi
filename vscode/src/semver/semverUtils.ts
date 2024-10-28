@@ -7,6 +7,7 @@ export function checkVersion(version: string = "0.0.0", versions: string[], lock
   let v = version;
 
   v = versionToSemver(v);
+  lockedAt = lockedAt && versionToSemver(lockedAt);
   version = versionToSemver(version);
   versions = versions.map(versionToSemver);
   
@@ -50,7 +51,7 @@ export function checkVersion(version: string = "0.0.0", versions: string[], lock
   return [satisfies(max, v), pathUpdated, maxSatisfying(versions, v)];
 }
 
-function versionToSemver(version: string): string {
+export function versionToSemver(version: string): string {
   if (CurrentLanguage === Language.Python) {
     return convertPythonVersionToSemver(version);
   }
@@ -89,7 +90,7 @@ function convertPythonVersion(version: string): string {
       .replace(/c(\d+)/, '-c.$1')
 }
 
-export function convertPythonVersionToSemver(version: string): string {
+function convertPythonVersionToSemver(version: string): string {
   const v = convertPythonVersion(version);
   const pattern = /^(\d+)\.(\d+)(?:\.(\d+))?([-a-zA-Z0-9.]+)?$/;
   const match = v.match(pattern);

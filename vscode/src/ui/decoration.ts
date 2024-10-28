@@ -14,7 +14,7 @@ import { CommandData } from "../commands/replacers";
 import { Configs } from "../config";
 import Item from "../core/Item";
 import { CurrentLanguage, Language } from "../core/Language";
-import { checkVersion, convertPythonVersionToSemver } from "../semver/semverUtils";
+import { checkVersion, versionToSemver } from "../semver/semverUtils";
 import DecorationPreferences from "./pref";
 
 type DecorationType = "COMP" | "PATCH" | "INCOMP" | "ERROR";
@@ -46,10 +46,10 @@ export default function decoration(
     markdown.appendMarkdown("\n");
     // Ignore empty strings
     error_parts.filter(s => s).forEach(part => {
-      markdown.appendMarkdown("* ");
-      markdown.appendText(part.trim()); // Gets rid of Markdown-breaking spaces, then append text safely escaped.
-      markdown.appendMarkdown("\n"); // Put the newlines back
-    });
+        markdown.appendMarkdown("* ");
+        markdown.appendText(part.trim()); // Gets rid of Markdown-breaking spaces, then append text safely escaped.
+        markdown.appendMarkdown("\n"); // Put the newlines back
+      });
     return markdown;
   };
   let hoverMessage = new MarkdownString();
@@ -84,7 +84,7 @@ export default function decoration(
       editor.document.save();
     }
     if (CurrentLanguage === Language.Python) {
-      version = convertPythonVersionToSemver(version!);
+      version = versionToSemver(version!);
     }
     if (!validRange(version)) {
       type = "ERROR";
@@ -212,7 +212,7 @@ function appendVersions(hoverMessage: MarkdownString, versions: string[], item: 
       startLine: item.range.start.line,
     };
 
-    const isCurrent = version === maxSatisfying;
+    const isCurrent = versionToSemver(version) === maxSatisfying;
     const encoded = encodeURI(JSON.stringify(data));
     const docs = (i === 0 || isCurrent) ? (' ' + getDocsLink(lang, item.key, version)) : "";
     const vulnText = v?.length ? decorationPreferences.vulnText.replace("${count}", `${v?.length}`) : "";
