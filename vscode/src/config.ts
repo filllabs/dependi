@@ -218,15 +218,15 @@ export const Settings = {
 
 
     this.decorator.position = config.get<DecorationPosition>(Configs.DECORATOR_POSITION) || "after";
-    this.decorator.error.template = config.get<string>(Configs.ERROR_DECORATOR) || "❗️❗️❗️";
+    this.decorator.error.template = config.get<string>(Configs.ERROR_DECORATOR) ?? "❗️❗️❗️";
     this.decorator.error.css = config.get<DecorationInstanceRenderOptions>(Configs.ERROR_DECORATOR_CSS) || {};
-    this.decorator.incompatible.template = config.get<string>(Configs.INCOMPATIBLE_DECORATOR) || "❌ ${version}";
+    this.decorator.incompatible.template = config.get<string>(Configs.INCOMPATIBLE_DECORATOR) ?? "❌ ${version}";
     this.decorator.incompatible.css = config.get<DecorationInstanceRenderOptions>(Configs.INCOMPATIBLE_DECORATOR_CSS) || {};
-    this.decorator.patchUpdate.template = config.get<string>(Configs.PATCH_UPDATE_DECORATOR) || "⚠️ ${version}";
+    this.decorator.patchUpdate.template = config.get<string>(Configs.PATCH_UPDATE_DECORATOR) ?? "⚠️ ${version}";
     this.decorator.patchUpdate.css = config.get<DecorationInstanceRenderOptions>(Configs.PATCH_UPDATE_DECORATOR_CSS) || {};
-    this.decorator.compatible.template = config.get<string>(Configs.COMPATIBLE_DECORATOR) || "✅";
+    this.decorator.compatible.template = config.get<string>(Configs.COMPATIBLE_DECORATOR) ?? "✅";
     this.decorator.compatible.css = config.get<DecorationInstanceRenderOptions>(Configs.COMPATIBLE_DECORATOR_CSS) || {};
-    this.decorator.vulnerability.template = config.get<string>(Configs.VULNERABILITY_DECORATOR) || "🚨 ${count}";
+    this.decorator.vulnerability.template = config.get<string>(Configs.VULNERABILITY_DECORATOR) ?? "🚨 ${count}";
     console.debug("Settings loaded", this);
   },
   onChange: function (e: ConfigurationChangeEvent) {
