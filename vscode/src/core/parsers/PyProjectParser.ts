@@ -11,7 +11,7 @@ export class PyProjectParser extends TomlParser {
     if (!state.currentItem.isValid()) {
       return;
     }
-    const ingoreKey = ["python"];
+    const ingoreKey = ["python", "requires-python"];
     if (ingoreKey.includes(state.currentItem.key)) {
       return;
     }
