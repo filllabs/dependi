@@ -2,7 +2,7 @@ import { Settings, UnstableFilter } from "../../config";
 import { Logger } from "../../extension";
 import { DependencyInfo } from "../DepencencyInfo";
 import { getReqOptions } from "../utils";
-import { addResponseHandlers, cleanURL, isStatusInvalid, isStatusRedirect, ResponseError } from "./utils";
+import { addResponseHandlers, cleanURL, isStatusInvalid, ResponseError } from "./utils";
 import { ClientRequest, IncomingMessage } from "http";
 import { makeRequest } from "./request";
 
@@ -26,13 +26,15 @@ export const versions = (name: string, currentVersion?: string) => {
         try {
           const response = JSON.parse(Buffer.concat(body).toString());
           let versions: string[] = [];
-          versions = currentVersion
+          let err = "";
+          ({ versions, err } = currentVersion
             ? setLatestVersion(response, currentVersion)
-            : setVersions(response, versions);
+            : setVersions(response, versions));
           info = {
             name: name,
             versions: versions,
             latestVersion: currentVersion ? response.latest : response["dist-tags"].latest,
+            error: err,
           };
         } catch (error) {
           console.error("Error parsing response:", error);
@@ -47,6 +49,7 @@ export const versions = (name: string, currentVersion?: string) => {
 };
 
 const setVersions = (response: any, versions: string[]) => {
+  let err: string = "";
   if (response.versions) {
     const versionData = Object.entries(response.versions);
     if (versionData.length) {
@@ -56,17 +59,27 @@ const setVersions = (response: any, versions: string[]) => {
           (Settings.npm.unstableFilter !== UnstableFilter.Exclude || !key.includes("-"))
         ) {
           versions.push(key);
+        } else if (value.deprecated) {
+          err = value.deprecated;
         }
       });
     }
   }
-  return versions;
+  if (versions.length > 0) {
+    err = "";
+  }
+  return { versions, err};
 };
 
 const setLatestVersion = (response: any, currentVersion: string) => {
-  return currentVersion === response.latest
-    ? [currentVersion]
-    : [currentVersion, response.latest];
+  let versions: string[] = [];
+  if (currentVersion === response.latest) {
+    versions = [currentVersion];
+  } else {
+    versions = [currentVersion, response.latest];
+  }
+
+  return { versions, err: "" };
 };
 function getURL(currentVersion: string | undefined, name: string) {
   return cleanURL(`${Settings.npm.index}/${currentVersion ? `-/package/${name}/dist-tags` : `${name}`}`);
