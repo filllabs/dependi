@@ -20,7 +20,7 @@ export class PypiParser {
       if (shouldIgnoreLine(line, Settings.python.ignoreLinePattern, ["#", "-", "."])) {
         continue;
       }
-      if (state.bypass) {
+      if (state.bypass || !line.text.includes("=")) {
         continue;
       }
       let item = parseDependencyLine(line);
