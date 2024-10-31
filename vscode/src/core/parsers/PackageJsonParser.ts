@@ -31,13 +31,13 @@ export class NpmParser extends JsonParser {
     item.createDecoRange();
     if (item.value?.startsWith("catalog:")) {
       if (this.state.yamlLines.length === 0) {
-        const filePath = vscode.window.activeTextEditor?.document.fileName;
-        const dirName = path.dirname(path.dirname(filePath || ""));
+        const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
+        const rootPath = workspaceFolder?.uri.fsPath as string;
         try {
-          const files = fs.readdirSync(dirName);
+          const files = fs.readdirSync(rootPath);
           const yamlFile = files.find((file) => file === "pnpm-workspace.yaml");
           if (yamlFile) {
-            const yamlFilePath = path.join(dirName, yamlFile);
+            const yamlFilePath = path.join(rootPath, yamlFile);
             const yamlContent = fs.readFileSync(yamlFilePath, "utf8");
             this.state.yamlLines = yamlContent.split("\n");
           }
