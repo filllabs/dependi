@@ -31,7 +31,10 @@ export class NpmParser extends JsonParser {
     item.createDecoRange();
     if (item.value?.startsWith("catalog:")) {
       if (this.state.yamlLines.length === 0) {
-        const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
+        const filePath = vscode.window.activeTextEditor?.document.uri.fsPath;
+        const workspaceFolder = vscode.workspace.getWorkspaceFolder(
+          vscode.Uri.file(filePath || "")
+        );
         const rootPath = workspaceFolder?.uri.fsPath as string;
         try {
           const files = fs.readdirSync(rootPath);
