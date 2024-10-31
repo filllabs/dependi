@@ -49,9 +49,14 @@ export class NpmParser extends JsonParser {
         }
       }
       if (this.state.yamlLines.length > 0) {
-        const catalogName = item.value.replace("catalog:", "");
-        const catalogLine = this.state.yamlLines.find((line) =>
-          line.includes(catalogName)
+        let catalogName = item.value.replace("catalog:", "");
+        if (catalogName.trim() === "") {
+          catalogName = item.key;
+        }
+        const catalogLine = this.state.yamlLines.find((line) => {
+          const catalogKey = line.split(":")[0].trim();
+          return catalogKey === item.key || catalogKey === catalogName;
+        }
         );
         if (catalogLine) {
           const catalogValue = clearText(catalogLine.split(":")[1].trim());
