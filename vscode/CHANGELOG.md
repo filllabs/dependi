@@ -2,6 +2,21 @@
 
 All notable changes to the "dependi" extension will be documented in this file.
 
+## [v0.7.10]((https://github.com/filllabs/dependi/compare/v0.7.10...v0.7.11))
+
+### Improvements
+
+- Support for requirements-dev.txt files to manage development dependencies in Python projects. [Issue #162](https://github.com/filllabs/dependi/issues/162)
+
+### Bug Fixes
+
+- Pyproject parser to ignore the requires-python key, focusing only on dependencies. [Issue #164](https://github.com/filllabs/dependi/issues/164)
+- Hide version display for empty strings in decoration settings, ensuring no default display occurs. [Issue #163](https://github.com/filllabs/dependi/issues/163)
+- Resolved display errors related to Python versions with semver incompatibilities.[Issue #150](https://github.com/filllabs/dependi/issues/150) [Issue #161](https://github.com/filllabs/dependi/issues/161)
+- Corrected an issue where a non-existent version in a package was incorrectly shown as "compatible." [Issue #112](https://github.com/filllabs/dependi/issues/112)
+- Improved error handling for deprecated npm packages to provide more informative error messages. [Issue #111](https://github.com/filllabs/dependi/issues/111)
+- Resolved a parsing error in Cargo.toml. [Issue #156](https://github.com/filllabs/dependi/issues/156)
+
 ## [v0.7.10]((https://github.com/filllabs/dependi/compare/v0.7.9...v0.7.10))
 
 ### New Features
