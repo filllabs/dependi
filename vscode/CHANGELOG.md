@@ -2,7 +2,7 @@
 
 All notable changes to the "dependi" extension will be documented in this file.
 
-## [v0.7.10]((https://github.com/filllabs/dependi/compare/v0.7.10...v0.7.11))
+## [v0.7.11]((https://github.com/filllabs/dependi/compare/v0.7.10...v0.7.11))
 
 ### Improvements
 
