@@ -29,7 +29,7 @@ export class NpmParser extends JsonParser {
     item = convertAliasToPackageName(item);
     item.createRange();
     item.createDecoRange();
-    if (item.value && item.value?.startsWith("catalog:")) {
+    if (item.value?.startsWith("catalog:")) {
       if (this.state.yamlLines.length === 0) {
         const filePath = vscode.window.activeTextEditor?.document.fileName;
         const dirName = path.dirname(path.dirname(filePath || ""));
