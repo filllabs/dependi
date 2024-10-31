@@ -1,4 +1,4 @@
-name: Test Publish VSCode Extension
+name: Publish VSCode Extension
 on:
   push:
     tags:
@@ -28,12 +28,12 @@ jobs:
           vsce publish -p $VSCE_TOKEN
         env:
           VSCE_TOKEN: ${{ secrets.VSC_PAT }}
-      - name: Publish to OpenVSX
-        run: |
-          npm install -g ovsx
-          ovsx publish -p $OVSX_PAT
-        env:
-          OVSX_TOKEN: ${{ secrets.OVSX_PAT }}
+      # - name: Publish to OpenVSX
+      #   run: |
+      #     npm install -g ovsx
+      #     ovsx publish -p $OVSX_PAT
+      #   env:
+      #     OVSX_TOKEN: ${{ secrets.OVSX_PAT }}
 
       - name: Send Download Link to Slack
         uses: slackapi/slack-github-action@v1.26.0
