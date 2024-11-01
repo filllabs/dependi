@@ -75,17 +75,17 @@
     "menus": {
       "editor/title": [
         {
-          "when": "dependi.hasLockFile && resourceFilename != 'go.mod' && resourceFilename != 'requirements.txt' && resourceFilename != 'requirements-dev.txt'",
+          "when": "dependi.hasLockFile && resourceFilename != 'go.mod' && !(resourceFilename =~ /^requirement/) ",
           "command": "dependi.commands.lockFileParsed",
           "group": "navigation"
         },
         {
-          "when": "!dependi.hasLockFile && dependi.isLockFileEnabled && resourceFilename in dependi.supportedFiles && resourceFilename != 'go.mod' && resourceFilename != 'requirements.txt' && resourceFilename != 'requirements-dev.txt'",
+          "when": "!dependi.hasLockFile && dependi.isLockFileEnabled && resourceFilename in dependi.supportedFiles && resourceFilename != 'go.mod' && !(resourceFilename =~ /^requirement/)",
           "command": "dependi.commands.disableLockFileParsing",
           "group": "navigation"
         },
         {
-          "when": "!dependi.hasLockFile && !dependi.isLockFileEnabled && resourceFilename in dependi.supportedFiles && resourceFilename != 'go.mod' && resourceFilename != 'requirements.txt' && resourceFilename != 'requirements-dev.txt'",
+          "when": "!dependi.hasLockFile && !dependi.isLockFileEnabled && resourceFilename in dependi.supportedFiles && resourceFilename != 'go.mod' && !(resourceFilename =~ /^requirement/)",
           "command": "dependi.commands.enableLockFileParsing",
           "group": "navigation"
         },
