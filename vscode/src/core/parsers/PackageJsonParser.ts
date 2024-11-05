@@ -54,7 +54,7 @@ export class NpmParser extends JsonParser {
           catalogName = item.key;
         }
         const catalogLine = this.state.yamlLines.find((line) => {
-          const catalogKey = line.split(":")[0].trim();
+          const catalogKey = line.split(":")[0].trim().replace(/^['"]|['"]$/g, "");
           return catalogKey === item.key || catalogKey === catalogName;
         }
         );
