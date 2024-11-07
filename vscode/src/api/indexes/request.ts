@@ -1,4 +1,5 @@
 import * as https from "https";
+import http from "http";
 import { cleanURL, isStatusRedirect } from "./utils";
 import { getReqOptions } from "../utils";
 import { ClientRequest, IncomingMessage } from "http";
@@ -9,8 +10,10 @@ export const makeRequest = (
   reject: (error: any) => void,
   headersAccept?: string
 ) => {
-  const req = https.get(requestOptions, (res) => {
-    if (isStatusRedirect(res) && res.headers.location) {
+  let protocol = requestOptions.protocol === "http:" ? http : https;
+  const req = protocol
+    .get(requestOptions, (res) => {
+      if (isStatusRedirect(res) && res.headers.location) {
         const newUrl = cleanURL(res.headers.location);
         const newOptions = getReqOptions(newUrl);
         if (headersAccept) {
@@ -18,9 +21,12 @@ export const makeRequest = (
             Accept: headersAccept,
           };
         }
-        const redirectReq = https.get(newOptions, (redirectRes) => {
+        protocol = newOptions.protocol  === "http:" ? http : https;
+        const redirectReq = protocol
+          .get(newOptions, (redirectRes) => {
             handleResponse(redirectRes, redirectReq);
-          }).on("error", reject);
+          })
+          .on("error", reject);
 
         redirectReq.end();
       } else {
