@@ -173,7 +173,7 @@ export const Settings = {
     console.log(this.version);
     // fill in the settings
     this.rust.enabled = config.get<boolean>(Configs.RUST_ENABLED) ?? true;
-    this.rust.index = config.get<string>(Configs.RUST_INDEX_SERVER_URL) || "http://index.crates.io";
+    this.rust.index = config.get<string>(Configs.RUST_INDEX_SERVER_URL) || "https://index.crates.io";
     this.rust.unstableFilter = migrateUnstableSettings(Configs.RUST_UNSTABLE_FILTER, Configs.RUST_UNSTABLE_OLD);
     this.rust.ignoreLinePattern = config.get<string>(Configs.RUST_IGNORE_LINE_PATTERN) || "";
     this.rust.informPatchUpdates = config.get<boolean>(Configs.RUST_INFORM_PATCH_UPDATES) ?? false;
