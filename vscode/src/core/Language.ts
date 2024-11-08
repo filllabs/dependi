@@ -29,6 +29,7 @@ export function setLanguage(file?: string) {
         return;
     }
     const filename = path.basename(file);
+    const fileExtension = path.extname(filename);
     switch (filename.toLowerCase()) {
         case "cargo.toml":
             return setLanguageConfig(Language.Rust, "rust", filename, OCVEnvironment.Cratesio, Settings.rust.lockFileEnabled);
@@ -36,13 +37,14 @@ export function setLanguage(file?: string) {
             return setLanguageConfig(Language.Golang, "go", filename, OCVEnvironment.Go);
         case "package.json":
             return setLanguageConfig(Language.JS, "npm", filename, OCVEnvironment.Npm, Settings.npm.lockFileEnabled);
-        case "requirements.txt":
-        case "requirements-dev.txt":
-            return setLanguageConfig(Language.Python, "python", filename, OCVEnvironment.Pypi);
         case "composer.json":
             return setLanguageConfig(Language.PHP, "php", filename, OCVEnvironment.Packagist, Settings.php.lockFileEnabled);
         case "pyproject.toml":
             return setLanguageConfig(Language.Python, "python", filename, OCVEnvironment.Pypi, Settings.python.lockFileEnabled);
+        default:
+            if (fileExtension === ".txt" && filename.toLowerCase().startsWith("requirement")) {
+                return setLanguageConfig(Language.Python, "python", filename, OCVEnvironment.Pypi, Settings.python.lockFileEnabled);
+            }
     }
 };
 
@@ -50,6 +52,7 @@ function setLanguageConfig(language: Language, config: string, filename: string,
     CurrentLanguage = language;
     CurrentLanguageConfig = config;
     CurrentEnvironment = OCVenv;
+    commands.executeCommand("setContext", "dependi.supportedFiles", [filename]);
     if (env.isTelemetryEnabled) 
         sendTelemetry({FileName: filename})
     if (isLockFileEnabled !== undefined) {
