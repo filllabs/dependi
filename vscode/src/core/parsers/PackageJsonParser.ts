@@ -30,41 +30,54 @@ export class NpmParser extends JsonParser {
     item.createRange();
     item.createDecoRange();
     if (item.value?.startsWith("catalog:")) {
-      if (this.state.yamlLines.length === 0) {
-        const filePath = vscode.window.activeTextEditor?.document.uri.fsPath;
-        const workspaceFolder = vscode.workspace.getWorkspaceFolder(
-          vscode.Uri.file(filePath || "")
-        );
-        const rootPath = workspaceFolder?.uri.fsPath as string;
-        try {
-          const files = fs.readdirSync(rootPath);
-          const yamlFile = files.find((file) => file === "pnpm-workspace.yaml");
-          if (yamlFile) {
-            const yamlFilePath = path.join(rootPath, yamlFile);
-            const yamlContent = fs.readFileSync(yamlFilePath, "utf8");
-            this.state.yamlLines = yamlContent.split("\n");
-          }
-        } catch (err) {
-          console.error(err);
-        }
-      }
+      this.loadYamlLinesIfNeeded();
+
       if (this.state.yamlLines.length > 0) {
-        let catalogName = item.value.replace("catalog:", "");
-        if (catalogName.trim() === "") {
-          catalogName = item.key;
-        }
-        const catalogLine = this.state.yamlLines.find((line) => {
-          const catalogKey = line.split(":")[0].trim().replace(/^['"]|['"]$/g, "");
-          return catalogKey === item.key || catalogKey === catalogName;
-        }
-        );
-        if (catalogLine) {
-          const catalogValue = clearText(catalogLine.split(":")[1].trim());
-          item.value = catalogValue;
-        }
+        this.updateItemValueFromCatalog(item);
       }
     }
     this.state.items.push(item);
+  }
+  private loadYamlLinesIfNeeded() {
+    if (this.state.yamlLines.length === 0) {
+      const filePath = vscode.window.activeTextEditor?.document.uri.fsPath;
+      const workspaceFolder = vscode.workspace.getWorkspaceFolder(
+        vscode.Uri.file(filePath || "")
+      );
+      const rootPath = workspaceFolder?.uri.fsPath as string;
+
+      try {
+        const files = fs.readdirSync(rootPath);
+        const yamlFile = files.find((file) => file === "pnpm-workspace.yaml");
+        if (yamlFile) {
+          const yamlFilePath = path.join(rootPath, yamlFile);
+          const yamlContent = fs.readFileSync(yamlFilePath, "utf8");
+          this.state.yamlLines = yamlContent.split("\n");
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  }
+
+  private updateItemValueFromCatalog(item: Item) {
+    let catalogName = item.value?.replace("catalog:", "");
+    if (catalogName?.trim() === "") {
+      catalogName = item.key;
+    }
+
+    const catalogLine = this.state.yamlLines.find((line) => {
+      const catalogKey = line
+        .split(":")[0]
+        .trim()
+        .replace(/^['"]|['"]$/g, "");
+      return catalogKey === item.key || catalogKey === catalogName;
+    });
+
+    if (catalogLine) {
+      const catalogValue = clearText(catalogLine.split(":")[1].trim());
+      item.value = catalogValue;
+    }
   }
 }
 
