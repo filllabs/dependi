@@ -10,10 +10,12 @@ class State {
   inDependencies: boolean;
   items: Item[];
   bypass: boolean;
+  yamlLines: string[];
   constructor() {
     this.inDependencies = false;
     this.items = [] as Item[];
     this.bypass = false;
+    this.yamlLines = [];
   }
 }
 
