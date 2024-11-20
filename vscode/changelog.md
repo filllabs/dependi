@@ -8,6 +8,8 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 - Support dependency groups in `pyproject.toml` for better dependency management.[Issue #182](https://github.com/filllabs/dependi/issues/182)
 
+- Added setting to treat non-registry versions as up-to-date for all languages.
+
 ### Bug Fixes
 
 - Reordered button groups for better visibility control and hiding less critical buttons when space is limited.[Issue #177](https://github.com/filllabs/dependi/issues/177)

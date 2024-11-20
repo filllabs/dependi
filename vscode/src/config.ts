@@ -17,6 +17,7 @@ export enum Configs {
   RUST_IGNORE_LINE_PATTERN = `rust.ignoreLinePattern`,
   RUST_INFORM_PATCH_UPDATES = `rust.informPatchUpdates`,
   RUST_ENABLED_LOCK_FILE = `rust.lockFileEnabled`,
+  RUST_TREAT_AS_UP_TO_DATE = `rust.treatAsUpToDate`,
 
   NPM_ENABLED = `npm.enabled`,
   NPM_INDEX_SERVER_URL = `npm.indexServerURL`,
@@ -24,6 +25,7 @@ export enum Configs {
   NPM_IGNORE_LINE_PATTERN = `npm.ignoreLinePattern`,
   NPM_INFORM_PATCH_UPDATES = `npm.informPatchUpdates`,
   NPM_ENABLED_LOCK_FILE = `npm.lockFileEnabled`,
+  NPM_TREAT_AS_UP_TO_DATE = `npm.treatAsUpToDate`,
 
   PHP_ENABLED = `php.enabled`,
   PHP_INDEX_SERVER_URL = `php.indexServerURL`,
@@ -31,12 +33,14 @@ export enum Configs {
   PHP_IGNORE_LINE_PATTERN = `php.ignoreLinePattern`,
   PHP_INFORM_PATCH_UPDATES = `php.informPatchUpdates`,
   PHP_ENABLED_LOCK_FILE = `php.lockFileEnabled`,
+  PHP_TREAT_AS_UP_TO_DATE = `php.treatAsUpToDate`,
 
   GO_ENABLED = `go.enabled`,
   GO_INDEX_SERVER_URL = `go.indexServerURL`,
   GO_UNSTABLE_FILTER = `go.unstableFilter`,
   GO_IGNORE_LINE_PATTERN = `go.ignoreLinePattern`,
   GO_INFORM_PATCH_UPDATES = `go.informPatchUpdates`,
+  GO_TREAT_AS_UP_TO_DATE = `go.treatAsUpToDate`,
 
   PYTHON_ENABLED = `python.enabled`,
   PYTHON_INDEX_SERVER_URL = `python.indexServerURL`,
@@ -44,6 +48,7 @@ export enum Configs {
   PYTHON_IGNORE_LINE_PATTERN = `python.ignoreLinePattern`,
   PYTHON_INFORM_PATCH_UPDATES = `python.informPatchUpdates`,
   PYTHON_ENABLED_LOCK_FILE = `python.lockFileEnabled`,
+  PYTHON_TREAT_AS_UP_TO_DATE = `python.treatAsUpToDate`,
 
   VULS_ENABLED = `vulnerability.enabled`,
   VULS_GHSA_ENABLED = `vulnerability.ghsa.enabled`,
@@ -98,8 +103,8 @@ export const Settings = {
     unstableFilter: UnstableFilter.Exclude,
     ignoreLinePattern: "",
     informPatchUpdates: false,
-    lockFileEnabled: true
-
+    lockFileEnabled: true,
+    treatAsUpToDate: false
   },
   npm: {
     enabled: true,
@@ -107,7 +112,8 @@ export const Settings = {
     unstableFilter: UnstableFilter.Exclude,
     ignoreLinePattern: "",
     informPatchUpdates: false,
-    lockFileEnabled: true
+    lockFileEnabled: true,
+    treatAsUpToDate: false
   },
   php: {
     enabled: true,
@@ -115,14 +121,16 @@ export const Settings = {
     unstableFilter: UnstableFilter.Exclude,
     ignoreLinePattern: "",
     informPatchUpdates: false,
-    lockFileEnabled: true
+    lockFileEnabled: true,
+    treatAsUpToDate: false
   },
   go: {
     enabled: true,
     index: "",
     unstableFilter: UnstableFilter.Exclude,
     ignoreLinePattern: "",
-    informPatchUpdates: true
+    informPatchUpdates: true,
+    treatAsUpToDate: false
   },
   python: {
     enabled: true,
@@ -130,7 +138,8 @@ export const Settings = {
     unstableFilter: UnstableFilter.Exclude,
     ignoreLinePattern: "",
     informPatchUpdates: false,
-    lockFileEnabled: true
+    lockFileEnabled: true,
+    treatAsUpToDate: false
   },
   vulnerability: {
     enabled: false,
@@ -178,6 +187,7 @@ export const Settings = {
     this.rust.ignoreLinePattern = config.get<string>(Configs.RUST_IGNORE_LINE_PATTERN) || "";
     this.rust.informPatchUpdates = config.get<boolean>(Configs.RUST_INFORM_PATCH_UPDATES) ?? false;
     this.rust.lockFileEnabled = config.get<boolean>(Configs.RUST_ENABLED_LOCK_FILE) ?? true;
+    this.rust.treatAsUpToDate = config.get<boolean>(Configs.RUST_TREAT_AS_UP_TO_DATE) ?? false;
     
     this.npm.enabled = config.get<boolean>(Configs.NPM_ENABLED) ?? true;
     this.npm.index = config.get<string>(Configs.NPM_INDEX_SERVER_URL) || "https://registry.npmjs.org";
@@ -185,6 +195,7 @@ export const Settings = {
     this.npm.ignoreLinePattern = config.get<string>(Configs.NPM_IGNORE_LINE_PATTERN) || "";
     this.npm.informPatchUpdates = config.get<boolean>(Configs.NPM_INFORM_PATCH_UPDATES) ?? false;
     this.npm.lockFileEnabled = config.get<boolean>(Configs.NPM_ENABLED_LOCK_FILE) ?? true;
+    this.npm.treatAsUpToDate = config.get<boolean>(Configs.NPM_TREAT_AS_UP_TO_DATE) ?? false;
 
     this.php.enabled = config.get<boolean>(Configs.PHP_ENABLED) ?? true;
     this.php.index = config.get<string>(Configs.PHP_INDEX_SERVER_URL) || "https://repo.packagist.org";
@@ -192,12 +203,14 @@ export const Settings = {
     this.php.ignoreLinePattern = config.get<string>(Configs.PHP_IGNORE_LINE_PATTERN) || "";
     this.php.informPatchUpdates = config.get<boolean>(Configs.PHP_INFORM_PATCH_UPDATES) ?? false;
     this.php.lockFileEnabled = config.get<boolean>(Configs.PHP_ENABLED_LOCK_FILE) ?? true;
+    this.php.treatAsUpToDate = config.get<boolean>(Configs.PHP_TREAT_AS_UP_TO_DATE) ?? false;
 
     this.go.enabled = config.get<boolean>(Configs.GO_ENABLED) ?? true;
     this.go.index = config.get<string>(Configs.GO_INDEX_SERVER_URL) || "https://proxy.golang.org";
     this.go.unstableFilter = migrateUnstableSettings(Configs.GO_UNSTABLE_FILTER, Configs.GO_UNSTABLE_OLD);
     this.go.ignoreLinePattern = config.get<string>(Configs.GO_IGNORE_LINE_PATTERN) || "";
     this.go.informPatchUpdates = config.get<boolean>(Configs.GO_INFORM_PATCH_UPDATES) ?? false;
+    this.go.treatAsUpToDate = config.get<boolean>(Configs.GO_TREAT_AS_UP_TO_DATE) ?? false;
 
     this.python.enabled = config.get<boolean>(Configs.PYTHON_ENABLED) ?? true;
     this.python.index = config.get<string>(Configs.PYTHON_INDEX_SERVER_URL) || "https://pypi.org/pypi";
@@ -205,6 +218,7 @@ export const Settings = {
     this.python.ignoreLinePattern = config.get<string>(Configs.PYTHON_IGNORE_LINE_PATTERN) || "";
     this.python.informPatchUpdates = config.get<boolean>(Configs.PYTHON_INFORM_PATCH_UPDATES) ?? false;
     this.python.lockFileEnabled = config.get<boolean>(Configs.PYTHON_ENABLED_LOCK_FILE) ?? true;
+    this.python.treatAsUpToDate = config.get<boolean>(Configs.PYTHON_TREAT_AS_UP_TO_DATE) ?? false;
 
     this.vulnerability.enabled = config.get<boolean>(Configs.VULS_ENABLED) ?? true;
     this.vulnerability.ghsa = config.get<boolean>(Configs.VULS_GHSA_ENABLED) ?? false;

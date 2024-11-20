@@ -18,10 +18,12 @@ export function checkVersion(version: string = "0.0.0", versions: string[], lock
     if (result) return result;
   }
 
-  if (max) {
-    const minV = minVersion(v)?.toString() ?? '0.0.0';
-    if (gt(minV, max)) {
-      return [true, false, version];
+  if (treatAsUpToDate()) {
+    if (max) {
+      const minV = minVersion(v)?.toString() ?? "0.0.0";
+      if (gt(minV, max)) {
+        return [true, false, version];
+      }
     }
   }
 
@@ -116,7 +118,7 @@ export function convertPythonVersionToSemver(version: string): string {
   const match = v.match(pattern);
 
   if (match) {
-    const major = match[1]; 
+    const major = match[1];
     const minor = match[2];
     const patch = match[3] || 0;
     const preRelease = match[4]? `-${match[4].slice(1)}`  :"";
@@ -126,4 +128,20 @@ export function convertPythonVersionToSemver(version: string): string {
   } else {
     return v;
   }
+}
+
+function treatAsUpToDate(): boolean {
+  switch (CurrentLanguage) {
+    case Language.Rust:
+      return Settings.rust.treatAsUpToDate;
+    case Language.JS:
+      return Settings.npm.treatAsUpToDate;
+    case Language.PHP:
+      return Settings.php.treatAsUpToDate;
+    case Language.Golang:
+      return Settings.go.treatAsUpToDate;
+    case Language.Python:
+      return Settings.python.treatAsUpToDate;
+  }
+  return false;
 }
