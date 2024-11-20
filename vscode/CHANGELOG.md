@@ -8,6 +8,10 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 - Support for all requirement*.txt files in Python projects. [Issue #162](https://github.com/filllabs/dependi/issues/162)
 
+### Bug Fixes
+
+- Resolved an issue where the `CHANGELOG.md` file could not be found on Linux systems. [Issue #175](https://github.com/filllabs/dependi/issues/175)
+
 ## [v0.7.11]((https://github.com/filllabs/dependi/compare/v0.7.10...v0.7.11))
 
 ### Improvements

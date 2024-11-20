@@ -9,7 +9,7 @@ export function getChangelogPage(
 ): string {
   const onDiskPath = Uri.joinPath(extensionUri, "icon.png");
   const logo = webview.asWebviewUri(onDiskPath);
-  const changelogPath = Uri.joinPath(extensionUri, "CHANGELOG.md");
+  const changelogPath = Uri.joinPath(extensionUri, "changelog.md");
   const changelogMD = readFileSync(changelogPath.fsPath, "utf8");
   const changelogHTML = markdownToHTML(changelogMD);
   const stylePath = Uri.joinPath(
