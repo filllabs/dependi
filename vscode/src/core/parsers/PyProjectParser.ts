@@ -72,6 +72,6 @@ export class PyProjectParser extends TomlParser {
       state.bypass = true;
       return false;
     }
-    return line.includes("dependencies = [") || line.includes("dev-dependencies = [");
+    return line.endsWith(" = [")
   }
 }
