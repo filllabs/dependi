@@ -118,6 +118,10 @@ While Dependi works out-of-the-box without any configuration, we also offer a fe
 - `dependi.decoration.error.style`: Style for error version decorations.
 - `dependi.decoration.vulnerability.template`: Decoration for vulnerable package versions.
 
+### Extras
+
+- `dependi.extras.silenceUpdateMessages`: This setting hides informational update messages when enabled (true).
+
 ### Cargo.toml, go.mod, package.json and requirements.txt
 
 - `# dependi: disable-check`: Disable version check for this specific dependency.

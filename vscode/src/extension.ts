@@ -129,17 +129,19 @@ async function configure(context: ExtensionContext) {
     await lt.setShownVersion(Settings.version);
   } else if (lt.shouldShowWelcomePage(context.extension.packageJSON.version)) {
     Logger.appendLine("Updated version");
-    window
-      .showInformationMessage(
-        "Dependi has been updated to a new version. See the CHANGELOG!",
-        "Show Changelog",
-        "Dismiss"
-      )
-      .then((selection) => {
-        if (selection === "Show Changelog") {
-          ChangelogPanel.render(context);
-        }
-      });
+    if (!Settings.extras.silenceUpdateMessages) {
+      window
+        .showInformationMessage(
+          "Dependi has been updated to a new version. See the CHANGELOG!",
+          "Show Changelog",
+          "Dismiss"
+        )
+        .then((selection) => {
+          if (selection === "Show Changelog") {
+            ChangelogPanel.render(context);
+          }
+        });
+    }
     await lt.setShownVersion(context.extension.packageJSON.version);
   }
 }

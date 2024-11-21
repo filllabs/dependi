@@ -82,6 +82,9 @@ export enum Configs {
   DISABLE_LOCK_FILE_PARSING = `${DEPENDI}commands.disableLockFileParsing`,
   LOCK_FILE_PARSED = `${DEPENDI}commands.lockFileParsed`,
 
+  // Extras
+  SILENCE_UPDATE_MESSAGES = `extras.silenceUpdateMessages`,
+
 
   //Storage
   DEVICE_ID = `${DEPENDI}deviceID`,
@@ -176,6 +179,9 @@ export const Settings = {
       template: ""
     }
   },
+  extras: {
+    silenceUpdateMessages: false
+  },
 
   load: function () {
     const config = workspace.getConfiguration("dependi");
@@ -228,9 +234,6 @@ export const Settings = {
     this.api.key = config.get<string>(Configs.INDEX_SERVER_API_KEY) || "";
     this.api.url = config.get<string>(Configs.INDEX_SERVER_URL) || "https://index.dependi.io";
 
-
-
-
     this.decorator.position = config.get<DecorationPosition>(Configs.DECORATOR_POSITION) || "after";
     this.decorator.error.template = config.get<string>(Configs.ERROR_DECORATOR) ?? "❗️❗️❗️";
     this.decorator.error.css = config.get<DecorationInstanceRenderOptions>(Configs.ERROR_DECORATOR_CSS) || {};
@@ -241,6 +244,8 @@ export const Settings = {
     this.decorator.compatible.template = config.get<string>(Configs.COMPATIBLE_DECORATOR) ?? "✅";
     this.decorator.compatible.css = config.get<DecorationInstanceRenderOptions>(Configs.COMPATIBLE_DECORATOR_CSS) || {};
     this.decorator.vulnerability.template = config.get<string>(Configs.VULNERABILITY_DECORATOR) ?? "🚨 ${count}";
+
+    this.extras.silenceUpdateMessages = config.get<boolean>(Configs.SILENCE_UPDATE_MESSAGES) ?? false;
     console.debug("Settings loaded", this);
   },
   onChange: function (e: ConfigurationChangeEvent) {
