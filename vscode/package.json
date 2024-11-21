@@ -77,37 +77,37 @@
         {
           "when": "dependi.hasLockFile && resourceFilename != 'go.mod' && !(resourceFilename =~ /^requirement/) ",
           "command": "dependi.commands.lockFileParsed",
-          "group": "navigation"
+          "group": "navigation@103"
         },
         {
           "when": "!dependi.hasLockFile && dependi.isLockFileEnabled && resourceFilename in dependi.supportedFiles && resourceFilename != 'go.mod' && !(resourceFilename =~ /^requirement/)",
           "command": "dependi.commands.disableLockFileParsing",
-          "group": "navigation"
+          "group": "navigation@103"
         },
         {
           "when": "!dependi.hasLockFile && !dependi.isLockFileEnabled && resourceFilename in dependi.supportedFiles && resourceFilename != 'go.mod' && !(resourceFilename =~ /^requirement/)",
           "command": "dependi.commands.enableLockFileParsing",
-          "group": "navigation"
+          "group": "navigation@103"
         },
         {
           "when": "resourceFilename in dependi.supportedFiles",
           "command": "dependi.commands.vulnerability.report",
-          "group": "navigation"
+          "group": "navigation@104"
         },
         {
           "when": "resourceFilename in dependi.supportedFiles",
           "command": "dependi.commands.vulnerability.currentReport",
-          "group": "navigation"
+          "group": "navigation@104"
         },
         {
           "when": "resourceFilename in dependi.supportedFiles",
           "command": "dependi.commands.updateAll",
-          "group": "navigation"
+          "group": "navigation@102"
         },
         {
           "when": "resourceFilename in dependi.supportedFiles",
           "command": "dependi.commands.retry",
-          "group": "navigation"
+          "group": "navigation@101"
         }
       ]
     },
