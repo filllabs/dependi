@@ -16,6 +16,8 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 - Reordered button groups for better visibility control and hiding less critical buttons when space is limited.[Issue #177](https://github.com/filllabs/dependi/issues/177)
 
+- Excluded Git URL dependencies handling for future consideration.
+
 ## [v0.7.12]((https://github.com/filllabs/dependi/compare/v0.7.11...v0.7.12))
 
 ### Improvements

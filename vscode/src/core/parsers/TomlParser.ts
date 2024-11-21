@@ -156,7 +156,7 @@ export class TomlParser implements Parser {
       .trim()
       .replace(/^"|"$|'/g, "");
 
-    if (isBoolean(item.value) || item.value.includes("path")) {
+    if (isBoolean(item.value) || containsIgnoreKeys(item.value)) {
       return undefined;
     }
     if (line.indexOf("{") > -1) {
@@ -308,4 +308,9 @@ function parseLockFile(item: Item[]): Item[] {
     console.error(err);
   }
   return item;
+}
+
+function containsIgnoreKeys(key: string) {
+  const ignoreKeys = ["git", "path" ];
+  return ignoreKeys.some((k) => key.includes(k));
 }
