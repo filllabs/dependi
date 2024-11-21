@@ -41,6 +41,8 @@ export function setLanguage(file?: string) {
             return setLanguageConfig(Language.PHP, "php", filename, OCVEnvironment.Packagist, Settings.php.lockFileEnabled);
         case "pyproject.toml":
             return setLanguageConfig(Language.Python, "python", filename, OCVEnvironment.Pypi, Settings.python.lockFileEnabled);
+        case "pixi.toml":
+            return setLanguageConfig(Language.Python, "python", filename, OCVEnvironment.Pypi, Settings.python.lockFileEnabled);
         default:
             if (fileExtension === ".txt" && filename.toLowerCase().startsWith("requirement")) {
                 return setLanguageConfig(Language.Python, "python", filename, OCVEnvironment.Pypi, Settings.python.lockFileEnabled);
