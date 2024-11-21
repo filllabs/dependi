@@ -863,6 +863,18 @@
             "order": 20
           }
         }
+      },  
+      {
+        "title": "Extras",
+        "properties": {
+          "dependi.extras.silenceUpdateMessages": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": false,
+            "description": "Enable to silence informational update messages.",
+            "order": 1
+          }
+        }
       }
     ]
   },
