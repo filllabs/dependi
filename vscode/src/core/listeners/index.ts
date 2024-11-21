@@ -65,7 +65,10 @@ export default async function listener(editor: TextEditor | undefined): Promise<
       console.log("Python");
       if (!Settings.python.enabled)
         return;
-      const parser = path.basename(editor.document.fileName) === "pyproject.toml" ? new PyProjectParser() : new PypiParser();
+      const fileName = path.basename(editor.document.fileName);
+      const parser = (fileName === "pyproject.toml" || fileName === "pixi.toml" )
+        ? new PyProjectParser()
+        : new PypiParser();
       listener = new PypiListener(
         new PypiFetcher(Settings.python.index, Configs.PYTHON_INDEX_SERVER_URL),
         parser);

@@ -10,6 +10,8 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 - Added setting to treat non-registry versions as up-to-date for all languages.
 
+- Support a pixi.toml configuration file in a Python project [Issues #179](https://github.com/filllabs/dependi/issues/179)
+
 ### Bug Fixes
 
 - Reordered button groups for better visibility control and hiding less critical buttons when space is limited.[Issue #177](https://github.com/filllabs/dependi/issues/177)
