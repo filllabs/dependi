@@ -4,6 +4,10 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 ## [v0.7.13]((https://github.com/filllabs/dependi/compare/v0.7.12...v0.7.13))
 
+### Improvements
+
+- Support dependency groups in `pyproject.toml` for better dependency management.[Issue #182](https://github.com/filllabs/dependi/issues/182)
+
 ### Bug Fixes
 
 - Reordered button groups for better visibility control and hiding less critical buttons when space is limited.[Issue #177](https://github.com/filllabs/dependi/issues/177)
