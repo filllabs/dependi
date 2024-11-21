@@ -30,6 +30,8 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 - Support for requirements-dev.txt files to manage development dependencies in Python projects. [Issue #162](https://github.com/filllabs/dependi/issues/162)
 
+_support a pixi.toml configuration file in a Python project [Issues #179](https://github.com/filllabs/dependi/issues/179)
+
 ### Bug Fixes
 
 - Pyproject parser to ignore the requires-python key, focusing only on dependencies. [Issue #164](https://github.com/filllabs/dependi/issues/164)
