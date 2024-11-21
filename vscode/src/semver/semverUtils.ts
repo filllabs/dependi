@@ -133,15 +133,15 @@ export function convertPythonVersionToSemver(version: string): string {
 function treatAsUpToDate(): boolean {
   switch (CurrentLanguage) {
     case Language.Rust:
-      return Settings.rust.treatAsUpToDate;
+      return Settings.rust.silenceVersionOverflows;
     case Language.JS:
-      return Settings.npm.treatAsUpToDate;
+      return Settings.npm.silenceVersionOverflows;
     case Language.PHP:
-      return Settings.php.treatAsUpToDate;
+      return Settings.php.silenceVersionOverflows;
     case Language.Golang:
-      return Settings.go.treatAsUpToDate;
+      return Settings.go.silenceVersionOverflows;
     case Language.Python:
-      return Settings.python.treatAsUpToDate;
+      return Settings.python.silenceVersionOverflows;
   }
   return false;
 }

@@ -254,7 +254,7 @@
             "description": "Enable checking for Rust dependencies in lockfiles.",
             "order": 9
           },
-          "dependi.rust.treatAsUpToDate": {
+          "dependi.rust.silenceVersionOverflows": {
             "type": "boolean",
             "scope": "resource",
             "default": false,
@@ -320,7 +320,7 @@
             "description": "Enable checking for Npm dependencies in lockfiles.",
             "order": 16
           },
-          "dependi.npm.treatAsUpToDate": {
+          "dependi.npm.silenceVersionOverflows": {
             "type": "boolean",
             "scope": "resource",
             "default": false,
@@ -379,7 +379,7 @@
             "description": "Inform about available patch updates for Go packages via decoration.",
             "order": 22
           },
-          "dependi.go.treatAsUpToDate": {
+          "dependi.go.silenceVersionOverflows": {
             "type": "boolean",
             "scope": "resource",
             "default": false,
@@ -445,7 +445,7 @@
             "description": "Enable checking for Python dependencies in lockfiles.",
             "order": 29
           },
-          "dependi.python.treatAsUpToDate": {
+          "dependi.python.silenceVersionOverflows": {
             "type": "boolean",
             "scope": "resource",
             "default": false,
@@ -511,7 +511,7 @@
             "description": "Enable checking for PHP dependencies in lockfiles.",
             "order": 36
           },
-          "dependi.php.treatAsUpToDate": {
+          "dependi.php.silenceVersionOverflows": {
             "type": "boolean",
             "scope": "resource",
             "default": false,
