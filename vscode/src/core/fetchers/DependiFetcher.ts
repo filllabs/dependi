@@ -66,6 +66,9 @@ export class DependiFetcher extends Fetcher {
   }
 
   mapVersions(dep: Dependency, item?: Item): Dependency {
+    if (!dep.versions) {
+      return dep;
+    }
     const versions = dep
       .versions!.filter((i: string) => i !== "" && i !== undefined)
       .sort(compareVersions)
