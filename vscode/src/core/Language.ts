@@ -44,7 +44,7 @@ export function setLanguage(file?: string) {
         case "pixi.toml":
             return setLanguageConfig(Language.Python, "python", filename, OCVEnvironment.Pypi, Settings.python.lockFileEnabled);
         default:
-            if (fileExtension === ".txt" && filename.toLowerCase().startsWith("requirement")) {
+            if ((fileExtension === ".txt" || fileExtension === ".in") &&  filename.toLowerCase().startsWith("requirement")) {
                 return setLanguageConfig(Language.Python, "python", filename, OCVEnvironment.Pypi, Settings.python.lockFileEnabled);
             }
     }
