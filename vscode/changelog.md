@@ -12,6 +12,8 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 - Support a pixi.toml configuration file in a Python project [Issue #179](https://github.com/filllabs/dependi/issues/179)
 
+- Support all requirement*.in files and requirement*.txt dependency in a Python project [Issue #187](https://github.com/filllabs/dependi/issues/187)
+
 - Added `dependi.extras.silenceUpdateMessages` to disable informational update messages when enabled. [Issue #193](https://github.com/filllabs/dependi/issues/193)
 
 ### Bug Fixes
