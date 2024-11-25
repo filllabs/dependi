@@ -68,6 +68,10 @@
     "workspaceContains:**/composer.json",
     "onLanguage:requirements.txt",
     "workspaceContains:**/requirements.txt",
+    "onLanguage:requirements.in",
+    "workspaceContains:**/requirements.in",
+    "onLanguage:pixi.toml",
+    "workspaceContains:**/pixi.toml",
     "onLanguage:pyproject.toml",
     "workspaceContains:**/pyproject.toml"
   ],
