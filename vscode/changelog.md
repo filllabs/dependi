@@ -20,6 +20,8 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 - Excluded Git URL dependencies handling for future consideration.
 
+- Resolved "http:" protocol limitation for local and private registries. [Issues #93](https://github.com/filllabs/dependi/issues/93).
+
 ## [v0.7.12]((https://github.com/filllabs/dependi/compare/v0.7.11...v0.7.12))
 
 ### Improvements
