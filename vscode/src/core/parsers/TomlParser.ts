@@ -58,6 +58,13 @@ export class TomlParser implements Parser {
           state.isSubTable = false;
           state.isSingle = true;
           state.currentItem = new Item();
+          if (line.text.includes("#")) {
+            state.currentItem.key = line.text.substring(
+              line.text.indexOf(".") + 1,
+              line.text.indexOf("]")
+            );
+            continue;
+          }
           // crate name is the last part of the table name
           state.currentItem.key = line.text.substring(
             line.text.lastIndexOf(".") + 1,
@@ -172,7 +179,7 @@ export class TomlParser implements Parser {
 
   isSubTable(line: string, state: State): boolean {
     return false;
-  } 
+  }
 }
 
 export function parseVersion(line: string, item: Item) {
@@ -300,7 +307,7 @@ function parseLockFile(item: Item[]): Item[] {
       const fileContent = fs.readFileSync(lockFilePath, "utf8");
       const LockFileParser = new TomlLockFileParser();
       item = LockFileParser.parse(fileContent, item);
-      commands.executeCommand("setContext", "dependi.hasLockFile", true); 
+      commands.executeCommand("setContext", "dependi.hasLockFile", true);
     } else {
       commands.executeCommand("setContext", "dependi.hasLockFile", false);
     }
@@ -311,6 +318,6 @@ function parseLockFile(item: Item[]): Item[] {
 }
 
 function containsIgnoreKeys(key: string) {
-  const ignoreKeys = ["git", "path" ];
+  const ignoreKeys = ["git", "path"];
   return ignoreKeys.some((k) => key.includes(k));
 }
