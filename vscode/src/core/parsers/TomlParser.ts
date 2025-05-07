@@ -58,10 +58,14 @@ export class TomlParser implements Parser {
           state.isSubTable = false;
           state.isSingle = true;
           state.currentItem = new Item();
+          let cleanText = line.text;
+          if (cleanText.includes("#")) {
+            cleanText = cleanText.substring(0, cleanText.indexOf("#")).trim();
+          }
           // crate name is the last part of the table name
-          state.currentItem.key = line.text.substring(
-            line.text.lastIndexOf(".") + 1,
-            line.text.indexOf("]")
+          state.currentItem.key = cleanText.substring(
+            cleanText.lastIndexOf(".") + 1,
+            cleanText.indexOf("]")
           );
         } else {
           state.isMultipleDepTable = false;
@@ -172,7 +176,7 @@ export class TomlParser implements Parser {
 
   isSubTable(line: string, state: State): boolean {
     return false;
-  } 
+  }
 }
 
 export function parseVersion(line: string, item: Item) {
@@ -300,7 +304,7 @@ function parseLockFile(item: Item[]): Item[] {
       const fileContent = fs.readFileSync(lockFilePath, "utf8");
       const LockFileParser = new TomlLockFileParser();
       item = LockFileParser.parse(fileContent, item);
-      commands.executeCommand("setContext", "dependi.hasLockFile", true); 
+      commands.executeCommand("setContext", "dependi.hasLockFile", true);
     } else {
       commands.executeCommand("setContext", "dependi.hasLockFile", false);
     }
@@ -311,6 +315,6 @@ function parseLockFile(item: Item[]): Item[] {
 }
 
 function containsIgnoreKeys(key: string) {
-  const ignoreKeys = ["git", "path" ];
+  const ignoreKeys = ["git", "path"];
   return ignoreKeys.some((k) => key.includes(k));
 }
