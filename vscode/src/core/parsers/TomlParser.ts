@@ -169,7 +169,7 @@ export class TomlParser implements Parser {
       parseVersion(line, item);
       return item.start > -1 ? item : undefined;
     }
-    item.start = line.indexOf(item.value);
+    item.start = line.indexOf(item.value, eqIndex);
     item.end = item.start + item.value.length;
     return item.start > -1 ? item : undefined;
   }
