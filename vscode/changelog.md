@@ -2,6 +2,12 @@
 
 All notable changes to the "dependi" extension will be documented in this file.
 
+## [v0.7.14]((https://github.com/filllabs/dependi/compare/v0.7.13...v0.7.14))
+
+### Bug Fixes
+
+- Fixed inline comment parsing in `Cargo.toml` dependencies to extract package names correctly. [Issue #204](https://github.com/filllabs/dependi/issues/204)
+
 ## [v0.7.13]((https://github.com/filllabs/dependi/compare/v0.7.12...v0.7.13))
 
 ### Improvements
