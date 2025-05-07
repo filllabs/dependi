@@ -1,7 +1,7 @@
 import { Settings } from "../../config";
 import { DependencyInfo } from '../DepencencyInfo';
 import { getReqOptions } from "../utils";
-import { addResponseHandlers, cleanURL, isStatusInvalid, isStatusRedirect, ResponseError } from "./utils";
+import { addResponseHandlers, cleanURL, isStatusInvalid, ResponseError } from "./utils";
 import { ClientRequest, IncomingMessage } from 'http';
 import { makeRequest } from './request';
 
@@ -19,17 +19,23 @@ export const versions = (name: string) => {
       res.on("end", () => {
         try {
           const response = JSON.parse(Buffer.concat(body).toString());
-          const versions = Object.keys(response.releases);
+          const filteredVersions = Object.keys(response.releases).filter(
+            (version) => {
+              const releaseInfo = response.releases[version];
+              return releaseInfo.every(
+                (entry: { yanked: boolean }) => !entry.yanked
+              );
+            }
+          );
           info = {
             name: name,
-            versions: versions
+            versions: filteredVersions,
           };
         } catch (e) {
           reject(e);
         }
         resolve(info);
-      }
-      );
+      });
     };
 
     makeRequest(options, handleResponse, reject);
@@ -39,4 +45,3 @@ export const versions = (name: string) => {
 function getURL(name: string) {
   return cleanURL(`${Settings.python.index}/${name}/json`);
 }
-
