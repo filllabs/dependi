@@ -12,9 +12,11 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 - Fixed inline comment parsing in `Cargo.toml` dependencies to extract package names correctly. [Issue #204](https://github.com/filllabs/dependi/issues/204)
 
-## [v0.7.13](https://github.com/filllabs/dependi/compare/v0.7.12...v0.7.13)
 - Fixed an issue with incorrect calculation of the version start position, ensuring accurate parsing.[Issue #220](https://github.com/filllabs/dependi/issues/205)
 
+- Fixed parsing of version constraints starting with `~=` in `requirements.txt` files.[Issue #218](https://github.com/filllabs/dependi/issues/218)
+
+## [v0.7.13](https://github.com/filllabs/dependi/compare/v0.7.12...v0.7.13)
 
 ### Improvements
 
