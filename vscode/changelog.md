@@ -2,13 +2,17 @@
 
 All notable changes to the "dependi" extension will be documented in this file.
 
-## [v0.7.14]((https://github.com/filllabs/dependi/compare/v0.7.13...v0.7.14))
+## [v0.7.14](https://github.com/filllabs/dependi/compare/v0.7.13...v0.7.14)
+
+### Improvements
+
+- Version listings from the PyPI index now exclude yanked releases, returning only installable versions.[Issue #222](https://github.com/filllabs/dependi/issues/222)
 
 ### Bug Fixes
 
 - Fixed inline comment parsing in `Cargo.toml` dependencies to extract package names correctly. [Issue #204](https://github.com/filllabs/dependi/issues/204)
 
-## [v0.7.13]((https://github.com/filllabs/dependi/compare/v0.7.12...v0.7.13))
+## [v0.7.13](https://github.com/filllabs/dependi/compare/v0.7.12...v0.7.13)
 
 ### Improvements
 
@@ -28,7 +32,7 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 - Resolved "http:" protocol limitation for local and private registries. [Issues #93](https://github.com/filllabs/dependi/issues/93).
 
-## [v0.7.12]((https://github.com/filllabs/dependi/compare/v0.7.11...v0.7.12))
+## [v0.7.12](https://github.com/filllabs/dependi/compare/v0.7.11...v0.7.12)
 
 ### Improvements
 
@@ -38,7 +42,7 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 - Resolved an issue where the `CHANGELOG.md` file could not be found on Linux systems. [Issue #175](https://github.com/filllabs/dependi/issues/175)
 
-## [v0.7.11]((https://github.com/filllabs/dependi/compare/v0.7.10...v0.7.11))
+## [v0.7.11](https://github.com/filllabs/dependi/compare/v0.7.10...v0.7.11)
 
 ### Improvements
 
@@ -53,7 +57,7 @@ All notable changes to the "dependi" extension will be documented in this file.
 - Improved error handling for deprecated npm packages to provide more informative error messages. [Issue #111](https://github.com/filllabs/dependi/issues/111)
 - Resolved a parsing error in Cargo.toml. [Issue #156](https://github.com/filllabs/dependi/issues/156)
 
-## [v0.7.10]((https://github.com/filllabs/dependi/compare/v0.7.9...v0.7.10))
+## [v0.7.10](https://github.com/filllabs/dependi/compare/v0.7.9...v0.7.10)
 
 ### New Features
 
