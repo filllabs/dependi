@@ -1,10 +1,10 @@
-import { compare, gt, maxSatisfying, minVersion, satisfies } from "semver";
+import { compare, gt, maxSatisfying, minVersion, satisfies, Range } from "semver";
 import { Settings } from "../config";
 import { CurrentLanguage, Language } from "../core/Language";
 
 
 export function checkVersion(version: string = "0.0.0", versions: string[], lockedAt?: string): [boolean, boolean, string | null] {
-  let v = versionToSemver(version);
+  let v = version;
 
   const semverVersions = versions.map(versionToSemver);
   const versionMap = mapVersions(versions, semverVersions);
@@ -48,11 +48,12 @@ export function checkVersion(version: string = "0.0.0", versions: string[], lock
   }
   const pathUpdated = shouldPatchBeChecked ? compare(max, minVersion(v) ?? '0.0.0') === 1 : false;
   const maxSatisfyingVersion = maxSatisfying(semverVersions, v);
+  const range = new Range(v).format();
   if (maxSatisfyingVersion && CurrentLanguage === Language.Python) {
-    return [satisfies(max, v), pathUpdated, versionMap[maxSatisfyingVersion]];
+    return [satisfies(max, range), pathUpdated, versionMap[maxSatisfyingVersion]];
   }
 
-  return [satisfies(max, v), pathUpdated, maxSatisfyingVersion];
+  return [satisfies(max, range), pathUpdated, maxSatisfyingVersion];
 }
 
 function mapVersions(versions: string[], semverVersions: string[]): Record<string, string> {

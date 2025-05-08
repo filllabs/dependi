@@ -20,6 +20,8 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 - Fixed parsing issues in Go that were affecting version retrieval, resulting in a more accurate and efficient filtering process.[Issue #210](https://github.com/filllabs/dependi/issues/210)
 
+- Fixed semver version range handling to properly understand and process version specifications according to semver standards.[Issue #209](https://github.com/filllabs/dependi/issues/209)
+
 ## [v0.7.13](https://github.com/filllabs/dependi/compare/v0.7.12...v0.7.13)
 
 ### Improvements
