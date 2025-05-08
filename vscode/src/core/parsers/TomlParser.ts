@@ -160,7 +160,11 @@ export class TomlParser implements Parser {
       .trim()
       .replace(/^"|"$|'/g, "");
 
-    if (isBoolean(item.value) || containsIgnoreKeys(item.value)) {
+    if (
+      isBoolean(item.value) ||
+      containsIgnoredKeywordsInValue(item.value) ||
+      containsIgnoredKeywordsInKey(item.key)
+    ) {
       return undefined;
     }
     if (line.indexOf("{") > -1) {
@@ -314,7 +318,12 @@ function parseLockFile(item: Item[]): Item[] {
   return item;
 }
 
-function containsIgnoreKeys(key: string) {
-  const ignoreKeys = ["git", "path"];
-  return ignoreKeys.some((k) => key.includes(k));
+function containsIgnoredKeywordsInValue(value: string) {
+  const ignoredKeywords = ["git", "path"];
+  return ignoredKeywords.some((v) => value.includes(v));
+}
+
+function containsIgnoredKeywordsInKey(key: string) {
+  const ignoredKeywords = ["."];
+  return ignoredKeywords.some((k) => key.includes(k));
 }
