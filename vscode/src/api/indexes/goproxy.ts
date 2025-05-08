@@ -19,17 +19,15 @@ export const versions = (name: string) => { // name eg: github.com/gorilla/mux
       let info: DependencyInfo;
       res.on("end", () => {
         try {
-          const rawVersions = body.toString().split("\n");
-          if (rawVersions.length === 1 && rawVersions[0] === "") {
+          const bodyString = Buffer.concat(body).toString();
+          const bodyArray = bodyString.split("\n");
+          if (bodyArray.length === 1 && bodyArray[0] === "") {
             return latestVersion(name).then(resolve).catch(reject);
           }
-          const cleanedVersions = rawVersions
-            .map((version) => version.trim())
-            .filter((version) => /^[vV]?\d+(\.\d+)*$/.test(version));
 
           info = {
             name: name,
-            versions: cleanedVersions,
+            versions: bodyArray,
           };
         } catch (e) {
           reject(e);
