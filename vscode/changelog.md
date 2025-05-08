@@ -16,6 +16,8 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 - Fixed parsing of version constraints starting with `~=` in `requirements.txt` files.[Issue #218](https://github.com/filllabs/dependi/issues/218)
 
+- Fixed invalid package name handling in `Cargo.toml` for more accurate dependency parsing.[Issue #208](https://github.com/filllabs/dependi/issues/208)
+
 ## [v0.7.13](https://github.com/filllabs/dependi/compare/v0.7.12...v0.7.13)
 
 ### Improvements
