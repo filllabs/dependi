@@ -32,7 +32,7 @@ jobs:
       - name: Publish to OpenVSX
         run: |
           npm install -g ovsx
-          ovsx publish -p $OVSX_PAT
+          ovsx publish -p $OVSX_TOKEN
         env:
           OVSX_TOKEN: ${{ secrets.OVSX_PAT }}
 
