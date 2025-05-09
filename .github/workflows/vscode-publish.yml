@@ -3,6 +3,7 @@ on:
   push:
     tags:
       - v*
+  workflow_dispatch:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -22,18 +23,18 @@ jobs:
           node-version: 22
       - name: Install Dependencies
         run: npm install --save-exact --save-dev esbuild
-      - name: Publish VS Code Extension
-        run: |
-          npm install -g @vscode/vsce
-          vsce publish -p $VSCE_TOKEN
-        env:
-          VSCE_TOKEN: ${{ secrets.VSC_PAT }}
-      # - name: Publish to OpenVSX
+      # - name: Publish VS Code Extension
       #   run: |
-      #     npm install -g ovsx
-      #     ovsx publish -p $OVSX_PAT
+      #     npm install -g @vscode/vsce
+      #     vsce publish -p $VSCE_TOKEN
       #   env:
-      #     OVSX_TOKEN: ${{ secrets.OVSX_PAT }}
+      #     VSCE_TOKEN: ${{ secrets.VSC_PAT }}
+      - name: Publish to OpenVSX
+        run: |
+          npm install -g ovsx
+          ovsx publish -p $OVSX_PAT
+        env:
+          OVSX_TOKEN: ${{ secrets.OVSX_PAT }}
 
       - name: Send Download Link to Slack
         uses: slackapi/slack-github-action@v1.26.0
