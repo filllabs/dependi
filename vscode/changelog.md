@@ -6,64 +6,64 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 ### Improvements
 
-- Version listings from the PyPI index now exclude yanked releases, returning only installable versions.[Issue #222](https://github.com/filllabs/dependi/issues/222)
+- Version listings from the PyPI index now exclude yanked releases, returning only installable versions. ([Issue #222](https://github.com/filllabs/dependi/issues/222))
 
 ### Bug Fixes
 
-- Fixed inline comment parsing in `Cargo.toml` dependencies to extract package names correctly. [Issue #204](https://github.com/filllabs/dependi/issues/204)
+- Fixed inline comment parsing in `Cargo.toml` dependencies to extract package names correctly. ([Issue #204](https://github.com/filllabs/dependi/issues/204))
 
-- Fixed an issue with incorrect calculation of the version start position, ensuring accurate parsing.[Issue #220](https://github.com/filllabs/dependi/issues/205)
+- Fixed an issue with incorrect calculation of the version start position, ensuring accurate parsing. ([Issue #220](https://github.com/filllabs/dependi/issues/205))
 
-- Fixed parsing of version constraints starting with `~=` in `requirements.txt` files.[Issue #218](https://github.com/filllabs/dependi/issues/218)
+- Fixed parsing of version constraints starting with `~=` in `requirements.txt` files. ([Issue #218](https://github.com/filllabs/dependi/issues/218))
 
-- Fixed invalid package name handling in `Cargo.toml` for more accurate dependency parsing.[Issue #208](https://github.com/filllabs/dependi/issues/208)
+- Fixed invalid package name handling in `Cargo.toml` for more accurate dependency parsing. ([Issue #208](https://github.com/filllabs/dependi/issues/208))
 
-- Fixed parsing issues in Go that were affecting version retrieval, resulting in a more accurate and efficient filtering process.[Issue #210](https://github.com/filllabs/dependi/issues/210)
+- Fixed parsing issues in Go that were affecting version retrieval, resulting in a more accurate and efficient filtering process. ([Issue #210](https://github.com/filllabs/dependi/issues/210))
 
 ## [v0.7.13](https://github.com/filllabs/dependi/compare/v0.7.12...v0.7.13)
 
 ### Improvements
 
-- Support dependency groups in `pyproject.toml` for better dependency management.[Issue #182](https://github.com/filllabs/dependi/issues/182)
+- Support dependency groups in `pyproject.toml` for better dependency management. ([Issue #182](https://github.com/filllabs/dependi/issues/182))
 
 - Added setting to treat non-registry versions as up-to-date for all languages.
 
-- Support a pixi.toml configuration file in a Python project [Issue #179](https://github.com/filllabs/dependi/issues/179)
+- Support a pixi.toml configuration file in a Python project ([Issue #179](https://github.com/filllabs/dependi/issues/179))
 
-- Added `dependi.extras.silenceUpdateMessages` to disable informational update messages when enabled. [Issue #193](https://github.com/filllabs/dependi/issues/193)
+- Added `dependi.extras.silenceUpdateMessages` to disable informational update messages when enabled. ([Issue #193](https://github.com/filllabs/dependi/issues/193))
 
 ### Bug Fixes
 
-- Reordered button groups for better visibility control and hiding less critical buttons when space is limited.[Issue #177](https://github.com/filllabs/dependi/issues/177)
+- Reordered button groups for better visibility control and hiding less critical buttons when space is limited. ([Issue #177](https://github.com/filllabs/dependi/issues/177))
 
 - Excluded Git URL dependencies handling for future consideration.
 
-- Resolved "http:" protocol limitation for local and private registries. [Issues #93](https://github.com/filllabs/dependi/issues/93).
+- Resolved "http:" protocol limitation for local and private registries. ([Issues #93](https://github.com/filllabs/dependi/issues/93).)
 
 ## [v0.7.12](https://github.com/filllabs/dependi/compare/v0.7.11...v0.7.12)
 
 ### Improvements
 
-- Support for all requirement*.txt files in Python projects. [Issue #162](https://github.com/filllabs/dependi/issues/162)
+- Support for all requirement*.txt files in Python projects. ([Issue #162](https://github.com/filllabs/dependi/issues/162))
 
 ### Bug Fixes
 
-- Resolved an issue where the `CHANGELOG.md` file could not be found on Linux systems. [Issue #175](https://github.com/filllabs/dependi/issues/175)
+- Resolved an issue where the `CHANGELOG.md` file could not be found on Linux systems. ([Issue #175](https://github.com/filllabs/dependi/issues/175))
 
 ## [v0.7.11](https://github.com/filllabs/dependi/compare/v0.7.10...v0.7.11)
 
 ### Improvements
 
-- Support for requirements-dev.txt files to manage development dependencies in Python projects. [Issue #162](https://github.com/filllabs/dependi/issues/162)
+- Support for requirements-dev.txt files to manage development dependencies in Python projects. ([Issue #162](https://github.com/filllabs/dependi/issues/162))
 
 ### Bug Fixes
 
-- Pyproject parser to ignore the requires-python key, focusing only on dependencies. [Issue #164](https://github.com/filllabs/dependi/issues/164)
-- Hide version display for empty strings in decoration settings, ensuring no default display occurs. [Issue #163](https://github.com/filllabs/dependi/issues/163)
-- Resolved display errors related to Python versions with semver incompatibilities.[Issue #150](https://github.com/filllabs/dependi/issues/150) [Issue #161](https://github.com/filllabs/dependi/issues/161)
-- Corrected an issue where a non-existent version in a package was incorrectly shown as "compatible." [Issue #112](https://github.com/filllabs/dependi/issues/112)
-- Improved error handling for deprecated npm packages to provide more informative error messages. [Issue #111](https://github.com/filllabs/dependi/issues/111)
-- Resolved a parsing error in Cargo.toml. [Issue #156](https://github.com/filllabs/dependi/issues/156)
+- Pyproject parser to ignore the requires-python key, focusing only on dependencies. ([Issue #164](https://github.com/filllabs/dependi/issues/164))
+- Hide version display for empty strings in decoration settings, ensuring no default display occurs. ([Issue #163](https://github.com/filllabs/dependi/issues/163))
+- Resolved display errors related to Python versions with semver incompatibilities. ([Issue #150](https://github.com/filllabs/dependi/issues/150) [Issue #161](https://github.com/filllabs/dependi/issues/161))
+- Corrected an issue where a non-existent version in a package was incorrectly shown as "compatible." ([Issue #112](https://github.com/filllabs/dependi/issues/112))
+- Improved error handling for deprecated npm packages to provide more informative error messages. ([Issue #111](https://github.com/filllabs/dependi/issues/111))
+- Resolved a parsing error in Cargo.toml. ([Issue #156](https://github.com/filllabs/dependi/issues/156))
 
 ## [v0.7.10](https://github.com/filllabs/dependi/compare/v0.7.9...v0.7.10)
 
@@ -86,8 +86,8 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 ### Bug Fixes
 
-- Handling of empty dependency fields fixed to ensure proper processing. [Issue 143](https://github.com/filllabs/dependi/issues/143)
-- `Languages` section removed from `package.json` as it is no longer necessary. [Issue 127](https://github.com/filllabs/dependi/issues/127)
+- Handling of empty dependency fields fixed to ensure proper processing. ([Issue 143](https://github.com/filllabs/dependi/issues/143))
+- `Languages` section removed from `package.json` as it is no longer necessary. ([Issue 127](https://github.com/filllabs/dependi/issues/127))
 
 ### Other Changes
 
@@ -113,7 +113,7 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 ### Bug Fixes
 
-- Fixed issue with `*` version not showing package versions. [Issue 118](https://github.com/filllabs/dependi/issues/118)
+- Fixed issue with `*` version not showing package versions. ([Issue #118](https://github.com/filllabs/dependi/issues/118))
 
 ## [v0.7.8](https://github.com/filllabs/dependi/compare/v0.7.7...v0.7.8)
 
@@ -136,29 +136,29 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 ### Bug Fixes
 
-- Fixed parsing issue with certain version strings. [Issue #77](https://github.com/filllabs/dependi/issues/77)
-- Fixed the bug in the dependency module to ensure correct functionality. [Issue #80](https://github.com/filllabs/dependi/issues/80)
-- Fixed bug in the dependency resolution module. [Issue #74](https://github.com/filllabs/dependi/issues/74)
-- Fixed: Added an output channel for improved logging and debugging. [Issue #84](https://github.com/filllabs/dependi/issues/82)
-- Fixed: Issue with changing versions in requirements.txt. [Issue #76](https://github.com/filllabs/dependi/issues/76)
+- Fixed parsing issue with certain version strings. ([Issue #77](https://github.com/filllabs/dependi/issues/77))
+- Fixed the bug in the dependency module to ensure correct functionality. ([Issue #80](https://github.com/filllabs/dependi/issues/80))
+- Fixed bug in the dependency resolution module. ([Issue #74](https://github.com/filllabs/dependi/issues/74))
+- Fixed: Added an output channel for improved logging and debugging. ([Issue #84](https://github.com/filllabs/dependi/issues/82))
+- Fixed: Issue with changing versions in requirements.txt. ([Issue #76](https://github.com/filllabs/dependi/issues/76))
 
 ## [v0.7.6](https://github.com/filllabs/dependi/compare/v0.7.5...v0.7.6)
 
 ### New Features
 
-- Added a report to list vulnerable library versions from the manifest file. (_[Pro](https://dependi.io) version_) [Issue #53](https://github.com/filllabs/dependi/issues/53)
+- Added a report to list vulnerable library versions from the manifest file. (_[Pro](https://dependi.io) version_) ([Issue #53](https://github.com/filllabs/dependi/issues/53))
 
 ### Bug Fixes
 
-- Fixed local dependency errors now it wil ignore. [Issue #52](https://github.com/filllabs/dependi/issues/52)
+- Fixed local dependency errors now it wil ignore. ([Issue #52](https://github.com/filllabs/dependi/issues/52))
 - Better error handling.
-- Wildcard version support added for TOML files. [Issue #59](https://github.com/filllabs/dependi/issues/59)
-- Fixed resolved issue where outdated packages appeared as up-to-date. [Issue #60](https://github.com/filllabs/dependi/issues/60)
-- Fixed incorrect node linking in dependency graph. [Issue #66](https://github.com/filllabs/dependi/issues/66)
+- Wildcard version support added for TOML files. ([Issue #59](https://github.com/filllabs/dependi/issues/59))
+- Fixed resolved issue where outdated packages appeared as up-to-date. ([Issue #60](https://github.com/filllabs/dependi/issues/60))
+- Fixed incorrect node linking in dependency graph. ([Issue #66](https://github.com/filllabs/dependi/issues/66))
 
 ### Improvements
 
-- Fixed the incorrect ordering of pre-release Python versions. [Issue #58](https://github.com/filllabs/dependi/issues/58)
+- Fixed the incorrect ordering of pre-release Python versions. ([Issue #58](https://github.com/filllabs/dependi/issues/58))
 
 ## [v0.7.5](https://github.com/filllabs/dependi/compare/v0.7.4...v0.7.5)
 
@@ -166,23 +166,23 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 - Update notification added for new versions instead of welcome page
 - Even Better TOML extension removed from dependencies
-- Informing patch updates added as a setting per language. [Issue #13](https://github.com/filllabs/dependi/issues/13)
-- Fixed issue Cargo.toml now ignores local libraries. [Issue #29](https://github.com/filllabs/dependi/issues/29)
-- Added support for pyproject.toml in Python language. [Issue #12](https://github.com/filllabs/dependi/issues/12)
+- Informing patch updates added as a setting per language. ([Issue #13](https://github.com/filllabs/dependi/issues/13))
+- Fixed issue Cargo.toml now ignores local libraries. ([Issue #29](https://github.com/filllabs/dependi/issues/29))
+- Added support for pyproject.toml in Python language. ([Issue #12](https://github.com/filllabs/dependi/issues/12))
 
 ## [v0.7.4](https://github.com/filllabs/dependi/compare/v0.7.3...v0.7.4)
 
 ### New Features
 
-- PHP support added [PR #21](https://github.com/filllabs/dependi/pull/21)
-- Language specific enable/disable settings added [Issue #11](https://github.com/filllabs/dependi/issues/11)
-- Fetching dependencies notification silenced to status bar spinner [Issue #34](https://github.com/filllabs/dependi/issues/34)
+- PHP support added ([PR #21](https://github.com/filllabs/dependi/pull/21))
+- Language specific enable/disable settings added ([Issue #11](https://github.com/filllabs/dependi/issues/11))
+- Fetching dependencies notification silenced to status bar spinner ([Issue #34](https://github.com/filllabs/dependi/issues/34))
 - GHSA vulnerability is now enabled as default.
-- Added support to ignore lines based on specified patterns [Issue #35](https://github.com/filllabs/dependi/issues/35)
+- Added support to ignore lines based on specified patterns ([Issue #35](https://github.com/filllabs/dependi/issues/35))
 
 ### Bug Fixes
 
-- requirements.txt file parsing bug fixed [Issue #23](https://github.com/filllabs/dependi/issues/23)
+- requirements.txt file parsing bug fixed ([Issue #23](https://github.com/filllabs/dependi/issues/23))
 - Welcome Page silenced on updates.
 
 ## [v0.7.3](https://github.com/filllabs/dependi/compare/v0.7.2...v0.7.3)
