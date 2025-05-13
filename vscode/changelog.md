@@ -2,6 +2,12 @@
 
 All notable changes to the "dependi" extension will be documented in this file.
 
+## [v0.7.15](https://github.com/filllabs/dependi/compare/v0.7.14...v0.7.15)
+
+### New Features
+
+- Add support for `pubspec.yaml` files — Dart & Flutter dependencies are now parsed and displayed. ([Issue #231](https://github.com/filllabs/dependi/issues/231))
+
 ## [v0.7.14](https://github.com/filllabs/dependi/compare/v0.7.13...v0.7.14)
 
 ### Improvements
