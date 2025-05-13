@@ -105,11 +105,12 @@ function chunkDataArray(data: Dependency[], chunkSize: number) {
 }
 
 function checkPreRelease(version: string): boolean {
+  version = version.toLowerCase();
   return (
     version.indexOf("-alpha") !== -1 ||
     version.indexOf("-beta") !== -1 ||
     version.indexOf("-rc") !== -1 ||
-    version.indexOf("-SNAPSHOT") !== -1 ||
+    version.indexOf("-snapshot") !== -1 ||
     version.indexOf("-dev") !== -1 ||
     version.indexOf("-preview") !== -1 ||
     version.indexOf("-experimental") !== -1 ||

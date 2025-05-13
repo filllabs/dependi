@@ -10,6 +10,7 @@ import { PhpParser } from "../../core/parsers/ComposerJsonParser";
 import { PypiParser } from "../../core/parsers/PypiParser";
 import { PyProjectParser } from "../../core/parsers/PyProjectParser";
 import { openDeviceLimitDialog, openPaymentRequiredDialog, openSettingsDialog } from "../../ui/dialogs";
+import { PubspecParser } from "../../core/parsers/PubspecParser";
 
 export const parserInvoker = (language: string) => {
   switch (language) {
@@ -25,6 +26,8 @@ export const parserInvoker = (language: string) => {
       return new PypiParser();
     case "pyproject.toml":
       return new PyProjectParser();
+    case "pubspec.yaml":
+      return new PubspecParser();
     default:
       throw Error("Language not supported");
   }

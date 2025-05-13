@@ -4,9 +4,9 @@ import { CurrentLanguage, Language } from "../core/Language";
 
 
 export function checkVersion(version: string = "0.0.0", versions: string[], lockedAt?: string): [boolean, boolean, string | null] {
-  let v = versionToSemver(version);
+  let v = versionToSemver(version, true);
 
-  const semverVersions = versions.map(versionToSemver);
+  const semverVersions = versions.map((v) => versionToSemver(v));
   const versionMap = mapVersions(versions, semverVersions);
 
   v = ensureCaretPrefix(v);
@@ -76,11 +76,17 @@ function checkLockedVersion(lockedAt: string, version: string, semverVersions: s
   return [semverLockedAt === semverVersions[0], false, lockedAt];
 }
 
-function versionToSemver(version: string): string {
-  return CurrentLanguage === Language.Python ? convertPythonVersionToSemver(version) : normalizeVersion(version);
+function versionToSemver(version: string, isCurrentVersion?: boolean): string {
+  return CurrentLanguage === Language.Python ? convertPythonVersionToSemver(version) : normalizeVersion(version, isCurrentVersion);
 }
 
-function normalizeVersion(version: string): string {
+function normalizeVersion(version: string, isCurrentVersion?: boolean): string {
+  if (isCurrentVersion) {
+    const prefix = version.charCodeAt(0);
+    if (prefix < 47 || prefix > 58) {
+      return version;
+    }
+  }
   // count the number of dots in the version string
   let dotCount = 0;
   for (let i = 0; i < version.length; i++) {
