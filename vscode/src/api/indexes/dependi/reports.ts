@@ -38,6 +38,7 @@ export enum Language {
   JS,
   Python,
   PHP,
+  Dart,
 }
 
 const LanguageArray = [

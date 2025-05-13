@@ -162,6 +162,8 @@ function getLinks(lang: Language, key: string): string {
       return ` _([View package](https://packagist.org/packages/${cleanKey}))_`;
     case Language.Python:
       return ` _([View package](https://pypi.org/project/${cleanKey}))_`;
+    case Language.Dart:
+      return ` _([View package](https://pub.dev/packages/${cleanKey}))_`;
     default:
       return '';
   }
@@ -179,6 +181,8 @@ function getDocsLink(lang: Language, key: string, version: string): string {
       return `[(docs)](https://packagist.org/packages/${key}#${version})`;
     case Language.Python:
       return `[(docs)](https://pypi.org/project/${key}/${version})`;
+    case Language.Dart:
+      return `[(docs)](https://pub.dev/packages/${key}/versions/${version})`;
     default:
       return '';
   }

@@ -22,6 +22,9 @@ export const enableLockFileParsing = commands.registerTextEditorCommand(
         case Language.Python:
           config.update(Configs.PYTHON_ENABLED_LOCK_FILE, true);
           break;
+        case Language.Dart:
+          config.update(Configs.DART_ENABLED_LOCK_FILE, true);
+          break;
         default:
           break;
       }

@@ -10,6 +10,7 @@ export enum Language {
     JS = 3,
     Python = 4,
     PHP = 5,
+    Dart = 6,
 }
 
 export enum OCVEnvironment {
@@ -18,6 +19,7 @@ export enum OCVEnvironment {
     Packagist = "Packagist",
     Pypi = "PyPI",
     Go = "Go",
+    Dart = "Pub",
 }
 export var CurrentLanguage: Language = Language.None;
 export var CurrentLanguageConfig: string = "";
@@ -43,6 +45,8 @@ export function setLanguage(file?: string) {
             return setLanguageConfig(Language.Python, "python", filename, OCVEnvironment.Pypi, Settings.python.lockFileEnabled);
         case "pixi.toml":
             return setLanguageConfig(Language.Python, "python", filename, OCVEnvironment.Pypi, Settings.python.lockFileEnabled);
+        case "pubspec.yaml":
+            return setLanguageConfig(Language.Dart, "dart", filename, OCVEnvironment.Dart);    
         default:
             if ((fileExtension === ".txt" || fileExtension === ".in") &&  filename.toLowerCase().startsWith("requirement")) {
                 return setLanguageConfig(Language.Python, "python", filename, OCVEnvironment.Pypi, Settings.python.lockFileEnabled);

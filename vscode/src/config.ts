@@ -50,6 +50,14 @@ export enum Configs {
   PYTHON_ENABLED_LOCK_FILE = `python.lockFileEnabled`,
   PYTHON_SILENCE_VERSION_OVERFLOWS = `python.silenceVersionOverflows`,
 
+  DART_ENABLED = `dart.enabled`,
+  DART_INDEX_SERVER_URL = `dart.indexServerURL`,
+  DART_UNSTABLE_FILTER = `dart.unstableFilter`,
+  DART_IGNORE_LINE_PATTERN = `dart.ignoreLinePattern`,
+  DART_INFORM_PATCH_UPDATES = `dart.informPatchUpdates`,
+  DART_ENABLED_LOCK_FILE = `dart.lockFileEnabled`,
+  DART_SILENCE_VERSION_OVERFLOWS = `dart.silenceVersionOverflows`,
+
   VULS_ENABLED = `vulnerability.enabled`,
   VULS_GHSA_ENABLED = `vulnerability.ghsa.enabled`,
   VULS_OSV_BATCH_URL = `vulnerability.osvQueryURL.batch`,
@@ -144,6 +152,15 @@ export const Settings = {
     lockFileEnabled: true,
     silenceVersionOverflows: false
   },
+  dart: {
+    enabled: true,
+    index: "",
+    unstableFilter: UnstableFilter.Exclude,
+    ignoreLinePattern: "",
+    informPatchUpdates: false,
+    lockFileEnabled: true,
+    silenceVersionOverflows: false
+  },
   vulnerability: {
     enabled: false,
     ghsa: false,
@@ -225,6 +242,14 @@ export const Settings = {
     this.python.informPatchUpdates = config.get<boolean>(Configs.PYTHON_INFORM_PATCH_UPDATES) ?? false;
     this.python.lockFileEnabled = config.get<boolean>(Configs.PYTHON_ENABLED_LOCK_FILE) ?? true;
     this.python.silenceVersionOverflows = config.get<boolean>(Configs.PYTHON_SILENCE_VERSION_OVERFLOWS) ?? false;
+
+    this.dart.enabled = config.get<boolean>(Configs.DART_ENABLED) ?? true;
+    this.dart.index = config.get<string>(Configs.DART_INDEX_SERVER_URL) || "https://pub.dev";
+    this.dart.unstableFilter = UnstableFilter[config.get<string>(Configs.DART_UNSTABLE_FILTER) as keyof typeof UnstableFilter] || UnstableFilter.Exclude;
+    this.dart.ignoreLinePattern = config.get<string>(Configs.DART_IGNORE_LINE_PATTERN) || "";
+    this.dart.informPatchUpdates = config.get<boolean>(Configs.DART_INFORM_PATCH_UPDATES) ?? false;
+    this.dart.lockFileEnabled = config.get<boolean>(Configs.DART_ENABLED_LOCK_FILE) ?? true;
+    this.dart.silenceVersionOverflows = config.get<boolean>(Configs.DART_SILENCE_VERSION_OVERFLOWS) ?? false;
 
     this.vulnerability.enabled = config.get<boolean>(Configs.VULS_ENABLED) ?? true;
     this.vulnerability.ghsa = config.get<boolean>(Configs.VULS_GHSA_ENABLED) ?? false;

@@ -116,6 +116,9 @@ function checkPreRelease(version: string): boolean {
     version.indexOf("-canary") !== -1 ||
     version.indexOf("-pre") !== -1 ||
     version.indexOf("-next") !== -1 ||
-    version.indexOf("-nightly") !== -1
+    version.indexOf("-nightly") !== -1 ||
+    version.indexOf("-nullsafety") !== -1 ||
+    version.indexOf("-nnbd") !== -1 ||
+    version.indexOf("+") !== -1
   );
 }

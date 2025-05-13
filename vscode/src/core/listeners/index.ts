@@ -23,6 +23,9 @@ import { NpmListener } from "./NpmListener";
 import { PhpListener } from './PhpListener';
 import { PypiListener } from "./PypiListener";
 import { Listener } from "./listener";
+import { PubspecListener } from "./PubspecListener";
+import { PubDevFetcher } from "../fetchers/PubDevFetcher";
+import { PubspecParser } from "../parsers/PubspecParser";
 
 
 export default async function listener(editor: TextEditor | undefined): Promise<void> {
@@ -72,6 +75,14 @@ export default async function listener(editor: TextEditor | undefined): Promise<
       listener = new PypiListener(
         new PypiFetcher(Settings.python.index, Configs.PYTHON_INDEX_SERVER_URL),
         parser);
+      break;
+    case Language.Dart:
+      if (!Settings.dart.enabled)
+        return;
+      listener = new PubspecListener(
+        new PubDevFetcher(Settings.dart.index, Configs.DART_INDEX_SERVER_URL),
+        new PubspecParser());
+      break;
   }
   if (listener !== undefined) {
     if (Settings.api.key !== "" && Settings.api.url !== "") {
