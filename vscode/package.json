@@ -525,6 +525,72 @@
         }
       },
       {
+        "title": "Dart Settings",
+        "properties": {
+          "dependi.dart.enabled": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": true,
+            "description": "Enable checking for Dart dependencies.",
+            "order": 38
+          },
+          "dependi.dart.indexServerURL": {
+            "type": "string",
+            "scope": "resource",
+            "description": "The URL for the Dart package index server.",
+            "format": "url",
+            "pattern": "^https?://(?!.*//)([^/]+/)*[^/]+$",
+            "default": "https://pub.dev",
+            "order": 39
+          },
+          "dependi.dart.unstableFilter": {
+            "type": "string",
+            "enum": [
+              "Exclude",
+              "IncludeAlways",
+              "IncludeIfUnstable"
+            ],
+            "default": "Exclude",
+            "scope": "resource",
+            "enumDescriptions": [
+              "Exclude them (default)",
+              "Include them and always consider as latest",
+              "Include if the current version is already unstable"
+            ],
+            "description": "Filter unstable versions: Exclude, Include Always, or Include If Unstable.",
+            "order": 40
+          },
+          "dependi.dart.ignoreLinePatterns": {
+            "type": "string",
+            "scope": "resource",
+            "default": "",
+            "markdownDescription": "Matches lines based on `*` position: `text*`, `*text`, `*text*`. Multiple patterns can be used, separated by commas.",
+            "order": 41
+          },
+          "dependi.dart.informPatchUpdates": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": false,
+            "description": "Inform about available patch updates for Dart packages via decoration.",
+            "order": 42
+          },
+          "dependi.dart.lockFileEnabled": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": true,
+            "description": "Enable checking for Dart dependencies in lockfiles.",
+            "order": 43
+          },
+          "dependi.dart.silenceVersionOverflows": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": false,
+            "description": "Consider non-registry packages as up-to-date if their version exceeds the max.",
+            "order": 44
+          }
+        }
+      },
+      {
         "title": "Vulnerability Settings",
         "properties": {
           "dependi.vulnerability.enabled": {
@@ -532,14 +598,14 @@
             "scope": "resource",
             "default": true,
             "description": "Enable checking for vulnerabilities in dependencies.",
-            "order": 38
+            "order": 45
           },
           "dependi.vulnerability.ghsa.enabled": {
             "type": "boolean",
             "scope": "resource",
             "default": false,
             "description": "Include GitHub Security Advisory vulnerabilities in checks.",
-            "order": 39
+            "order": 46
           },
           "dependi.vulnerability.osvQueryURL.batch": {
             "type": "string",
@@ -548,7 +614,7 @@
             "format": "url",
             "pattern": "^https?://(?!.*//)([^/]+/)*[^/]+$",
             "default": "https://api.osv.dev/v1/querybatch",
-            "order": 40
+            "order": 47
           },
           "dependi.vulnerability.osvQueryURL.single": {
             "type": "string",
@@ -557,7 +623,7 @@
             "format": "url",
             "pattern": "^https?://(?!.*//)([^/]+/)*[^/]+$",
             "default": "https://api.osv.dev/v1/query",
-            "order": 41
+            "order": 48
           }
         }
       },
@@ -867,7 +933,7 @@
             "order": 20
           }
         }
-      },  
+      },
       {
         "title": "Extras",
         "properties": {

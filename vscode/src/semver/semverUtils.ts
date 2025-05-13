@@ -142,6 +142,8 @@ function treatAsUpToDate(): boolean {
       return Settings.go.silenceVersionOverflows;
     case Language.Python:
       return Settings.python.silenceVersionOverflows;
+    case Language.Dart:
+      return Settings.dart.silenceVersionOverflows;
   }
   return false;
 }

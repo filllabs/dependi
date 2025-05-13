@@ -1,13 +1,13 @@
 # Dependi: Your Ultimate Dependency Management Tool
 
-Dependi is a comprehensive dependency management extension that helps developers write code faster and smarter by efficiently managing project dependencies. Formerly known as Crates the most loved and used dependency management extension for Rust. Dependi now supports multiple languages including Rust, Go, JavaScript, TypeScript, Python and PHP.
+Dependi is a comprehensive dependency management extension that helps developers write code faster and smarter by efficiently managing project dependencies. Formerly known as Crates the most loved and used dependency management extension for Rust. Dependi now supports multiple languages including Rust, Go, JavaScript, TypeScript, Python, PHP and Dart.
 
 [Install](https://www.dependi.io/download) Dependi via VSCode or [Dependi.io](https://www.dependi.io)
 
 
 When you install Dependi in Visual Studio Code, 2 options are available :
 
-- Dependi Core: Provides essential dependency management for Rust, Go, JavaScript, TypeScript, Python and PHP projects. Free to use with no subscription required.
+- Dependi Core: Provides essential dependency management for Rust, Go, JavaScript, TypeScript, Python, PHP and Dart projects. Free to use with no subscription required.
 
 - [Dependi Pro:](https://www.dependi.io) Offers many advanced features like detailed vulnerability reports, private repository support, and priority support... Easy subscription packages and [free trials](https://www.dependi.io/#pricing) are available.
 
@@ -35,6 +35,9 @@ Dependi simplifies dependency management in Visual Studio Code, helping you to:
   - **PHP**:
     - Documentation: [https://www.php.net/docs.php](https://www.php.net/docs.php)
     - Package Repository (Packagist): [https://repo.packagist.org](https://repo.packagist.org)
+  - **Dart / Flutter**:
+    - Documentation: [https://dart.dev/docs](https://dart.dev/docs)
+    - Package Repository (pub.dev): [https://pub.dev](https://pub.dev)
     
 - **Vulnerabilities at a Glance**: Quickly identify vulnerabilities in your project dependencies and take action to mitigate risks.
   ![Vulnerabilities at a Glance](https://www.dependi.io/screenshots/vuln.png)
@@ -42,7 +45,7 @@ Dependi simplifies dependency management in Visual Studio Code, helping you to:
 - **Vulnerability Reports**: Generate comprehensive reports detailing the vulnerabilities in your dependencies, helping you maintain secure codebases.
   ![Vulnerability Reports](https://www.dependi.io/screenshots/report.png)
 
-- **Supported Languages and Frameworks**: Dependi works with a variety of languages including Rust, Go, JavaScript, TypeScript,  Python and PHP. It is designed to support most popular languages and frameworks, making it a versatile tool for developers.
+- **Supported Languages and Frameworks**: Dependi works with a variety of languages including Rust, Go, JavaScript, TypeScript,  Python, PHP and Dart. It is designed to support most popular languages and frameworks, making it a versatile tool for developers.
 
 For more information about the feature set [visit here](https://www.dependi.io/#features).
 

@@ -2,11 +2,9 @@ import { satisfies } from "semver";
 import Item from "../Item";
 
 export class State {
-  isTable: boolean;
   lockedValue: string;
   dependency: string;
   constructor() {
-    this.isTable = false;
     this.lockedValue = "";
     this.dependency = "";
   }
@@ -28,7 +26,7 @@ export class TomlLockFileParser {
             line = doc[++row];
             if (line.startsWith("version")) {
               state.lockedValue = this.getParsedVersion(line);
-              this.setLockValue(state, items);
+              setLockValue(state, items);
               row++;
             }
           }
@@ -41,19 +39,6 @@ export class TomlLockFileParser {
 
   isTableSection(line: string): boolean {
     return line.startsWith("[[") && line.endsWith("]]");
-  }
-
-  setLockValue(state: State, items: Item[]): void {
-    let foundItem = items.find((item) => item.key === state.dependency);
-    if (
-      foundItem &&
-      (!foundItem.lockedAt ||
-        (foundItem.value && satisfies(state.lockedValue, foundItem.value)))
-    ) {
-      foundItem.lockedAt = state.lockedValue;
-    }
-    state.lockedValue = "";
-    state.dependency = "";
   }
 
   getPackageName(line: string): string {
@@ -72,4 +57,17 @@ export function isPackagePresent(items: Item[], packageName: string): boolean {
 }
 export function clearText(text: string) {
   return text.replace(/[^a-zA-Z0-9-_.*+]/g, "").trim();
+}
+
+export function setLockValue(state: State, items: Item[]): void {
+  let foundItem = items.find((item) => item.key === state.dependency);
+  if (
+    foundItem &&
+    (!foundItem.lockedAt ||
+      (foundItem.value && satisfies(state.lockedValue, foundItem.value)))
+  ) {
+    foundItem.lockedAt = state.lockedValue;
+  }
+  state.lockedValue = "";
+  state.dependency = "";
 }
