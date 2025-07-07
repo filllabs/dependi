@@ -33,6 +33,15 @@ export const updateAll = commands.registerTextEditorCommand(
         Logger.appendLine(`Dependency not found ${rItem.key}`);
         continue;
       }
+      let newVersion = rItem.version;
+      if (editor.document.fileName.endsWith('package.json')) {
+        const oldVersion = editor.document.getText(dep.item.range);
+        const match = oldVersion.match(/^(\^|~|>=|<=|>|<|=)?(.+)$/);
+        if (match) {
+          const prefix = match[1] || '';
+          newVersion = prefix + rItem.version;
+        }
+      }
       edit.replace(
         new Range(
           dep.item.range.start.line,
@@ -40,7 +49,7 @@ export const updateAll = commands.registerTextEditorCommand(
           dep.item.range.end.line,
           dep.item.range.end.character,
         ),
-        rItem.version,
+        newVersion,
       );
     }
     status.inProgress = false;
