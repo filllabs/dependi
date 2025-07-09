@@ -29,14 +29,20 @@ export abstract class Listener {
     // traverse cache and update items of dependencies
     let cache = DependencyCache.get(CurrentLanguage);
     if (!cache) {
-      cache = new NodeCache({ stdTTL: 5 * 60, checkperiod: 5 * 30, useClones: false });
+      cache = new NodeCache({
+        stdTTL: 5 * 60,
+        checkperiod: 5 * 30,
+        useClones: false,
+      });
       DependencyCache.set(CurrentLanguage, cache);
     }
-    dependencies = dependencies.map(dep => {
-      let cached = cache.get<Dependency>(dep.item.key + dep.item.range.start.line);
+    dependencies = dependencies.map((dep) => {
+      let cached = cache.get<Dependency>(
+        dep.item.key + dep.item.range.start.line
+      );
       if (cached) {
         if (dep.item.value === "latest") {
-          dep.item.value = cached.item.latestVersion
+          dep.item.value = cached.item.latestVersion;
         }
         dep.item.latestVersion = cached.item.latestVersion;
         cached.item = dep.item;
@@ -51,16 +57,16 @@ export abstract class Listener {
     });
 
     return dependencies;
-  };
-
-
+  }
 
   async parseAndDecorate(editor: TextEditor) {
     try {
       // parallel fetch versions
       // create initial fetchedDeps from dependencies
       let dependencies = this.parse(editor);
-      const promises: Promise<Dependency[]>[] = [this.fetcher.versions(dependencies)];
+      const promises: Promise<Dependency[]>[] = [
+        this.fetcher.versions(dependencies),
+      ];
       // fetch current vulnerabilities depends on check parameter.
       if (Settings.vulnerability.enabled) {
         // fetch vulns for current versions only to quickly show vulnerabilities.
@@ -71,8 +77,11 @@ export abstract class Listener {
       await Promise.all(promises);
 
       // clear replaceAllData set new data
-      status.updateAllData = dependencies.map((d) => ({ key: d.item.key, version: d.versions?.[0] ?? "", startLine: d.item.range.start.line }));
-
+      status.updateAllData = dependencies.map((d) => ({
+        key: d.item.key,
+        version: this.buildVersionWithPrefix(d),
+        startLine: d.item.range.start.line,
+      }));
 
       // parallel fetch vulns for current versions
       decorate(editor, dependencies, CurrentLanguage);
@@ -88,4 +97,17 @@ export abstract class Listener {
     }
   }
   modifyDependecy(dep: Dependency): void {}
+  buildVersionWithPrefix(dependency: Dependency): string {
+    const latestVersion = dependency.versions?.[0] ?? "";
+    const currentValue = dependency.item.value || "";
+
+    if (currentValue === "*") {
+      return "*";
+    }
+
+    const prefixMatch = currentValue.match(/^(\^|~|>=|<=|>|<|=)?(.+)$/);
+    const prefix = prefixMatch ? prefixMatch[1] : "";
+
+    return prefix + latestVersion;
+  }
 }
