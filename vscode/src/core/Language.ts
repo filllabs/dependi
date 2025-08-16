@@ -11,6 +11,7 @@ export enum Language {
     Python = 4,
     PHP = 5,
     Dart = 6,
+    CSharp = 7,
 }
 
 export enum OCVEnvironment {
@@ -20,6 +21,7 @@ export enum OCVEnvironment {
     Pypi = "PyPI",
     Go = "Go",
     Dart = "Pub",
+    Nuget = "NuGet",
 }
 export var CurrentLanguage: Language = Language.None;
 export var CurrentLanguageConfig: string = "";
@@ -46,9 +48,15 @@ export function setLanguage(file?: string) {
         case "pixi.toml":
             return setLanguageConfig(Language.Python, "python", filename, OCVEnvironment.Pypi, Settings.python.lockFileEnabled);
         case "pubspec.yaml":
-            return setLanguageConfig(Language.Dart, "dart", filename, OCVEnvironment.Dart);    
+            return setLanguageConfig(Language.Dart, "dart", filename, OCVEnvironment.Dart);
+        case "directory.build.props":
+        case "directory.packages.props":
+            return setLanguageConfig(Language.CSharp, "csharp", filename, OCVEnvironment.Nuget); 
         default:
-            if ((fileExtension === ".txt" || fileExtension === ".in") &&  filename.toLowerCase().startsWith("requirement")) {
+            if (fileExtension === ".csproj") {
+                return setLanguageConfig(Language.CSharp, "csharp", filename, OCVEnvironment.Nuget);
+            }
+            if ((fileExtension === ".txt" || fileExtension === ".in") && filename.toLowerCase().startsWith("requirement")) {
                 return setLanguageConfig(Language.Python, "python", filename, OCVEnvironment.Pypi, Settings.python.lockFileEnabled);
             }
     }
