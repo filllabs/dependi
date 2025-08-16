@@ -58,6 +58,14 @@ export enum Configs {
   DART_ENABLED_LOCK_FILE = `dart.lockFileEnabled`,
   DART_SILENCE_VERSION_OVERFLOWS = `dart.silenceVersionOverflows`,
 
+  CSHARP_ENABLED = `csharp.enabled`,
+  CSHARP_INDEX_SERVER_URL = `csharp.indexServerURL`,
+  CSHARP_UNSTABLE_FILTER = `csharp.unstableFilter`,
+  CSHARP_IGNORE_LINE_PATTERN = `csharp.ignoreLinePattern`,
+  CSHARP_INFORM_PATCH_UPDATES = `csharp.informPatchUpdates`,
+  CSHARP_ENABLED_LOCK_FILE = `csharp.lockFileEnabled`,
+  CSHARP_SILENCE_VERSION_OVERFLOWS = `csharp.silenceVersionOverflows`,
+
   VULS_ENABLED = `vulnerability.enabled`,
   VULS_GHSA_ENABLED = `vulnerability.ghsa.enabled`,
   VULS_OSV_BATCH_URL = `vulnerability.osvQueryURL.batch`,
@@ -161,6 +169,15 @@ export const Settings = {
     lockFileEnabled: true,
     silenceVersionOverflows: false
   },
+  csharp: {
+    enabled: true,
+    index: "",
+    unstableFilter: UnstableFilter.Exclude,
+    ignoreLinePattern: "",
+    informPatchUpdates: false,
+    lockFileEnabled: true,
+    silenceVersionOverflows: false
+  },
   vulnerability: {
     enabled: false,
     ghsa: false,
@@ -250,6 +267,14 @@ export const Settings = {
     this.dart.informPatchUpdates = config.get<boolean>(Configs.DART_INFORM_PATCH_UPDATES) ?? false;
     this.dart.lockFileEnabled = config.get<boolean>(Configs.DART_ENABLED_LOCK_FILE) ?? true;
     this.dart.silenceVersionOverflows = config.get<boolean>(Configs.DART_SILENCE_VERSION_OVERFLOWS) ?? false;
+    
+    this.csharp.enabled = config.get<boolean>(Configs.CSHARP_ENABLED) ?? true;
+    this.csharp.index = config.get<string>(Configs.CSHARP_INDEX_SERVER_URL) || "https://api.nuget.org";
+    this.csharp.unstableFilter = UnstableFilter[config.get<string>(Configs.CSHARP_UNSTABLE_FILTER) as keyof typeof UnstableFilter] || UnstableFilter.Exclude;
+    this.csharp.ignoreLinePattern = config.get<string>(Configs.CSHARP_IGNORE_LINE_PATTERN) || "";
+    this.csharp.informPatchUpdates = config.get<boolean>(Configs.CSHARP_INFORM_PATCH_UPDATES) ?? false;
+    this.csharp.lockFileEnabled = config.get<boolean>(Configs.CSHARP_ENABLED_LOCK_FILE) ?? true;
+    this.csharp.silenceVersionOverflows = config.get<boolean>(Configs.CSHARP_SILENCE_VERSION_OVERFLOWS) ?? false;
 
     this.vulnerability.enabled = config.get<boolean>(Configs.VULS_ENABLED) ?? true;
     this.vulnerability.ghsa = config.get<boolean>(Configs.VULS_GHSA_ENABLED) ?? false;

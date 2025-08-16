@@ -32,6 +32,7 @@
     "javascript",
     "ts",
     "typescript",
+    "csharp",
     "crates",
     "pypi",
     "pip",
@@ -43,6 +44,7 @@
     "packagist",
     "composer",
     "cargo",
+    "nuget",
     "package",
     "dependi",
     "requirements",
@@ -78,7 +80,13 @@
     "onLanguage:pyproject.toml",
     "workspaceContains:**/pyproject.toml",
     "onLanguage:pubspec.yaml",
-    "workspaceContains:**/pubspec.yaml"
+    "workspaceContains:**/pubspec.yaml",
+    "onLanguage:csproj",
+    "workspaceContains:**/*.csproj",
+    "onLanguage:Directory.Build.props",
+    "workspaceContains:**/Directory.Build.props",
+    "onLanguage:Directory.Packages.props",
+    "workspaceContains:**/Directory.Packages.props"
   ],
   "contributes": {
     "menus": {
@@ -983,6 +991,7 @@
   "dependencies": {
     "@neuralegion/cvss": "1.2.2",
     "fast-toml": "0.5.4",
+    "fast-xml-parser": "5.2.5",
     "node-cache": "5.1.2",
     "release-please": "16.12.0",
     "semver": "7.6.3"
