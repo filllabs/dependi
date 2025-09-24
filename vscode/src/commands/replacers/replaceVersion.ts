@@ -12,33 +12,31 @@ import { Logger } from "../../extension";
  * @param edit The text editor edit.
  * @param info The replace item.
  */
-export const replaceVersion = commands.registerTextEditorCommand(
-  Configs.REPLACE_VERSIONS,
-  (editor: TextEditor, edit: TextEditorEdit, data: CommandData) => {
-    if (editor && data && !status.inProgress) {
+export const replaceVersion: import("vscode").Disposable | undefined = process.env.DEPENDI_HEADLESS
+  ? undefined
+  : commands.registerTextEditorCommand(Configs.REPLACE_VERSIONS, (editor: TextEditor, edit: TextEditorEdit, data: CommandData) => {
+      if (editor && data && !status.inProgress) {
+        status.inProgress = true;
 
-      status.inProgress = true;
+        const dep = DependencyCache.get(CurrentLanguage)?.get<Dependency>(data.key + data.startLine);
 
-      const dep = DependencyCache.get(CurrentLanguage)?.get<Dependency>(data.key + data.startLine);
-
-      if (!dep) {
+        if (!dep) {
+          status.inProgress = false;
+          return;
+        }
+        const range = new Range(
+          dep.item.range.start.line,
+          dep.item.range.start.character,
+          dep.item.range.end.line,
+          dep.item.range.end.character
+        );
+        edit.replace(range, data.version);
         status.inProgress = false;
-        return;
       }
-      const range = new Range(
-        dep.item.range.start.line,
-        dep.item.range.start.character,
-        dep.item.range.end.line,
-        dep.item.range.end.character,
-      );
-      edit.replace(range, data.version);
-      status.inProgress = false;
-    }
-    workspace.save(editor.document.uri).then((uri) => {
-      if (!uri) {
-        console.error("Failed to save", uri);
-        Logger.appendLine(`Failed to save ${uri}`);
-      }
+      workspace.save(editor.document.uri).then((uri) => {
+        if (!uri) {
+          console.error("Failed to save", uri);
+          Logger.appendLine(`Failed to save ${uri}`);
+        }
+      });
     });
-  },
-);

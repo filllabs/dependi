@@ -58,6 +58,12 @@ export enum Configs {
   DART_ENABLED_LOCK_FILE = `dart.lockFileEnabled`,
   DART_SILENCE_VERSION_OVERFLOWS = `dart.silenceVersionOverflows`,
 
+  HELM_ENABLED = `helm.enabled`,
+  HELM_UNSTABLE_FILTER = `helm.unstableFilter`,
+  HELM_IGNORE_LINE_PATTERN = `helm.ignoreLinePattern`,
+  HELM_INFORM_PATCH_UPDATES = `helm.informPatchUpdates`,
+  HELM_SILENCE_VERSION_OVERFLOWS = `helm.silenceVersionOverflows`,
+
   VULS_ENABLED = `vulnerability.enabled`,
   VULS_GHSA_ENABLED = `vulnerability.ghsa.enabled`,
   VULS_OSV_BATCH_URL = `vulnerability.osvQueryURL.batch`,
@@ -65,7 +71,6 @@ export enum Configs {
 
   INDEX_SERVER_API_KEY = `apiKey`,
   INDEX_SERVER_URL = `apiURL`,
-
 
   DECORATOR_POSITION = `decoration.position`,
 
@@ -93,12 +98,11 @@ export enum Configs {
   // Extras
   SILENCE_UPDATE_MESSAGES = `extras.silenceUpdateMessages`,
 
-
   //Storage
   DEVICE_ID = `${DEPENDI}deviceID`,
   SHOWN_VERSION = `${DEPENDI}shownVersion`,
 
-  // Old Settings 
+  // Old Settings
   RUST_UNSTABLE_OLD = `rust.excludeUnstableVersions`,
   NPM_UNSTABLE_OLD = `npm.excludeUnstableVersions`,
   PHP_UNSTABLE_OLD = `php.excludeUnstableVersions`,
@@ -161,6 +165,13 @@ export const Settings = {
     lockFileEnabled: true,
     silenceVersionOverflows: false
   },
+  helm: {
+    enabled: true,
+    unstableFilter: UnstableFilter.Exclude,
+    ignoreLinePattern: "",
+    informPatchUpdates: false,
+    silenceVersionOverflows: false
+  },
   vulnerability: {
     enabled: false,
     ghsa: false,
@@ -172,7 +183,6 @@ export const Settings = {
     url: "",
     proPanelURL: "https://www.dependi.io/pro",
     deviceID: ""
-
   },
   decorator: {
     position: "" as DecorationPosition,
@@ -211,7 +221,7 @@ export const Settings = {
     this.rust.informPatchUpdates = config.get<boolean>(Configs.RUST_INFORM_PATCH_UPDATES) ?? false;
     this.rust.lockFileEnabled = config.get<boolean>(Configs.RUST_ENABLED_LOCK_FILE) ?? true;
     this.rust.silenceVersionOverflows = config.get<boolean>(Configs.RUST_SILENCE_VERSION_OVERFLOWS) ?? false;
-    
+
     this.npm.enabled = config.get<boolean>(Configs.NPM_ENABLED) ?? true;
     this.npm.index = config.get<string>(Configs.NPM_INDEX_SERVER_URL) || "https://registry.npmjs.org";
     this.npm.unstableFilter = migrateUnstableSettings(Configs.NPM_UNSTABLE_FILTER, Configs.NPM_UNSTABLE_OLD);
@@ -251,6 +261,12 @@ export const Settings = {
     this.dart.lockFileEnabled = config.get<boolean>(Configs.DART_ENABLED_LOCK_FILE) ?? true;
     this.dart.silenceVersionOverflows = config.get<boolean>(Configs.DART_SILENCE_VERSION_OVERFLOWS) ?? false;
 
+    this.helm.enabled = config.get<boolean>(Configs.HELM_ENABLED) ?? true;
+    this.helm.unstableFilter = migrateUnstableSettings(Configs.HELM_UNSTABLE_FILTER, Configs.HELM_UNSTABLE_FILTER);
+    this.helm.ignoreLinePattern = config.get<string>(Configs.HELM_IGNORE_LINE_PATTERN) || "";
+    this.helm.informPatchUpdates = config.get<boolean>(Configs.HELM_INFORM_PATCH_UPDATES) ?? false;
+    this.helm.silenceVersionOverflows = config.get<boolean>(Configs.HELM_SILENCE_VERSION_OVERFLOWS) ?? false;
+
     this.vulnerability.enabled = config.get<boolean>(Configs.VULS_ENABLED) ?? true;
     this.vulnerability.ghsa = config.get<boolean>(Configs.VULS_GHSA_ENABLED) ?? false;
     this.vulnerability.osvBatch = config.get<string>(Configs.VULS_OSV_BATCH_URL) || "https://api.osv.dev/v1/querybatch";
@@ -282,7 +298,7 @@ export const Settings = {
   }
 };
 
-function migrateUnstableSettings(newSettingKey: string , oldSettingKey: string): UnstableFilter {
+function migrateUnstableSettings(newSettingKey: string, oldSettingKey: string): UnstableFilter {
   const config = workspace.getConfiguration("dependi");
   const filter = config.get<string>(newSettingKey);
   if (Settings.version > "0.7.9") {

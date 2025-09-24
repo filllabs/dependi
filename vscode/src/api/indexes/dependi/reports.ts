@@ -39,6 +39,7 @@ export enum Language {
   Python,
   PHP,
   Dart,
+  Helm
 }
 
 const LanguageArray = [
@@ -47,6 +48,7 @@ const LanguageArray = [
   { ID: Language.JS, Name: "package.json" },
   { ID: Language.PHP, Name: "composer.json" },
   { ID: Language.Python, Name: "requirements.txt" },
+  { ID: Language.Helm, Name: "Chart.yaml" }
 ];
 
 export const getLangIdFromName = (name: string): Language => LanguageArray.find((lang) => lang.Name === name)?.ID ?? Language.None;
@@ -57,10 +59,10 @@ export async function getVulnReport(req: VulnReq, options?: RequestInit) {
     headers: {
       Authorization: Settings.api.key,
       "X-Device-ID": Settings.api.deviceID,
-      "Content-Type": "application/json",
+      "Content-Type": "application/json"
     },
     body: JSON.stringify(req),
-    ...options,
+    ...options
   });
   return response;
 }
@@ -71,10 +73,10 @@ export async function getCurrentVulnReport(req: VulnReq, options?: RequestInit) 
     headers: {
       Authorization: Settings.api.key,
       "X-Device-ID": Settings.api.deviceID,
-      "Content-Type": "application/json",
+      "Content-Type": "application/json"
     },
     body: JSON.stringify(req),
-    ...options,
+    ...options
   });
   return response;
 }
@@ -86,8 +88,8 @@ export async function getReportPDF(req: string, options?: RequestInit) {
     headers: {
       Authorization: Settings.api.key,
       "X-Device-ID": Settings.api.deviceID,
-      "Content-Type": "application/json",
+      "Content-Type": "application/json"
     },
-    ...options,
+    ...options
   });
 }

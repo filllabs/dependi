@@ -2,7 +2,6 @@ import { compare, gt, maxSatisfying, minVersion, satisfies } from "semver";
 import { Settings } from "../config";
 import { CurrentLanguage, Language } from "../core/Language";
 
-
 export function checkVersion(version: string = "0.0.0", versions: string[], lockedAt?: string): [boolean, boolean, string | null] {
   let v = versionToSemver(version, true);
 
@@ -45,8 +44,11 @@ export function checkVersion(version: string = "0.0.0", versions: string[], lock
     case Language.Python:
       shouldPatchBeChecked = Settings.python.informPatchUpdates;
       break;
+    case Language.Helm:
+      shouldPatchBeChecked = Settings.helm.informPatchUpdates;
+      break;
   }
-  const pathUpdated = shouldPatchBeChecked ? compare(max, minVersion(v) ?? '0.0.0') === 1 : false;
+  const pathUpdated = shouldPatchBeChecked ? compare(max, minVersion(v) ?? "0.0.0") === 1 : false;
   const maxSatisfyingVersion = maxSatisfying(semverVersions, v);
   if (maxSatisfyingVersion && CurrentLanguage === Language.Python) {
     return [satisfies(max, v), pathUpdated, versionMap[maxSatisfyingVersion]];
@@ -65,7 +67,7 @@ function mapVersions(versions: string[], semverVersions: string[]): Record<strin
 
 function ensureCaretPrefix(version: string): string {
   const prefix = version.charCodeAt(0);
-  return (prefix > 47 && prefix < 58) ? `^${version}` : version;
+  return prefix > 47 && prefix < 58 ? `^${version}` : version;
 }
 
 function checkLockedVersion(lockedAt: string, version: string, semverVersions: string[]): [boolean, boolean, string | null] | null {
@@ -90,7 +92,7 @@ function normalizeVersion(version: string, isCurrentVersion?: boolean): string {
   // count the number of dots in the version string
   let dotCount = 0;
   for (let i = 0; i < version.length; i++) {
-    if (version[i] === '.') {
+    if (version[i] === ".") {
       dotCount++;
       if (dotCount > 1) {
         return version;
@@ -107,15 +109,15 @@ function normalizeVersion(version: string, isCurrentVersion?: boolean): string {
 
 function convertPythonVersion(version: string): string {
   return version
-      .replace(/\.dev(\d+)/, '-dev.$1')
-      .replace(/\.post(\d+)/, '-post.$1')
-      .replace(/\.a(\d+)/, '-alpha.$1')
-      .replace(/\.b(\d+)/, '-beta.$1')
-      .replace(/\.rc(\d+)/, '-rc.$1')
-      .replace(/a(\d+)/, '-alpha.$1')
-      .replace(/b(\d+)/, '-beta.$1')
-      .replace(/rc(\d+)/, '-rc.$1')
-      .replace(/c(\d+)/, '-c.$1')
+    .replace(/\.dev(\d+)/, "-dev.$1")
+    .replace(/\.post(\d+)/, "-post.$1")
+    .replace(/\.a(\d+)/, "-alpha.$1")
+    .replace(/\.b(\d+)/, "-beta.$1")
+    .replace(/\.rc(\d+)/, "-rc.$1")
+    .replace(/a(\d+)/, "-alpha.$1")
+    .replace(/b(\d+)/, "-beta.$1")
+    .replace(/rc(\d+)/, "-rc.$1")
+    .replace(/c(\d+)/, "-c.$1");
 }
 
 export function convertPythonVersionToSemver(version: string): string {
@@ -127,7 +129,7 @@ export function convertPythonVersionToSemver(version: string): string {
     const major = match[1];
     const minor = match[2];
     const patch = match[3] || 0;
-    const preRelease = match[4]? `-${match[4].slice(1)}`  :"";
+    const preRelease = match[4] ? `-${match[4].slice(1)}` : "";
 
     const normalizedVersion = `${major}.${minor}.${patch}${preRelease}`;
     return normalizedVersion;
@@ -150,6 +152,8 @@ function treatAsUpToDate(): boolean {
       return Settings.python.silenceVersionOverflows;
     case Language.Dart:
       return Settings.dart.silenceVersionOverflows;
+    case Language.Helm:
+      return Settings.helm.silenceVersionOverflows;
   }
   return false;
 }

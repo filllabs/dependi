@@ -1,8 +1,8 @@
 {
   "name": "dependi",
   "displayName": "Dependi",
-  "description": "Empowers developers to efficiently manage dependencies and address vulnerabilities in Rust, Go, JavaScript, Typescript, PHP and Python projects.",
-  "version": "0.7.15",
+  "description": "Empowers developers to efficiently manage dependencies and address vulnerabilities in Rust, Go, JavaScript, Typescript, PHP, Python and Helm Chart projects.",
+  "version": "0.8.0",
   "publisher": "fill-labs",
   "author": {
     "name": "Fill Labs",
@@ -49,7 +49,10 @@
     "vulnerability",
     "security",
     "update",
-    "toml"
+    "toml",
+    "helm",
+    "chart",
+    "kubernetes"
   ],
   "categories": [
     "Programming Languages",
@@ -73,7 +76,9 @@
     "onLanguage:pixi.toml",
     "workspaceContains:**/pixi.toml",
     "onLanguage:pyproject.toml",
-    "workspaceContains:**/pyproject.toml"
+    "workspaceContains:**/pyproject.toml",
+    "onLanguage:Chart.yaml",
+    "workspaceContains:**/Chart.yaml"
   ],
   "contributes": {
     "menus": {
@@ -591,6 +596,56 @@
         }
       },
       {
+        "title": "Helm Settings",
+        "properties": {
+          "dependi.helm.enabled": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": true,
+            "description": "Enable checking for Helm Chart dependencies.",
+            "order": 145
+          },
+          "dependi.helm.unstableFilter": {
+            "type": "string",
+            "enum": [
+              "Exclude",
+              "IncludeAlways",
+              "IncludeIfUnstable"
+            ],
+            "default": "Exclude",
+            "scope": "resource",
+            "enumDescriptions": [
+              "Exclude them (default)",
+              "Include them and always consider as latest",
+              "Include if the current version is already unstable"
+            ],
+            "description": "Filter unstable chart versions: Exclude, Include Always, or Include If Unstable.",
+            "order": 146
+          },
+          "dependi.helm.ignoreLinePattern": {
+            "type": "string",
+            "scope": "resource",
+            "default": "",
+            "markdownDescription": "Regex pattern to ignore lines while parsing Chart.yaml dependencies.",
+            "order": 147
+          },
+          "dependi.helm.informPatchUpdates": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": false,
+            "description": "Inform about available patch updates for Helm charts via decoration.",
+            "order": 148
+          },
+          "dependi.helm.silenceVersionOverflows": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": false,
+            "description": "Consider a chart as up-to-date if its version exceeds repository max.",
+            "order": 149
+          }
+        }
+      },
+      {
         "title": "Vulnerability Settings",
         "properties": {
           "dependi.vulnerability.enabled": {
@@ -956,7 +1011,8 @@
     "esbuild-watch": "npm run esbuild-base -- --sourcemap --watch",
     "test-compile": "tsc -p ./",
     "build": "npm run esbuild",
-    "package": "npx vsce package"
+    "package": "npx vsce package",
+    "test-helm": "npx ts-node --project tsconfig.json scripts/test-helm.ts"
   },
   "types": "vscode",
   "devDependencies": {
@@ -973,14 +1029,16 @@
     "eslint": "9.9.0",
     "glob": "11.0.0",
     "mocha": "10.7.3",
-    "typescript": "5.5.4"
+    "typescript": "5.5.4",
+    "ts-node": "10.9.2"
   },
   "dependencies": {
     "@neuralegion/cvss": "1.2.2",
     "fast-toml": "0.5.4",
     "node-cache": "5.1.2",
     "release-please": "16.12.0",
-    "semver": "7.6.3"
+    "semver": "7.6.3",
+    "yaml": "2.5.0"
   },
   "extensionDependencies": [
     "vscode.git"
