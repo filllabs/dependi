@@ -20,13 +20,15 @@ import { CargoTomlListener } from "./CargoTomlListener";
 import { DependiListener } from "./DependiListener";
 import { GoModListener } from "./GoModListener";
 import { NpmListener } from "./NpmListener";
-import { PhpListener } from './PhpListener';
+import { PhpListener } from "./PhpListener";
 import { PypiListener } from "./PypiListener";
 import { Listener } from "./listener";
 import { PubspecListener } from "./PubspecListener";
 import { PubDevFetcher } from "../fetchers/PubDevFetcher";
 import { PubspecParser } from "../parsers/PubspecParser";
-
+import { HelmChartParser } from "../parsers/HelmChartParser";
+import { HelmFetcher } from "../fetchers/HelmFetcher";
+import { HelmListener } from "./HelmListener";
 
 export default async function listener(editor: TextEditor | undefined): Promise<void> {
   if (!editor || !editor.document || editor.document.isDirty) {
@@ -37,58 +39,40 @@ export default async function listener(editor: TextEditor | undefined): Promise<
   let listener: Listener | undefined = undefined;
   switch (CurrentLanguage) {
     case Language.Rust:
-      if (!Settings.rust.enabled)
-        return;
-      listener = new CargoTomlListener(
-        new CratesFetcher(Settings.rust.index, Configs.RUST_INDEX_SERVER_URL),
-        new CargoTomlParser());
+      if (!Settings.rust.enabled) return;
+      listener = new CargoTomlListener(new CratesFetcher(Settings.rust.index, Configs.RUST_INDEX_SERVER_URL), new CargoTomlParser());
       break;
     case Language.Golang:
-      if (!Settings.go.enabled)
-        return;
-      listener = new GoModListener(
-        new GoProxyFetcher(Settings.go.index, Configs.GO_INDEX_SERVER_URL),
-        new GoModParser());
+      if (!Settings.go.enabled) return;
+      listener = new GoModListener(new GoProxyFetcher(Settings.go.index, Configs.GO_INDEX_SERVER_URL), new GoModParser());
       break;
     case Language.JS:
-      if (!Settings.npm.enabled)
-        return;
-      listener = new NpmListener(
-        new NpmFetcher(Settings.npm.index, Configs.NPM_INDEX_SERVER_URL),
-        new NpmParser());
+      if (!Settings.npm.enabled) return;
+      listener = new NpmListener(new NpmFetcher(Settings.npm.index, Configs.NPM_INDEX_SERVER_URL), new NpmParser());
       break;
     case Language.PHP:
-      if (!Settings.php.enabled)
-        return;
-      listener = new PhpListener(
-        new PackagistFetcher(Settings.php.index, Configs.PHP_INDEX_SERVER_URL),
-        new PhpParser());
+      if (!Settings.php.enabled) return;
+      listener = new PhpListener(new PackagistFetcher(Settings.php.index, Configs.PHP_INDEX_SERVER_URL), new PhpParser());
       break;
     case Language.Python:
       console.log("Python");
-      if (!Settings.python.enabled)
-        return;
+      if (!Settings.python.enabled) return;
       const fileName = path.basename(editor.document.fileName);
-      const parser = (fileName === "pyproject.toml" || fileName === "pixi.toml" )
-        ? new PyProjectParser()
-        : new PypiParser();
-      listener = new PypiListener(
-        new PypiFetcher(Settings.python.index, Configs.PYTHON_INDEX_SERVER_URL),
-        parser);
+      const parser = fileName === "pyproject.toml" || fileName === "pixi.toml" ? new PyProjectParser() : new PypiParser();
+      listener = new PypiListener(new PypiFetcher(Settings.python.index, Configs.PYTHON_INDEX_SERVER_URL), parser);
       break;
     case Language.Dart:
-      if (!Settings.dart.enabled)
-        return;
-      listener = new PubspecListener(
-        new PubDevFetcher(Settings.dart.index, Configs.DART_INDEX_SERVER_URL),
-        new PubspecParser());
+      if (!Settings.dart.enabled) return;
+      listener = new PubspecListener(new PubDevFetcher(Settings.dart.index, Configs.DART_INDEX_SERVER_URL), new PubspecParser());
+      break;
+    case Language.Helm:
+      if (!Settings.helm.enabled) return;
+      listener = new HelmListener(new HelmFetcher(), new HelmChartParser());
       break;
   }
   if (listener !== undefined) {
-    if (Settings.api.key !== "" && Settings.api.url !== "") {
-      listener = new DependiListener(
-        new DependiFetcher(Settings.api.url, Configs.INDEX_SERVER_URL),
-        listener.parser);
+    if (CurrentLanguage !== Language.Helm && Settings.api.key !== "" && Settings.api.url !== "") {
+      listener = new DependiListener(new DependiFetcher(Settings.api.url, Configs.INDEX_SERVER_URL), listener.parser);
     }
     if (!status.inProgress) {
       status.inProgress = true;
@@ -100,5 +84,4 @@ export default async function listener(editor: TextEditor | undefined): Promise<
       });
     }
   }
-
 }

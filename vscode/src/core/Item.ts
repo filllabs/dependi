@@ -4,8 +4,6 @@ import { Range } from "vscode";
  * Item is a data structure to define parsed items, hierarchy and index.
  */
 
-
-
 export default class Item {
   key: string = "";
   value: string | undefined = "";
@@ -17,6 +15,8 @@ export default class Item {
   decoRange: Range = new Range(0, 0, 0, 0);
   lockedAt?: string;
   latestVersion?: string;
+  repository?: string; // Helm: repository URL
+  chartName?: string; // Helm: original chart name if alias used
   constructor(item?: Item) {
     if (item) {
       this.key = item.key;
@@ -42,21 +42,11 @@ export default class Item {
 
   /**Create Range */
   createRange() {
-    this.range = new Range(
-      this.line,
-      this.start,
-      this.line,
-      this.end
-    );
+    this.range = new Range(this.line, this.start, this.line, this.end);
   }
   /**Create Decoration Range */
   createDecoRange() {
-    this.decoRange = new Range(
-      this.line,
-      this.start,
-      this.line,
-      this.endOfLine
-    );
+    this.decoRange = new Range(this.line, this.start, this.line, this.endOfLine);
   }
 
   isValid() {

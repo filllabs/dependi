@@ -1,12 +1,12 @@
 # Dependi: Your Ultimate Dependency Management Tool
 
-Dependi is a comprehensive dependency management extension that helps developers write code faster and smarter by efficiently managing project dependencies. Formerly known as Crates the most loved and used dependency management extension for Rust. Dependi now supports multiple languages including Rust, Go, JavaScript, TypeScript, Python, PHP and Dart.
+Dependi is a comprehensive dependency management extension that helps developers write code faster and smarter by efficiently managing project dependencies. Formerly known as Crates the most loved and used dependency management extension for Rust. Dependi now supports multiple languages including Rust, Go, JavaScript, TypeScript, Python, PHP, Dart and Helm.
 
 [Install](https://www.dependi.io/download) Dependi via VSCode or [Dependi.io](https://www.dependi.io)
 
 When you install Dependi in Visual Studio Code, 2 options are available :
 
-- Dependi Core: Provides essential dependency management for Rust, Go, JavaScript, TypeScript, Python, PHP and Dart projects. Free to use with no subscription required.
+- Dependi Core: Provides essential dependency management for Rust, Go, JavaScript, TypeScript, Python, PHP, Dart and Helm Chart projects. Free to use with no subscription required.
 
 - [Dependi Pro:](https://www.dependi.io) Offers many advanced features like detailed vulnerability reports, private repository support, and priority support... Easy subscription packages and [free trials](https://www.dependi.io/#pricing) are available.
 
@@ -48,7 +48,7 @@ Dependi simplifies dependency management in Visual Studio Code, helping you to:
 - **Vulnerability Reports**: Generate comprehensive reports detailing the vulnerabilities in your dependencies, helping you maintain secure codebases.
   ![Vulnerability Reports](https://www.dependi.io/screenshots/report.png)
 
-- **Supported Languages and Frameworks**: Dependi works with a variety of languages including Rust, Go, JavaScript, TypeScript, Python, PHP and Dart. It is designed to support most popular languages and frameworks, making it a versatile tool for developers.
+- **Supported Languages and Frameworks**: Dependi works with a variety of languages including Rust, Go, JavaScript, TypeScript, Python, PHP, Dart and Helm. It is designed to support most popular languages and frameworks, making it a versatile tool for developers.
 
 For more information about the feature set [visit here](https://www.dependi.io/#features).
 
@@ -111,6 +111,11 @@ While Dependi works out-of-the-box without any configuration, we also offer a fe
 - `dependi.dart.unstableFilter`: Filter unstable versions: Exclude, Include Always, or Include If Unstable.
 - `dependi.dart.ignoreLinePattern`: Matches lines based on `*` position: `text*`, `*text`, `*text*`. Multiple patterns can be used, separated by commas.
 - `dependi.dart.silenceVersionOverflows`: Consider non-registry versions of packages as up-to-date if their version exceeds the registry version.
+- `dependi.helm.enabled`: Enable Helm Chart dependency management.
+- `dependi.helm.unstableFilter`: Filter unstable chart versions: Exclude, Include Always, or Include If Unstable.
+- `dependi.helm.ignoreLinePattern`: Regex pattern to ignore lines in Chart.yaml dependencies parsing.
+- `dependi.helm.informPatchUpdates`: Inform about available patch updates for Helm charts.
+- `dependi.helm.silenceVersionOverflows`: Consider chart as up-to-date if its version exceeds repository max.
 - `dependi.vulnerability.enabled`: Enable checking for vulnerabilities in dependencies.
 - `dependi.vulnerability.ghsa.enabled`: Include GitHub Security Advisory vulnerabilities in checks.
 - `dependi.vulnerability.osvQueryURL.batch`: The URL for batch querying vulnerabilities via OSV.
@@ -131,7 +136,7 @@ While Dependi works out-of-the-box without any configuration, we also offer a fe
 
 - `dependi.extras.silenceUpdateMessages`: This setting hides informational update messages when enabled (true).
 
-### Cargo.toml, go.mod, package.json and requirements.txt
+### Cargo.toml, go.mod, package.json, requirements.txt and Chart.yaml
 
 - `# dependi: disable-check`: Disable version check for this specific dependency.
 

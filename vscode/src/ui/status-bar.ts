@@ -14,10 +14,21 @@ interface StatusBarItemExt extends StatusBarItem {
   fetching: (indexServerURL: string) => void;
 }
 
-export const StatusBar: StatusBarItemExt = window.createStatusBarItem(
-  StatusBarAlignment.Right,
-  -1000
+const __safeVSCodeWindow: any = (typeof window !== "undefined" && (window as any)) || {};
+const __rawStatusBarItem = (
+  __safeVSCodeWindow.createStatusBarItem
+    ? __safeVSCodeWindow.createStatusBarItem(StatusBarAlignment.Right, -1000)
+    : {
+        text: "",
+        tooltip: "",
+        color: "",
+        command: undefined,
+        show() {},
+        hide() {}
+      }
 ) as StatusBarItemExt;
+
+export const StatusBar: StatusBarItemExt = __rawStatusBarItem;
 StatusBar.setText = (t: Type, text?: string, noDialog: boolean = false) => {
   switch (t) {
     case "Error":
@@ -53,9 +64,9 @@ StatusBar.setText = (t: Type, text?: string, noDialog: boolean = false) => {
 StatusBar.fetching = (indexServerURL: string) => {
   StatusBar.color = "statusBarItem.activeForeground";
   StatusBar.text = "$(sync~spin) Dependi";
-  StatusBar.tooltip = "👀 Fetching " + indexServerURL.replace(/^https?:\/\//, '');
+  StatusBar.tooltip = "👀 Fetching " + indexServerURL.replace(/^https?:\/\//, "");
   StatusBar.command = Configs.RETRY;
 };
 export default {
-  StatusBar,
+  StatusBar
 };

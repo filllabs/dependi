@@ -2,14 +2,7 @@
 /**
  * This extension helps to manage crate dependency versions.
  */
-import {
-  commands,
-  ExtensionContext,
-  OutputChannel,
-  TextDocumentChangeEvent,
-  window,
-  workspace,
-} from "vscode";
+import { commands, ExtensionContext, OutputChannel, TextDocumentChangeEvent, window, workspace } from "vscode";
 import { replaceVersion } from "./commands/replacers/replaceVersion";
 import { updateAll } from "./commands/replacers/updateAll";
 import { generateCurrentVulnReport } from "./commands/report-generator/generateCurrentVulnReport";
@@ -25,7 +18,6 @@ import { disableLockFileParsing } from "./commands/lock-file/disableLockFilePars
 import { enableLockFileParsing } from "./commands/lock-file/enableLockFileParsing";
 import { lockFileParsed } from "./commands/lock-file/lockFileParsed";
 import { DependencyCache } from "./core/listeners/listener";
-
 
 export var Logger: OutputChannel;
 
@@ -99,12 +91,12 @@ export function activate(context: ExtensionContext) {
     "composer.json",
     "requirements.txt",
     "requirements-dev.txt",
-    "pyproject.toml",
+    "pyproject.toml"
   ]);
 
   console.debug("Adding commands");
   context.subscriptions.push(retry);
-  context.subscriptions.push(replaceVersion);
+  context.subscriptions.push(replaceVersion as any);
   context.subscriptions.push(updateAll);
   context.subscriptions.push(generateVulnerabilityReport(context));
   context.subscriptions.push(generateCurrentVulnReport(context));
@@ -131,11 +123,7 @@ async function configure(context: ExtensionContext) {
     Logger.appendLine("Updated version");
     if (!Settings.extras.silenceUpdateMessages) {
       window
-        .showInformationMessage(
-          "Dependi has been updated to a new version. See the CHANGELOG!",
-          "Show Changelog",
-          "Dismiss"
-        )
+        .showInformationMessage("Dependi has been updated to a new version. See the CHANGELOG!", "Show Changelog", "Dismiss")
         .then((selection) => {
           if (selection === "Show Changelog") {
             ChangelogPanel.render(context);
