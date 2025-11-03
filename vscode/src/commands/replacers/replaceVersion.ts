@@ -31,7 +31,20 @@ export const replaceVersion = commands.registerTextEditorCommand(
         dep.item.range.end.line,
         dep.item.range.end.character,
       );
-      edit.replace(range, data.version);
+      
+      // Preserve semver prefix from original version by reading from the document
+      let newVersion = data.version;
+      const currentVersionText = editor.document.getText(range);
+      const prefixMatch = currentVersionText.match(/^(\^|~|>=?|<=?|=)/);
+      if (prefixMatch) {
+        // Check if the new version doesn't already have a prefix
+        const newVersionHasPrefix = /^(\^|~|>=?|<=?|=)/.test(newVersion);
+        if (!newVersionHasPrefix) {
+          newVersion = prefixMatch[0] + newVersion;
+        }
+      }
+      
+      edit.replace(range, newVersion);
       status.inProgress = false;
     }
     workspace.save(editor.document.uri).then((uri) => {

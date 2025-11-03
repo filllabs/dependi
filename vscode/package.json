@@ -2,7 +2,7 @@
   "name": "dependi",
   "displayName": "Dependi",
   "description": "Empowers developers to efficiently manage dependencies and address vulnerabilities in Rust, Go, JavaScript, Typescript, PHP and Python projects.",
-  "version": "0.7.15",
+  "version": "0.7.16",
   "publisher": "fill-labs",
   "author": {
     "name": "Fill Labs",

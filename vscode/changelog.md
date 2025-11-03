@@ -2,6 +2,14 @@
 
 All notable changes to the "dependi" extension will be documented in this file.
 
+## [v0.7.16](https://github.com/filllabs/dependi/compare/v0.7.15...v0.7.16)
+
+### Bug Fixes
+
+- Fixed preserve SemVer prefixes in config files. ([Issue #244](https://github.com/filllabs/dependi/issues/244)) 
+
+- Fixed the latest version not being detected if there's no space after comparison signs. ([Issue #242](https://github.com/filllabs/dependi/issues/242)) 
+
 ## [v0.7.15](https://github.com/filllabs/dependi/compare/v0.7.14...v0.7.15)
 
 ### New Features
