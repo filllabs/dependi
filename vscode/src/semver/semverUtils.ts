@@ -119,7 +119,16 @@ function convertPythonVersion(version: string): string {
 }
 
 export function convertPythonVersionToSemver(version: string): string {
-  const v = convertPythonVersion(version);
+  // Handle semver operators that may be present (=, ~, >=, <=, >, <)
+  let operator = '';
+  let versionPart = version;
+  const operatorMatch = version.match(/^(=|~|>=?|<=?)/);
+  if (operatorMatch) {
+    operator = operatorMatch[0];
+    versionPart = version.slice(operator.length).trim();
+  }
+  
+  const v = convertPythonVersion(versionPart);
   const pattern = /^(\d+)\.(\d+)(?:\.(\d+))?([-a-zA-Z0-9.]+)?$/;
   const match = v.match(pattern);
 
@@ -130,9 +139,9 @@ export function convertPythonVersionToSemver(version: string): string {
     const preRelease = match[4]? `-${match[4].slice(1)}`  :"";
 
     const normalizedVersion = `${major}.${minor}.${patch}${preRelease}`;
-    return normalizedVersion;
+    return operator + normalizedVersion;
   } else {
-    return v;
+    return operator + v;
   }
 }
 
