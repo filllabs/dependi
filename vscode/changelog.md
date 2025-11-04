@@ -2,6 +2,12 @@
 
 All notable changes to the "dependi" extension will be documented in this file.
 
+## [v0.7.17](https://github.com/filllabs/dependi/compare/v0.7.16...v0.7.17)
+
+### Bug Fixes
+
+- Fixed possibly false negative when using the caret operator in composer.json. ([Issue #252](https://github.com/filllabs/dependi/issues/252)) 
+
 ## [v0.7.16](https://github.com/filllabs/dependi/compare/v0.7.15...v0.7.16)
 
 ### Bug Fixes
