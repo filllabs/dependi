@@ -81,28 +81,40 @@ function versionToSemver(version: string, isCurrentVersion?: boolean): string {
 }
 
 function normalizeVersion(version: string, isCurrentVersion?: boolean): string {
-  if (isCurrentVersion) {
+  // Extract operator prefix if present (^, ~, >=, <=, >, <, =)
+  let operator = '';
+  let versionPart = version;
+  const operatorMatch = version.match(/^(\^|~|>=?|<=?|=)/);
+  if (operatorMatch) {
+    operator = operatorMatch[0];
+    versionPart = version.slice(operator.length).trim();
+  } else if (isCurrentVersion) {
     const prefix = version.charCodeAt(0);
     if (prefix < 47 || prefix > 58) {
       return version;
     }
   }
+  
   // count the number of dots in the version string
   let dotCount = 0;
-  for (let i = 0; i < version.length; i++) {
-    if (version[i] === '.') {
+  for (let i = 0; i < versionPart.length; i++) {
+    if (versionPart[i] === '.') {
       dotCount++;
       if (dotCount > 1) {
-        return version;
+        return operator + versionPart;
       }
     }
   }
-  if (!version.includes(".")) {
-    return `${version}.0.0`;
-  } else if (version.split(".").length === 2) {
-    return `${version}.0`;
+  
+  // Normalize the version part
+  let normalized = versionPart;
+  if (!versionPart.includes(".")) {
+    normalized = `${versionPart}.0.0`;
+  } else if (versionPart.split(".").length === 2) {
+    normalized = `${versionPart}.0`;
   }
-  return version;
+  
+  return operator + normalized;
 }
 
 function convertPythonVersion(version: string): string {
