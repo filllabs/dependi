@@ -37,6 +37,9 @@
     "pip",
     "npm",
     "php",
+    "dart",
+    "flutter",
+    "pubspec",
     "packagist",
     "composer",
     "cargo",
@@ -73,7 +76,9 @@
     "onLanguage:pixi.toml",
     "workspaceContains:**/pixi.toml",
     "onLanguage:pyproject.toml",
-    "workspaceContains:**/pyproject.toml"
+    "workspaceContains:**/pyproject.toml",
+    "onLanguage:pubspec.yaml",
+    "workspaceContains:**/pubspec.yaml"
   ],
   "contributes": {
     "menus": {

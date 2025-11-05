@@ -8,6 +8,7 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 - Fixed possibly false negative when using the caret operator in composer.json. ([Issue #252](https://github.com/filllabs/dependi/issues/252))
 - Fixed a bug in update all command.([Issue #257](https://github.com/filllabs/dependi/issues/257))
+- Fixed a bug in Dart language support.([Issue #256](https://github.com/filllabs/dependi/issues/256))
 
 ## [v0.7.16](https://github.com/filllabs/dependi/compare/v0.7.15...v0.7.16)
 
