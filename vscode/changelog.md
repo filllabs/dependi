@@ -6,15 +6,16 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 ### Bug Fixes
 
-- Fixed possibly false negative when using the caret operator in composer.json. ([Issue #252](https://github.com/filllabs/dependi/issues/252)) 
+- Fixed possibly false negative when using the caret operator in composer.json. ([Issue #252](https://github.com/filllabs/dependi/issues/252))
+- Fixed a bug in update all command.([Issue #257](https://github.com/filllabs/dependi/issues/257))
 
 ## [v0.7.16](https://github.com/filllabs/dependi/compare/v0.7.15...v0.7.16)
 
 ### Bug Fixes
 
-- Fixed preserve SemVer prefixes in config files. ([Issue #244](https://github.com/filllabs/dependi/issues/244)) 
+- Fixed preserve SemVer prefixes in config files. ([Issue #244](https://github.com/filllabs/dependi/issues/244))
 
-- Fixed the latest version not being detected if there's no space after comparison signs. ([Issue #242](https://github.com/filllabs/dependi/issues/242)) 
+- Fixed the latest version not being detected if there's no space after comparison signs. ([Issue #242](https://github.com/filllabs/dependi/issues/242))
 
 ## [v0.7.15](https://github.com/filllabs/dependi/compare/v0.7.14...v0.7.15)
 
@@ -24,7 +25,7 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 ### Bug Fixes
 
-- Fixed incorrect SemVer compatibility checks during version comparison. ([Issue #209](https://github.com/filllabs/dependi/issues/209)) 
+- Fixed incorrect SemVer compatibility checks during version comparison. ([Issue #209](https://github.com/filllabs/dependi/issues/209))
 
 ## [v0.7.14](https://github.com/filllabs/dependi/compare/v0.7.13...v0.7.14)
 
@@ -68,7 +69,7 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 ### Improvements
 
-- Support for all requirement*.txt files in Python projects. ([Issue #162](https://github.com/filllabs/dependi/issues/162))
+- Support for all requirement\*.txt files in Python projects. ([Issue #162](https://github.com/filllabs/dependi/issues/162))
 
 ### Bug Fixes
 
@@ -101,10 +102,10 @@ All notable changes to the "dependi" extension will be documented in this file.
 - Parsing of dependencies in varied custom sections of configuration files.
 - Handling of 3xx redirects by following the `Location` header.
 - `ignoreUnstables` replaced with `unstableFilter` across all languages.
-	- `unstableFilter` options:
-	    - `exclude`: Excludes unstable versions.
-	    - `includeAlways`: Always includes unstable versions.
-	    - `includeIfUnstable`: Includes if the current version is unstable.
+  - `unstableFilter` options:
+    - `exclude`: Excludes unstable versions.
+    - `includeAlways`: Always includes unstable versions.
+    - `includeIfUnstable`: Includes if the current version is unstable.
 - `retry` command now clears the cache for the relevant language.
 - Version-checking logic enhanced for locked values and manifest file comparisons.
 
@@ -117,16 +118,14 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 - README and extension descriptions updated.
 
-
 ## [v0.7.9](https://github.com/filllabs/dependi/compare/v0.7.8...v0.7.9)
 
 ### New Features
 
 - Commands to toggle Lock File Parsing in the title bar.
-  - ![Lock Icon](https://www.dependi.io/screenshots/lock.png)  Lock File Parsing enabled.
-  - ![Unlock Icon](https://www.dependi.io/screenshots/unlock.png)  Lock File Parsing disabled.
-  - ![Doc-Lock Icon](https://www.dependi.io/screenshots/lock-doc.png)  A lock file has been found and parsed.
-
+  - ![Lock Icon](https://www.dependi.io/screenshots/lock.png) Lock File Parsing enabled.
+  - ![Unlock Icon](https://www.dependi.io/screenshots/unlock.png) Lock File Parsing disabled.
+  - ![Doc-Lock Icon](https://www.dependi.io/screenshots/lock-doc.png) A lock file has been found and parsed.
 
 ### Improvements
 
