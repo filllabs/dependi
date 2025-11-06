@@ -185,7 +185,7 @@ export function possibleLatestVersion(
         : null;
     }
     // Return with = prefix to indicate exact match (semver compatible)
-    return "=" + exactVersionConstraint.slice(2).trim();
+    return exactVersionConstraint.slice(2).trim();
   } else if (constraints.some((constraint) => constraint.includes("*"))) {
     let majorVersion = constraints
       .find((constraint) => constraint.trim().startsWith("=="))
