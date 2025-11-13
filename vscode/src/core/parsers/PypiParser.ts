@@ -72,6 +72,9 @@ function parseDependencyLine(line: TextLine): Item {
     startOfVersion += 1;
   }
 
+  // Trim and normalize spaces between operator and version
+  version = version.trim().replace(/^(==|>=|<=|~=|>|<|!)\s+/, '$1');
+
   if (isQuote(name[0]) && isQuote(name[name.length - 1])) {
     name = name.substring(1, name.length - 1);
   }
@@ -97,18 +100,20 @@ function parseDependencyLine(line: TextLine): Item {
 }
 
 function isValid(version: string, constraint: string): boolean {
+  constraint = constraint.trim();
+  
   if (constraint.startsWith("==")) {
-    return version === constraint.slice(2);
+    return version === constraint.slice(2).trim();
   } else if (constraint.startsWith("!")) {
-    return version !== constraint.slice(1);
+    return version !== constraint.slice(1).trim();
   } else if (constraint.startsWith(">=")) {
-    return compareVersions(version, constraint.slice(2)) >= 0;
+    return compareVersions(version, constraint.slice(2).trim()) >= 0;
   } else if (constraint.startsWith("<=")) {
-    return compareVersions(version, constraint.slice(2)) <= 0;
+    return compareVersions(version, constraint.slice(2).trim()) <= 0;
   } else if (constraint.startsWith(">")) {
-    return compareVersions(version, constraint.slice(1)) > 0;
+    return compareVersions(version, constraint.slice(1).trim()) > 0;
   } else if (constraint.startsWith("<")) {
-    return compareVersions(version, constraint.slice(1)) < 0;
+    return compareVersions(version, constraint.slice(1).trim()) < 0;
   } else {
     return false;
   }
@@ -161,13 +166,14 @@ export function possibleLatestVersion(
   versions: string[]
 ): string | null {
   const exactVersionConstraint = constraints.find((constraint) =>
-    constraint.startsWith("==")
+    constraint.trim().startsWith("==")
   );
   if (exactVersionConstraint) {
     if (constraints.some((constraint) => constraint.includes("*"))) {
       const majorVersion = constraints
-        .find((constraint) => constraint.startsWith("=="))
+        .find((constraint) => constraint.trim().startsWith("=="))
         ?.slice(2)
+        .trim()
         .split(".")[0];
       const filteredVersions = versions.filter((version) =>
         version.startsWith(majorVersion || "")
@@ -178,11 +184,13 @@ export function possibleLatestVersion(
         )
         : null;
     }
-    return exactVersionConstraint.slice(2);
+    // Return with = prefix to indicate exact match (semver compatible)
+    return exactVersionConstraint.slice(2).trim();
   } else if (constraints.some((constraint) => constraint.includes("*"))) {
     let majorVersion = constraints
-      .find((constraint) => constraint.startsWith("=="))
+      .find((constraint) => constraint.trim().startsWith("=="))
       ?.slice(2)
+      .trim()
       .split(".")[0];
     if (majorVersion === undefined) {
       majorVersion = constraints.find((constraint) => constraint.includes("*"))

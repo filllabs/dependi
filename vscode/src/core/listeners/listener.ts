@@ -107,7 +107,13 @@ export abstract class Listener {
 
     const prefixMatch = currentValue.match(/^(\^|~|>=|<=|>|<|=)?(.+)$/);
     const prefix = prefixMatch ? prefixMatch[1] : "";
+    let version = prefix;
+    if (!version) {
+      version = latestVersion;
+    } else {
+      version = prefix + latestVersion;
+    }
 
-    return prefix + latestVersion;
+    return version;
   }
 }

@@ -2,7 +2,7 @@
   "name": "dependi",
   "displayName": "Dependi",
   "description": "Empowers developers to efficiently manage dependencies and address vulnerabilities in Rust, Go, JavaScript, Typescript, PHP and Python projects.",
-  "version": "0.7.15",
+  "version": "0.7.17",
   "publisher": "fill-labs",
   "author": {
     "name": "Fill Labs",
@@ -38,6 +38,9 @@
     "pip",
     "npm",
     "php",
+    "dart",
+    "flutter",
+    "pubspec",
     "packagist",
     "composer",
     "cargo",
@@ -82,6 +85,8 @@
     "workspaceContains:**/Directory.Build.props",
     "onLanguage:Directory.Packages.props",
     "workspaceContains:**/Directory.Packages.props"
+    "onLanguage:pubspec.yaml",
+    "workspaceContains:**/pubspec.yaml"
   ],
   "contributes": {
     "menus": {
