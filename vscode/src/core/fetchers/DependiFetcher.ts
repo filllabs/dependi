@@ -29,6 +29,12 @@ export class DependiFetcher extends Fetcher {
       case Language.Rust:
         unstableFilter = Settings.rust.unstableFilter;
         break;
+      case Language.Dart:
+        unstableFilter = Settings.dart.unstableFilter;
+        break;
+      case Language.CSharp:
+        unstableFilter = Settings.csharp.unstableFilter;
+        break;
     }
     const req: VersionsReq = {
       Language: CurrentLanguage,

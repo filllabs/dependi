@@ -56,6 +56,12 @@ export function activate(context: ExtensionContext) {
       case e.affectsConfiguration("dependi.php.unstableFilter"):
         DependencyCache.delete(Language.PHP);
         break;
+      case e.affectsConfiguration("dependi.dart.unstableFilter"):
+        DependencyCache.delete(Language.Dart);
+        break;
+      case e.affectsConfiguration("dependi.csharp.unstableFilter"):
+        DependencyCache.delete(Language.CSharp);
+        break;
       default:
         break;
     }
@@ -100,6 +106,9 @@ export function activate(context: ExtensionContext) {
     "requirements.txt",
     "requirements-dev.txt",
     "pyproject.toml",
+    "pubspec.yaml",
+    "directory.build.props",
+    "directory.packages.props",
   ]);
 
   console.debug("Adding commands");

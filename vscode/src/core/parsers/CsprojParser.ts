@@ -26,57 +26,56 @@ export class CsprojParser implements Parser {
         .filter(p => compareVersions.validate(p.version));
 
     let items: Item[] = [];
-
-    let state = resetState();
+    let packageName = "";
+    let packageVersion = "";
 
     for (let row = 0; row < doc.lineCount; row++) {
       const line = doc.lineAt(row);
 
       if (line.text.includes("<PackageVersion") || line.text.includes("<PackageReference")) {
         // start read next package and search for name && version
-        state = resetState();
+        packageName = "";
+        packageVersion = "";
       }
       if (line.text.includes("Include=")) {
         const matches = /Include="([a-zA-z0-9.]+)"/.exec(line.text);
-        const packageName = matches && matches[1];
-        state.name = packageName || state.name;
+        packageName = (matches && matches[1]) || packageName;
       }
       if (line.text.includes("Version=")) {
         const matches = /Version="([0-9.]+)"/.exec(line.text);
-        const packageVersion = matches && matches[1];
-        state.version = packageVersion || state.version;
+        packageVersion = (matches && matches[1]) || packageVersion;
       }
 
-      if (state.name && state.version) {
-        if (!detectedPackages.some(p => p.name === state.name && p.version === state.version)) {
+      if (packageName && packageVersion) {
+        if (!detectedPackages.some(p => p.name === packageName && p.version === packageVersion)) {
           continue;
         }
 
-        const startOfVersion = line.text.indexOf(state.version);
-        const endOfVersion = startOfVersion + state.version.length;
+        // Find version position: search after "Version=" to avoid matching version in comments
+        const versionAttrIndex = line.text.indexOf('Version="');
+        const startOfVersion = versionAttrIndex !== -1 
+          ? versionAttrIndex + 'Version="'.length 
+          : line.text.indexOf(packageVersion);
+        const endOfVersion = startOfVersion + packageVersion.length;
 
         const item = new Item();
         item.copyFrom(
-          state.name,
-          state.version,
+          packageName,
+          packageVersion,
           startOfVersion,
           endOfVersion,
           line.lineNumber,
           line.range.end.character
         );
+        item.createRange();
+        item.createDecoRange();
         items.push(item);
 
-        state = resetState();
+        packageName = "";
+        packageVersion = "";
       }
     }
 
     return items;
   }
-}
-
-function resetState() {
-  return {
-    name: "",
-    version: "",
-  };
 }

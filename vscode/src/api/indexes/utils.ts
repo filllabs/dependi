@@ -1,4 +1,5 @@
 import { ClientRequest, IncomingMessage } from "http";
+import * as zlib from "zlib";
 
 export function ResponseError(res: IncomingMessage) {
   return new Error(`statusCode=${res.statusCode}: ${res.url}`);
@@ -36,6 +37,33 @@ export function addResponseHandlers(name: string, res: IncomingMessage, req: Cli
     reject(new Error(`Request to ${name} timed out`));
   });
   return body;
+}
+
+export function addResponseHandlersWithGzip(name: string, res: IncomingMessage, req: ClientRequest, reject: (reason?: any) => void) {
+  let body: any[] = [];
+  req.on('error', function (err) {
+    reject(err);
+  });
+  req.on('timeout', function () {
+    req.destroy();
+    reject(new Error(`Request to ${name} timed out`));
+  });
+  let responseStream: NodeJS.ReadableStream;
+  const contentEncoding = res.headers["content-encoding"];
+  
+  if (contentEncoding === "gzip") {
+    responseStream = res.pipe(zlib.createGunzip());
+  } else {
+    responseStream = res;
+  }
+  responseStream.on("error", (err) => {
+    reject(err);
+  });
+  responseStream.on('data', function (chunk) {
+    body.push(chunk);
+  });
+
+  return { body, stream: responseStream };
 }
 
 export function cleanURL(url: string) {

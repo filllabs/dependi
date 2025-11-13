@@ -45,6 +45,12 @@ export function checkVersion(version: string = "0.0.0", versions: string[], lock
     case Language.Python:
       shouldPatchBeChecked = Settings.python.informPatchUpdates;
       break;
+    case Language.Dart:
+      shouldPatchBeChecked = Settings.dart.informPatchUpdates;
+      break;
+    case Language.CSharp:
+      shouldPatchBeChecked = Settings.csharp.informPatchUpdates;
+      break;
   }
   const pathUpdated = shouldPatchBeChecked ? compare(max, minVersion(v) ?? '0.0.0') === 1 : false;
   const maxSatisfyingVersion = maxSatisfying(semverVersions, v);
@@ -171,6 +177,8 @@ function treatAsUpToDate(): boolean {
       return Settings.python.silenceVersionOverflows;
     case Language.Dart:
       return Settings.dart.silenceVersionOverflows;
+    case Language.CSharp:
+      return Settings.csharp.silenceVersionOverflows;
   }
   return false;
 }
