@@ -2,6 +2,7 @@ import { Settings } from "../../config";
 import { DependencyInfo } from "../DepencencyInfo";
 import { getReqOptions } from "../utils";
 import { addResponseHandlers, cleanURL, isStatusInvalid, ResponseError } from "./utils";
+import * as zlib from "zlib";
 import { ClientRequest, IncomingMessage } from "http";
 import { makeRequest } from "./request";
 
@@ -14,14 +15,48 @@ export const versions = (name: string) => {
       if (isStatusInvalid(res)) {
         return reject(ResponseError(res));
       }
-      
-      const body = addResponseHandlers(name, res, req, reject);
-      res.on("end", () => {
-        const response: Root = JSON.parse(Buffer.concat(body).toString());
+
+      // 2. Request (giden istek) için hata dinleyicileri
+      req.on("error", function (err) {
+        reject(err);
+      });
+      req.on("timeout", function () {
+        req.destroy();
+        reject(new Error(`Request to ${name} timed out`));
+      });
+
+      // 3. Gelen cevabın sıkıştırılmış olup olmadığını kontrol et
+      let responseStream: NodeJS.ReadableStream;
+      const contentEncoding = res.headers["content-encoding"];
+
+      if (contentEncoding === "gzip") {
+        // Cevap Gzip ise, zlib ile aç
+        responseStream = res.pipe(zlib.createGunzip());
+      } else {
+        // Değilse, olduğu gibi kullan
+        responseStream = res;
+      }
+
+      // Dekompresyon sırasında hata olursa yakala
+      responseStream.on("error", (err) => {
+        reject(err);
+      });
+
+      // 4. Veriyi dekompres edilmiş stream'den topla
+      let body: any[] = [];
+      responseStream.on("data", function (chunk) {
+        body.push(chunk);
+      });
+
+      // 5. Dekompres edilmiş stream bittiğinde JSON'ı parse et
+      responseStream.on("end", () => {
         try {
+          const response: Root = JSON.parse(Buffer.concat(body).toString());
           const info: DependencyInfo = {
             name: name,
-            versions: response.items.flatMap(item => item.items).map(item => item.catalogEntry.version),
+            versions: response.items
+              .flatMap((item) => item.items)
+              .map((item) => item.catalogEntry.version),
           };
           resolve(info);
         } catch (e) {
