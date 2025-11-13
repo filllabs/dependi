@@ -84,7 +84,7 @@
     "onLanguage:Directory.Build.props",
     "workspaceContains:**/Directory.Build.props",
     "onLanguage:Directory.Packages.props",
-    "workspaceContains:**/Directory.Packages.props"
+    "workspaceContains:**/Directory.Packages.props",
     "onLanguage:pubspec.yaml",
     "workspaceContains:**/pubspec.yaml"
   ],
