@@ -26,7 +26,9 @@ import { Listener } from "./listener";
 import { PubspecListener } from "./PubspecListener";
 import { PubDevFetcher } from "../fetchers/PubDevFetcher";
 import { PubspecParser } from "../parsers/PubspecParser";
-
+import { NuGetFetcher } from "../fetchers/NuGetFetcher";
+import { CsprojParser } from "../parsers/CsprojParser";
+import { CSharpListener } from "./CSharpListener";
 
 export default async function listener(editor: TextEditor | undefined): Promise<void> {
   if (!editor || !editor.document || editor.document.isDirty) {
@@ -82,6 +84,12 @@ export default async function listener(editor: TextEditor | undefined): Promise<
       listener = new PubspecListener(
         new PubDevFetcher(Settings.dart.index, Configs.DART_INDEX_SERVER_URL),
         new PubspecParser());
+    case Language.CSharp:
+      if (!Settings.csharp.enabled)
+        return;
+      listener = new CSharpListener(
+        new NuGetFetcher(Settings.csharp.index, Configs.CSHARP_INDEX_SERVER_URL),
+        new CsprojParser());
       break;
   }
   if (listener !== undefined) {
