@@ -53,7 +53,16 @@ const LanguageArray = [
   { ID: Language.CSharp, Name: "directory.packages.props" },
 ];
 
-export const getLangIdFromName = (name: string): Language => LanguageArray.find((lang) => lang.Name === name)?.ID ?? Language.None;
+export const getLangIdFromName = (name: string): Language => {
+  const exactMatch = LanguageArray.find((lang) => lang.Name.toLowerCase() === name.toLowerCase());
+  if (exactMatch) {
+    return exactMatch.ID;
+  }
+  if (name.toLowerCase().endsWith(".csproj")) {
+    return Language.CSharp;
+  }
+  return Language.None;
+};
 
 export async function getVulnReport(req: VulnReq, options?: RequestInit) {
   const response = await request<string>(`v1/reports/vulnerability`, {

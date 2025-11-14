@@ -11,6 +11,7 @@ import { PypiParser } from "../../core/parsers/PypiParser";
 import { PyProjectParser } from "../../core/parsers/PyProjectParser";
 import { openDeviceLimitDialog, openPaymentRequiredDialog, openSettingsDialog } from "../../ui/dialogs";
 import { PubspecParser } from "../../core/parsers/PubspecParser";
+import { CsprojParser } from "../../core/parsers/CsprojParser";
 
 export const parserInvoker = (language: string) => {
   switch (language) {
@@ -28,7 +29,14 @@ export const parserInvoker = (language: string) => {
       return new PyProjectParser();
     case "pubspec.yaml":
       return new PubspecParser();
+    case "Directory.Build.props":
+    case "Directory.Packages.props":
+      return new CsprojParser();
     default:
+      // Check if it's a .csproj file
+      if (language.endsWith(".csproj")) {
+        return new CsprojParser();
+      }
       throw Error("Language not supported");
   }
 };
