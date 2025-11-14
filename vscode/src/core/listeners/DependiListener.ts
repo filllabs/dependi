@@ -4,6 +4,7 @@ import decorate from "../../ui/decorator";
 import Dependency from "../Dependency";
 import { CurrentLanguage } from "../Language";
 import { Listener } from "./listener";
+import { status } from "../../commands/replacers";
 
 export class DependiListener extends Listener {
 
@@ -14,6 +15,13 @@ export class DependiListener extends Listener {
       // create initial fetchedDeps from dependencies
       const versions: Dependency[] = await this.fetcher.versions(dependencies);
       // this.fillCache(CurrentLanguage, versions);
+
+       // clear replaceAllData set new data
+       status.updateAllData = dependencies.map((d) => ({
+        key: d.item.key,
+        version: this.buildVersionWithPrefix(d),
+        startLine: d.item.range.start.line,
+      }));
       decorate(editor, versions, CurrentLanguage);
 
     } catch (e) {
