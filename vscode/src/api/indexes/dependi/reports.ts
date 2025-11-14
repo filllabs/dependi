@@ -39,6 +39,7 @@ export enum Language {
   Python,
   PHP,
   Dart,
+  CSharp,
 }
 
 const LanguageArray = [
@@ -47,6 +48,9 @@ const LanguageArray = [
   { ID: Language.JS, Name: "package.json" },
   { ID: Language.PHP, Name: "composer.json" },
   { ID: Language.Python, Name: "requirements.txt" },
+  { ID: Language.Dart, Name: "pubspec.yaml" },
+  { ID: Language.CSharp, Name: "directory.build.props" },
+  { ID: Language.CSharp, Name: "directory.packages.props" },
 ];
 
 export const getLangIdFromName = (name: string): Language => LanguageArray.find((lang) => lang.Name === name)?.ID ?? Language.None;

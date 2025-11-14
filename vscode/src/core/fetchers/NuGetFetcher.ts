@@ -1,4 +1,4 @@
-import { versions } from "../../api/indexes/crates";
+import { versions } from "../../api/indexes/nuget";
 import { Settings } from "../../config";
 import compareVersions from "../../semver/compareVersions";
 import { fetcherCatch } from "../../utils/errors";

@@ -164,6 +164,8 @@ function getLinks(lang: Language, key: string): string {
       return ` _([View package](https://pypi.org/project/${cleanKey}))_`;
     case Language.Dart:
       return ` _([View package](https://pub.dev/packages/${cleanKey}))_`;
+    case Language.CSharp:
+      return ` _([View package](https://www.nuget.org/packages/${cleanKey}))_`;
     default:
       return '';
   }
@@ -183,6 +185,8 @@ function getDocsLink(lang: Language, key: string, version: string): string {
       return `[(docs)](https://pypi.org/project/${key}/${version})`;
     case Language.Dart:
       return `[(docs)](https://pub.dev/packages/${key}/versions/${version})`;
+    case Language.CSharp:
+      return `[(docs)](https://www.nuget.org/packages/${key}/${version})`;
     default:
       return '';
   }

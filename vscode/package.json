@@ -604,6 +604,72 @@
         }
       },
       {
+        "title": "CSharp Settings",
+        "properties": {
+          "dependi.csharp.enabled": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": true,
+            "description": "Enable checking for C# dependencies.",
+            "order": 45
+          },
+          "dependi.csharp.indexServerURL": {
+            "type": "string",
+            "scope": "resource",
+            "description": "The URL for the C# package index server.",
+            "format": "url",
+            "pattern": "^https?://(?!.*//)([^/]+/)*[^/]+$",
+            "default": "https://api.nuget.org",
+            "order": 46
+          },
+          "dependi.csharp.unstableFilter": {
+            "type": "string",
+            "enum": [
+              "Exclude",
+              "IncludeAlways",
+              "IncludeIfUnstable"
+            ],
+            "default": "Exclude",
+            "scope": "resource",
+            "enumDescriptions": [
+              "Exclude them (default)",
+              "Include them and always consider as latest",
+              "Include if the current version is already unstable"
+            ],
+            "description": "Filter unstable versions: Exclude, Include Always, or Include If Unstable.",
+            "order": 47
+          },
+          "dependi.csharp.ignoreLinePatterns": {
+            "type": "string",
+            "scope": "resource",
+            "default": "",
+            "markdownDescription": "Matches lines based on `*` position: `text*`, `*text`, `*text*`. Multiple patterns can be used, separated by commas.",
+            "order": 48
+          },
+          "dependi.csharp.informPatchUpdates": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": false,
+            "description": "Inform about available patch updates for C# packages via decoration.",
+            "order": 49
+          },
+          "dependi.csharp.lockFileEnabled": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": true,
+            "description": "Enable checking for C# dependencies in lockfiles.",
+            "order": 50
+          },
+          "dependi.csharp.silenceVersionOverflows": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": false,
+            "description": "Consider non-registry packages as up-to-date if their version exceeds the max.",
+            "order": 51
+          }
+        }
+      },
+      {
         "title": "Vulnerability Settings",
         "properties": {
           "dependi.vulnerability.enabled": {
@@ -611,14 +677,14 @@
             "scope": "resource",
             "default": true,
             "description": "Enable checking for vulnerabilities in dependencies.",
-            "order": 45
+            "order": 52
           },
           "dependi.vulnerability.ghsa.enabled": {
             "type": "boolean",
             "scope": "resource",
             "default": false,
             "description": "Include GitHub Security Advisory vulnerabilities in checks.",
-            "order": 46
+            "order": 53
           },
           "dependi.vulnerability.osvQueryURL.batch": {
             "type": "string",
@@ -627,7 +693,7 @@
             "format": "url",
             "pattern": "^https?://(?!.*//)([^/]+/)*[^/]+$",
             "default": "https://api.osv.dev/v1/querybatch",
-            "order": 47
+            "order": 54
           },
           "dependi.vulnerability.osvQueryURL.single": {
             "type": "string",
@@ -636,7 +702,7 @@
             "format": "url",
             "pattern": "^https?://(?!.*//)([^/]+/)*[^/]+$",
             "default": "https://api.osv.dev/v1/query",
-            "order": 48
+            "order": 55
           }
         }
       },

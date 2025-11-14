@@ -1,7 +1,7 @@
 import { Settings } from "../../config";
 import { DependencyInfo } from "../DepencencyInfo";
 import { getReqOptions } from "../utils";
-import { addResponseHandlers, cleanURL, isStatusInvalid, ResponseError } from "./utils";
+import { addResponseHandlersWithGzip, cleanURL, isStatusInvalid, ResponseError } from "./utils";
 import { ClientRequest, IncomingMessage } from "http";
 import { makeRequest } from "./request";
 
@@ -14,21 +14,23 @@ export const versions = (name: string) => {
       if (isStatusInvalid(res)) {
         return reject(ResponseError(res));
       }
-      
-      const body = addResponseHandlers(name, res, req, reject);
-      res.on("end", () => {
-        const response: Root = JSON.parse(Buffer.concat(body).toString());
+      const { body, stream } = addResponseHandlersWithGzip(name, res, req, reject);
+      let info: DependencyInfo;
+      stream.on("end", () => {
         try {
-          const info: DependencyInfo = {
+          const response: Root = JSON.parse(Buffer.concat(body).toString());
+          info = {
             name: name,
-            versions: response.items.flatMap(item => item.items).map(item => item.catalogEntry.version),
+            versions: response.items
+              .flatMap((item) => item.items || [])
+              .filter((item) => item?.catalogEntry?.version)
+              .map((item) => item.catalogEntry!.version),
           };
-          resolve(info);
         } catch (e) {
           reject(e);
         }
-      }
-      );
+        resolve(info);
+      });
     };
 
     makeRequest(options, handleResponse, reject);
@@ -52,12 +54,12 @@ type Root = {
     commitId: string
     commitTimeStamp: string
     count: number
-    items: Array<{
+    items?: Array<{
       "@id": string
       "@type": string
       commitId: string
       commitTimeStamp: string
-      catalogEntry: {
+      catalogEntry?: {
         "@id": string
         "@type": string
         authors: string

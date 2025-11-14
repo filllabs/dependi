@@ -25,6 +25,9 @@ export const lockFileParsed = commands.registerTextEditorCommand(
         case Language.Dart:
           config.update(Configs.DART_ENABLED_LOCK_FILE, false);
           break;
+        case Language.CSharp:
+          config.update(Configs.CSHARP_ENABLED_LOCK_FILE, false);
+          break;
         default:
           break;
       }
