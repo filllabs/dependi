@@ -85,6 +85,8 @@
     "workspaceContains:**/Directory.Build.props",
     "onLanguage:Directory.Packages.props",
     "workspaceContains:**/Directory.Packages.props",
+    "onLanguage:cs",
+    "workspaceContains:**/*.cs",
     "onLanguage:pubspec.yaml",
     "workspaceContains:**/pubspec.yaml"
   ],
@@ -1060,7 +1062,8 @@
     "fast-xml-parser": "5.2.5",
     "node-cache": "5.1.2",
     "release-please": "16.12.0",
-    "semver": "7.6.3"
+    "semver": "7.6.3",
+    "semver-regex": "4.0.5"
   },
   "extensionDependencies": [
     "vscode.git"
