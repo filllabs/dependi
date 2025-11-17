@@ -2,6 +2,12 @@
 
 All notable changes to the "dependi" extension will be documented in this file.
 
+## [v0.7.18](https://github.com/filllabs/dependi/compare/v0.7.17...v0.7.18)
+
+### New Features
+
+- **Language Support:** Dependi now supports C# projects for both Pro and Core users! ([#248](https://github.com/filllabs/dependi/pull/248) Thanks to [Odonno](https://github.com/Odonno))
+
 ## [v0.7.17](https://github.com/filllabs/dependi/compare/v0.7.16...v0.7.17)
 
 ### Bug Fixes
