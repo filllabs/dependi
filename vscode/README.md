@@ -114,6 +114,12 @@ While Dependi works out-of-the-box without any configuration, we also offer a fe
 - `dependi.dart.unstableFilter`: Filter unstable versions: Exclude, Include Always, or Include If Unstable.
 - `dependi.dart.ignoreLinePattern`: Matches lines based on `*` position: `text*`, `*text`, `*text*`. Multiple patterns can be used, separated by commas.
 - `dependi.dart.silenceVersionOverflows`: Consider non-registry versions of packages as up-to-date if their version exceeds the registry version.
+- `dependi.csharp.enabled`: Enable C# package management.
+- `dependi.csharp.lockFileEnabled`: Enable checking for C# dependencies in lockfiles.
+- `dependi.csharp.indexServerURL`: The URL for the C# package index server.
+- `dependi.csharp.unstableFilter`: Filter unstable versions: Exclude, Include Always, or Include If Unstable.
+- `dependi.csharp.ignoreLinePattern`: Matches lines based on `*` position: `text*`, `*text`, `*text*`. Multiple patterns can be used, separated by commas.
+- `dependi.csharp.silenceVersionOverflows`: Consider non-registry versions of packages as up-to-date if their version exceeds the registry version.
 - `dependi.vulnerability.enabled`: Enable checking for vulnerabilities in dependencies.
 - `dependi.vulnerability.ghsa.enabled`: Include GitHub Security Advisory vulnerabilities in checks.
 - `dependi.vulnerability.osvQueryURL.batch`: The URL for batch querying vulnerabilities via OSV.
