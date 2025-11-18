@@ -58,7 +58,7 @@ export const getLangIdFromName = (name: string): Language => {
   if (exactMatch) {
     return exactMatch.ID;
   }
-  if (name.toLowerCase().endsWith(".csproj")) {
+  if (name.toLowerCase().endsWith(".csproj") || name.toLowerCase().endsWith(".cs")) {
     return Language.CSharp;
   }
   return Language.None;
