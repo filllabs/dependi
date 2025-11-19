@@ -343,6 +343,22 @@
             "default": false,
             "description": "Consider non-registry packages as up-to-date if their version exceeds the max.",
             "order": 17
+          },
+          "dependi.npm.jsrEnabled": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": true,
+            "description": "Enable checking for JSR dependencies within JavaScript/TypeScript projects.",
+            "order": 18
+          },
+          "dependi.npm.jsrIndexServerURL": {
+            "type": "string",
+            "scope": "resource",
+            "description": "The URL for the JSR package index server when JSR is enabled.",
+            "format": "url",
+            "default": "https://jsr.io",
+            "pattern": "^https?://(?!.*//)([^/]+/)*[^/]+$",
+            "order": 19
           }
         }
       },
@@ -354,7 +370,7 @@
             "scope": "resource",
             "default": true,
             "description": "Enable checking for Go dependencies.",
-            "order": 18
+            "order": 21
           },
           "dependi.go.indexServerURL": {
             "type": "string",
@@ -363,7 +379,7 @@
             "format": "url",
             "pattern": "^https?://(?!.*//)([^/]+/)*[^/]+$",
             "default": "https://proxy.golang.org",
-            "order": 19
+            "order": 22
           },
           "dependi.go.unstableFilter": {
             "type": "string",
@@ -380,28 +396,28 @@
               "Include if the current version is already unstable"
             ],
             "description": "Filter unstable versions: Exclude, Include Always, or Include If Unstable.",
-            "order": 20
+            "order": 23
           },
           "dependi.go.ignoreLinePatterns": {
             "type": "string",
             "scope": "resource",
             "default": "",
             "markdownDescription": "Matches lines based on `*` position: `text*`, `*text`, `*text*`. Multiple patterns can be used, separated by commas.",
-            "order": 21
+            "order": 24
           },
           "dependi.go.informPatchUpdates": {
             "type": "boolean",
             "scope": "resource",
             "default": false,
             "description": "Inform about available patch updates for Go packages via decoration.",
-            "order": 22
+            "order": 25
           },
           "dependi.go.silenceVersionOverflows": {
             "type": "boolean",
             "scope": "resource",
             "default": false,
             "description": "Consider non-registry packages as up-to-date if their version exceeds the max.",
-            "order": 23
+            "order": 26
           }
         }
       },
@@ -413,7 +429,7 @@
             "scope": "resource",
             "default": true,
             "description": "Enable checking for Python dependencies.",
-            "order": 24
+            "order": 27
           },
           "dependi.python.indexServerURL": {
             "type": "string",
@@ -422,7 +438,7 @@
             "format": "url",
             "pattern": "^https?://(?!.*//)([^/]+/)*[^/]+$",
             "default": "https://pypi.org/pypi",
-            "order": 25
+            "order": 28
           },
           "dependi.python.unstableFilter": {
             "type": "string",
@@ -439,35 +455,35 @@
               "Include if the current version is already unstable"
             ],
             "description": "Filter unstable versions: Exclude, Include Always, or Include If Unstable.",
-            "order": 26
+            "order": 29
           },
           "dependi.python.ignoreLinePatterns": {
             "type": "string",
             "scope": "resource",
             "default": "",
             "markdownDescription": "Matches lines based on `*` position: `text*`, `*text`, `*text*`. Multiple patterns can be used, separated by commas.",
-            "order": 27
+            "order": 30
           },
           "dependi.python.informPatchUpdates": {
             "type": "boolean",
             "scope": "resource",
             "default": false,
             "description": "Inform about available patch updates for Python packages via decoration.",
-            "order": 28
+            "order": 31
           },
           "dependi.python.lockFileEnabled": {
             "type": "boolean",
             "scope": "resource",
             "default": true,
             "description": "Enable checking for Python dependencies in lockfiles.",
-            "order": 29
+            "order": 32
           },
           "dependi.python.silenceVersionOverflows": {
             "type": "boolean",
             "scope": "resource",
             "default": false,
             "description": "Consider non-registry packages as up-to-date if their version exceeds the max.",
-            "order": 30
+            "order": 33
           }
         }
       },
@@ -479,7 +495,7 @@
             "scope": "resource",
             "default": true,
             "description": "Enable checking for PHP dependencies.",
-            "order": 31
+            "order": 34
           },
           "dependi.php.indexServerURL": {
             "type": "string",
@@ -488,7 +504,7 @@
             "format": "url",
             "pattern": "^https?://(?!.*//)([^/]+/)*[^/]+$",
             "default": "https://repo.packagist.org",
-            "order": 32
+            "order": 35
           },
           "dependi.php.unstableFilter": {
             "type": "string",
@@ -505,35 +521,35 @@
               "Include if the current version is already unstable"
             ],
             "description": "Filter unstable versions: Exclude, Include Always, or Include If Unstable.",
-            "order": 33
+            "order": 36
           },
           "dependi.php.ignoreLinePatterns": {
             "type": "string",
             "scope": "resource",
             "default": "",
             "markdownDescription": "Matches lines based on `*` position: `text*`, `*text`, `*text*`. Multiple patterns can be used, separated by commas.",
-            "order": 34
+            "order": 37
           },
           "dependi.php.informPatchUpdates": {
             "type": "boolean",
             "scope": "resource",
             "default": false,
             "description": "Inform about available patch updates for PHP packages via decoration.",
-            "order": 35
+            "order": 39
           },
           "dependi.php.lockFileEnabled": {
             "type": "boolean",
             "scope": "resource",
             "default": true,
             "description": "Enable checking for PHP dependencies in lockfiles.",
-            "order": 36
+            "order": 40
           },
           "dependi.php.silenceVersionOverflows": {
             "type": "boolean",
             "scope": "resource",
             "default": false,
             "description": "Consider non-registry packages as up-to-date if their version exceeds the max.",
-            "order": 37
+            "order": 41
           }
         }
       },
@@ -545,7 +561,7 @@
             "scope": "resource",
             "default": true,
             "description": "Enable checking for Dart dependencies.",
-            "order": 38
+            "order": 42
           },
           "dependi.dart.indexServerURL": {
             "type": "string",
@@ -554,7 +570,7 @@
             "format": "url",
             "pattern": "^https?://(?!.*//)([^/]+/)*[^/]+$",
             "default": "https://pub.dev",
-            "order": 39
+            "order": 43
           },
           "dependi.dart.unstableFilter": {
             "type": "string",
@@ -571,35 +587,35 @@
               "Include if the current version is already unstable"
             ],
             "description": "Filter unstable versions: Exclude, Include Always, or Include If Unstable.",
-            "order": 40
+            "order": 44
           },
           "dependi.dart.ignoreLinePatterns": {
             "type": "string",
             "scope": "resource",
             "default": "",
             "markdownDescription": "Matches lines based on `*` position: `text*`, `*text`, `*text*`. Multiple patterns can be used, separated by commas.",
-            "order": 41
+            "order": 45
           },
           "dependi.dart.informPatchUpdates": {
             "type": "boolean",
             "scope": "resource",
             "default": false,
             "description": "Inform about available patch updates for Dart packages via decoration.",
-            "order": 42
+            "order": 46
           },
           "dependi.dart.lockFileEnabled": {
             "type": "boolean",
             "scope": "resource",
             "default": true,
             "description": "Enable checking for Dart dependencies in lockfiles.",
-            "order": 43
+            "order": 47
           },
           "dependi.dart.silenceVersionOverflows": {
             "type": "boolean",
             "scope": "resource",
             "default": false,
             "description": "Consider non-registry packages as up-to-date if their version exceeds the max.",
-            "order": 44
+            "order": 48
           }
         }
       },
@@ -611,7 +627,7 @@
             "scope": "resource",
             "default": true,
             "description": "Enable checking for C# dependencies.",
-            "order": 45
+            "order": 49
           },
           "dependi.csharp.indexServerURL": {
             "type": "string",
@@ -620,7 +636,7 @@
             "format": "url",
             "pattern": "^https?://(?!.*//)([^/]+/)*[^/]+$",
             "default": "https://api.nuget.org",
-            "order": 46
+            "order": 50
           },
           "dependi.csharp.unstableFilter": {
             "type": "string",
@@ -637,35 +653,35 @@
               "Include if the current version is already unstable"
             ],
             "description": "Filter unstable versions: Exclude, Include Always, or Include If Unstable.",
-            "order": 47
+            "order": 51
           },
           "dependi.csharp.ignoreLinePatterns": {
             "type": "string",
             "scope": "resource",
             "default": "",
             "markdownDescription": "Matches lines based on `*` position: `text*`, `*text`, `*text*`. Multiple patterns can be used, separated by commas.",
-            "order": 48
+            "order": 52
           },
           "dependi.csharp.informPatchUpdates": {
             "type": "boolean",
             "scope": "resource",
             "default": false,
             "description": "Inform about available patch updates for C# packages via decoration.",
-            "order": 49
+            "order": 53
           },
           "dependi.csharp.lockFileEnabled": {
             "type": "boolean",
             "scope": "resource",
             "default": true,
             "description": "Enable checking for C# dependencies in lockfiles.",
-            "order": 50
+            "order": 54
           },
           "dependi.csharp.silenceVersionOverflows": {
             "type": "boolean",
             "scope": "resource",
             "default": false,
             "description": "Consider non-registry packages as up-to-date if their version exceeds the max.",
-            "order": 51
+            "order": 55
           }
         }
       },
@@ -677,14 +693,14 @@
             "scope": "resource",
             "default": true,
             "description": "Enable checking for vulnerabilities in dependencies.",
-            "order": 52
+            "order": 56
           },
           "dependi.vulnerability.ghsa.enabled": {
             "type": "boolean",
             "scope": "resource",
             "default": false,
             "description": "Include GitHub Security Advisory vulnerabilities in checks.",
-            "order": 53
+            "order": 57
           },
           "dependi.vulnerability.osvQueryURL.batch": {
             "type": "string",
@@ -693,7 +709,7 @@
             "format": "url",
             "pattern": "^https?://(?!.*//)([^/]+/)*[^/]+$",
             "default": "https://api.osv.dev/v1/querybatch",
-            "order": 54
+            "order": 58
           },
           "dependi.vulnerability.osvQueryURL.single": {
             "type": "string",
@@ -702,7 +718,7 @@
             "format": "url",
             "pattern": "^https?://(?!.*//)([^/]+/)*[^/]+$",
             "default": "https://api.osv.dev/v1/query",
-            "order": 55
+            "order": 59
           }
         }
       },
@@ -718,19 +734,19 @@
             ],
             "scope": "resource",
             "description": "Position of UI decorations relative to package names.",
-            "order": 1
+            "order": 101
           },
           "dependi.decoration.compatible.template": {
             "type": "string",
             "scope": "resource",
             "default": "✅",
             "description": "Decoration for compatible package versions.",
-            "order": 5
+            "order": 105
           },
           "dependi.decoration.compatible.style": {
             "type": "object",
             "default": null,
-            "order": 6,
+            "order": 106,
             "description": "Style for compatible version decorations.",
             "properties": {
               "after": {
@@ -796,12 +812,12 @@
             "scope": "resource",
             "default": "⚠️ ${version}",
             "description": "Decoration for package versions has a semver patch available.",
-            "order": 10
+            "order": 110
           },
           "dependi.decoration.patchAvailable.style": {
             "type": "object",
             "default": null,
-            "order": 11,
+            "order": 111,
             "description": "Style for decorations when package version has a semver patch available.",
             "properties": {
               "after": {
@@ -867,12 +883,12 @@
             "scope": "resource",
             "default": "❌ ${version}",
             "description": "Decoration for incompatible package versions.",
-            "order": 12
+            "order": 112
           },
           "dependi.decoration.incompatible.style": {
             "type": "object",
             "default": null,
-            "order": 13,
+            "order": 113,
             "description": "Style for incompatible version decorations.",
             "properties": {
               "after": {
@@ -938,12 +954,12 @@
             "scope": "resource",
             "default": "❗️❗️❗️",
             "description": "Decoration for error package versions.",
-            "order": 15
+            "order": 115
           },
           "dependi.decoration.error.style": {
             "type": "object",
             "default": null,
-            "order": 16,
+            "order": 116,
             "description": "Style for error version decorations.",
             "properties": {
               "after": {
@@ -1009,7 +1025,7 @@
             "scope": "resource",
             "default": "🚨 ${count}",
             "description": "Decoration for vulnerable package versions.",
-            "order": 20
+            "order": 120
           }
         }
       },
@@ -1021,7 +1037,7 @@
             "scope": "resource",
             "default": false,
             "description": "Enable to silence informational update messages.",
-            "order": 1
+            "order": 130
           }
         }
       }
