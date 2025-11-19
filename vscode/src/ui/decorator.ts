@@ -1,15 +1,10 @@
-import {
-  DecorationOptions,
-  TextEditor,
-} from "vscode";
+import { DecorationOptions, TextEditor } from "vscode";
 import Dependency from "../core/Dependency";
 import { Language } from "../core/Language";
 import { Logger } from "../extension";
 import decoration from "./decoration";
-import DecorationPreferences, { loadPref } from "./pref";
+import { getPref } from "./pref";
 import { StatusBar } from "./status-bar";
-
-var previousPref: DecorationPreferences | undefined;
 
 /**
  *
@@ -23,7 +18,7 @@ export default function decorate(
 ) {
   console.debug("Decorating", editor.document.fileName);
   // vulns (params)
-  const pref = loadPref();
+  const pref = getPref();
 
   const errors: Array<string> = [];
   const filtered = dependencies.filter((dep: Dependency) => {
@@ -47,7 +42,7 @@ export default function decorate(
         editor,
         dependency.item,
         dependency.versions || [],
-        JSON.parse(JSON.stringify(pref)),
+        pref,
         lang,
         dependency.vulns,
         dependency.error
@@ -75,28 +70,18 @@ export default function decorate(
       errors.push(`Failed to build decorator (${dependency.item.value})`);
     }
   }
-  // dispose old decorations
-  // compare with previous pref if changed dispose old decoration and set new ones else dont dispose and set
-  if (previousPref) {
-    previousPref.compatibleType;
-    previousPref.compatibleType.dispose();
-    previousPref.incompatibleType.dispose();
-    previousPref.errorType.dispose();
-  }
+
   editor.setDecorations(pref.compatibleType, compOptions);
   editor.setDecorations(pref.incompatibleType, inCompOptions);
   editor.setDecorations(pref.errorType, errOptions);
 
-  previousPref = pref;
-
   if (errors.length) {
     StatusBar.setText(
       "Error",
-      `Completed with errors ${errors.join("\n")}`, true);
+      `Completed with errors ${errors.join("\n")}`,
+      true
+    );
   } else {
     StatusBar.setText("Info");
   }
 }
-
-
-

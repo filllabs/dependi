@@ -1,4 +1,9 @@
-import { DecorationInstanceRenderOptions, TextEditorDecorationType, ThemableDecorationInstanceRenderOptions, window } from "vscode";
+import {
+  DecorationInstanceRenderOptions,
+  TextEditorDecorationType,
+  ThemableDecorationInstanceRenderOptions,
+  window,
+} from "vscode";
 import { Settings } from "../config";
 
 export type DecorationPosition = keyof ThemableDecorationInstanceRenderOptions;
@@ -7,10 +12,10 @@ export type DecorationPosition = keyof ThemableDecorationInstanceRenderOptions;
  * DecorationText is a data structure that binds the decoration text to its configured css
  */
 export default interface DecorationPreferences {
-  compatibleType: TextEditorDecorationType,
-  patchUpdateType: TextEditorDecorationType,
-  incompatibleType: TextEditorDecorationType,
-  errorType: TextEditorDecorationType,
+  compatibleType: TextEditorDecorationType;
+  patchUpdateType: TextEditorDecorationType;
+  incompatibleType: TextEditorDecorationType;
+  errorType: TextEditorDecorationType;
   compatibleText: string;
   patchUpdateText: string;
   incompatibleText: string;
@@ -19,9 +24,27 @@ export default interface DecorationPreferences {
   position: DecorationPosition;
 }
 
+let cachedPref: DecorationPreferences | undefined;
 
+export function getPref(): DecorationPreferences {
+  if (!cachedPref) {
+    cachedPref = loadPref();
+  }
+  return cachedPref;
+}
 
-export function loadPref(): DecorationPreferences {
+export function reloadPref(): void {
+  if (cachedPref) {
+    cachedPref.compatibleType.dispose();
+    cachedPref.patchUpdateType.dispose();
+    cachedPref.incompatibleType.dispose();
+    cachedPref.errorType.dispose();
+    cachedPref = undefined;
+  }
+  getPref();
+}
+
+function loadPref(): DecorationPreferences {
   const compText = Settings.decorator.compatible.template;
   const compCss = { ...Settings.decorator.compatible.css };
   const patchText = Settings.decorator.patchUpdate.template;
@@ -37,7 +60,6 @@ export function loadPref(): DecorationPreferences {
   initializeCSS(incompCss, position, incompText);
   initializeCSS(errorCss, position, errorText);
 
-
   return {
     compatibleType: createType(compCss),
     patchUpdateType: createType(patchCss),
@@ -51,14 +73,20 @@ export function loadPref(): DecorationPreferences {
     position,
   };
 }
-function initializeCSS(css: DecorationInstanceRenderOptions, position: DecorationPosition, text: string) {
+function initializeCSS(
+  css: DecorationInstanceRenderOptions,
+  position: DecorationPosition,
+  text: string
+) {
   if (css[position] == undefined || css[position] == null) {
     css[position] = {
-      margin: "0.5em"
+      margin: "0.5em",
     };
   }
   css[position]!.contentText = text;
 }
-function createType(options: DecorationInstanceRenderOptions): TextEditorDecorationType {
+function createType(
+  options: DecorationInstanceRenderOptions
+): TextEditorDecorationType {
   return window.createTextEditorDecorationType(options);
-};
+}

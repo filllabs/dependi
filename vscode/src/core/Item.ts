@@ -4,8 +4,6 @@ import { Range } from "vscode";
  * Item is a data structure to define parsed items, hierarchy and index.
  */
 
-
-
 export default class Item {
   key: string = "";
   value: string | undefined = "";
@@ -18,6 +16,7 @@ export default class Item {
   decoRange: Range = new Range(0, 0, 0, 0);
   lockedAt?: string;
   latestVersion?: string;
+  registry?: string;
   constructor(item?: Item) {
     if (item) {
       this.key = item.key;
@@ -31,7 +30,15 @@ export default class Item {
   /**
    * Copy value, start,end ,line from
    */
-  copyFrom(key?: string, value?: string, start?: number, end?: number, line?: number, endOfLine?: number, lockedAt?: string) {
+  copyFrom(
+    key?: string,
+    value?: string,
+    start?: number,
+    end?: number,
+    line?: number,
+    endOfLine?: number,
+    lockedAt?: string
+  ) {
     if (key) this.key = key;
     if (value) this.value = value;
     if (start) this.start = start;
@@ -43,12 +50,7 @@ export default class Item {
 
   /**Create Range */
   createRange() {
-    this.range = new Range(
-      this.line,
-      this.start,
-      this.line,
-      this.end
-    );
+    this.range = new Range(this.line, this.start, this.line, this.end);
   }
   /**Create Decoration Range */
   createDecoRange() {
@@ -61,6 +63,12 @@ export default class Item {
   }
 
   isValid() {
-    return this.key.length > 0 && this.value?.length && this.start > -1 && this.end > -1 && (/\d/.test(this.value) || this.value === "*");
+    return (
+      this.key.length > 0 &&
+      this.value?.length &&
+      this.start > -1 &&
+      this.end > -1 &&
+      (/\d/.test(this.value) || this.value === "*")
+    );
   }
 }
