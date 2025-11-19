@@ -12,6 +12,7 @@ export enum Language {
     PHP = 5,
     Dart = 6,
     CSharp = 7,
+    PnpmWorkspace = 8,
 }
 
 export enum OCVEnvironment {
@@ -41,6 +42,8 @@ export function setLanguage(file?: string) {
             return setLanguageConfig(Language.Golang, "go", filename, OCVEnvironment.Go);
         case "package.json":
             return setLanguageConfig(Language.JS, "npm", filename, OCVEnvironment.Npm, Settings.npm.lockFileEnabled);
+        case "pnpm-workspace.yaml":
+            return setLanguageConfig(Language.PnpmWorkspace, "npm", filename, OCVEnvironment.Npm);
         case "composer.json":
             return setLanguageConfig(Language.PHP, "php", filename, OCVEnvironment.Packagist, Settings.php.lockFileEnabled);
         case "pyproject.toml":
