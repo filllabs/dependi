@@ -1,4 +1,5 @@
 import { TextEditor } from "vscode";
+import { Settings } from "../../config";
 import { Logger } from "../../extension";
 import decorate from "../../ui/decorator";
 import Dependency from "../Dependency";
@@ -11,6 +12,9 @@ export class DependiListener extends Listener {
   async parseAndDecorate(editor: TextEditor) {
     try {
       let dependencies = this.parse(editor);
+      if (!Settings.npm.jsrEnabled) {
+        dependencies = dependencies.filter((d) => d.item.source !== "jsr");
+      }
       // parallel fetch versions
       // create initial fetchedDeps from dependencies
       const versions: Dependency[] = await this.fetcher.versions(dependencies);

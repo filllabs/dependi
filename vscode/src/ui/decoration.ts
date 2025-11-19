@@ -157,7 +157,7 @@ function getLinks(lang: Language, key: string, item?: Item): string {
     case Language.Golang:
       return ` _([View module](https://pkg.go.dev/${cleanKey}) | [Check docs](https://pkg.go.dev/${cleanKey}#section-documentation))_`;
     case Language.JS:
-      if (item?.registry === "jsr") {
+      if (item?.source === "jsr") {
         return ` _([View package](https://jsr.io/${cleanKey}))_`;
       }
       return ` _([View package](https://npmjs.com/package/${cleanKey}))_`;
@@ -181,7 +181,7 @@ function getDocsLink(lang: Language, key: string, version: string, item?: Item):
     case Language.Golang:
       return `[(docs)](https://pkg.go.dev/${key}@${version}#section-documentation)`;
     case Language.JS:
-      if (item?.registry === "jsr") {
+      if (item?.source === "jsr") {
         return `[(docs)](https://jsr.io/${key}/${version})`;
       }
       return `[(docs)](https://npmjs.com/package/${key}/v/${version})`;
