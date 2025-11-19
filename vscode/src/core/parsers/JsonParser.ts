@@ -11,11 +11,13 @@ class State {
   items: Item[];
   bypass: boolean;
   yamlLines: string[];
+  dependencyDepth: number; // Track nested depth for catalogs
   constructor() {
     this.inDependencies = false;
     this.items = [] as Item[];
     this.bypass = false;
     this.yamlLines = [];
+    this.dependencyDepth = 0;
   }
 }
 
@@ -45,14 +47,30 @@ export class JsonParser {
       if (this.isDependencies(line)) {
         // from now on we are in require block read every line until we find the end of the block as dependencies
         this.state.inDependencies = true;
+        this.state.dependencyDepth = 0; // Reset depth when entering dependencies block
         continue;
       }
       if (this.state.inDependencies) {
+        // Check for nested object start (catalogs case)
+        if (isNestedObjectStart(line)) {
+          this.state.dependencyDepth++;
+        }
+        
         if (isBlockEnd(line)) {
-          this.state.inDependencies = false;
+          if (this.state.dependencyDepth > 0) {
+            // We're closing a nested block (like "build" or "testing" in catalogs)
+            this.state.dependencyDepth--;
+          } else {
+            // We're closing the main dependencies/catalogs block
+            this.state.inDependencies = false;
+          }
           continue;
         }
         let item = parseDependencyLine(line);
+        // Skip empty version entries like "build": { ",
+        if (item.value === "" && item.start === item.end) {
+          continue;
+        }
         this.addDependency(item);
       }
     }
@@ -97,6 +115,12 @@ export class JsonParser {
 
 function isBlockEnd(line: TextLine): boolean {
   return line.text[line.firstNonWhitespaceCharacterIndex] === "}";
+}
+
+function isNestedObjectStart(line: TextLine): boolean {
+  // Check if line contains ": {" pattern (indicates start of nested object like "build": { or "catalogs": {)
+  const text = line.text.trim();
+  return text.includes(": {") || text.endsWith("{");
 }
 
 function parseDependencyLine(line: TextLine): Item {

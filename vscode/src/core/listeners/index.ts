@@ -16,11 +16,13 @@ import { NpmParser } from "../parsers/PackageJsonParser";
 import { PhpParser } from "../parsers/ComposerJsonParser";
 import { PyProjectParser } from "../parsers/PyProjectParser";
 import { PypiParser } from "../parsers/PypiParser";
+import { PnpmWorkspaceYamlParser } from "../parsers/PnpmWorkspaceYamlParser";
 import { CargoTomlListener } from "./CargoTomlListener";
 import { DependiListener } from "./DependiListener";
 import { GoModListener } from "./GoModListener";
 import { NpmListener } from "./NpmListener";
 import { PhpListener } from './PhpListener';
+import { PnpmWorkspaceListener } from "./PnpmWorkspaceListener";
 import { PypiListener } from "./PypiListener";
 import { Listener } from "./listener";
 import { PubspecListener } from "./PubspecListener";
@@ -58,6 +60,13 @@ export default async function listener(editor: TextEditor | undefined): Promise<
       listener = new NpmListener(
         new NpmFetcher(Settings.npm.index, Configs.NPM_INDEX_SERVER_URL),
         new NpmParser());
+      break;
+    case Language.PnpmWorkspace:
+      if (!Settings.npm.enabled)
+        return;
+      listener = new PnpmWorkspaceListener(
+        new NpmFetcher(Settings.npm.index, Configs.NPM_INDEX_SERVER_URL),
+        new PnpmWorkspaceYamlParser());
       break;
     case Language.PHP:
       if (!Settings.php.enabled)
