@@ -26,6 +26,8 @@ export enum Configs {
   NPM_INFORM_PATCH_UPDATES = `npm.informPatchUpdates`,
   NPM_ENABLED_LOCK_FILE = `npm.lockFileEnabled`,
   NPM_SILENCE_VERSION_OVERFLOWS = `npm.silenceVersionOverflows`,
+  NPM_JSR_ENABLED = `npm.jsrEnabled`,
+  NPM_JSR_INDEX_SERVER_URL = `npm.jsrIndexServerURL`,
 
   PHP_ENABLED = `php.enabled`,
   PHP_INDEX_SERVER_URL = `php.indexServerURL`,
@@ -132,7 +134,9 @@ export const Settings = {
     ignoreLinePattern: "",
     informPatchUpdates: false,
     lockFileEnabled: true,
-    silenceVersionOverflows: false
+    silenceVersionOverflows: false,
+    jsrEnabled: true,
+    jsrIndex: "",
   },
   php: {
     enabled: true,
@@ -236,6 +240,8 @@ export const Settings = {
     this.npm.informPatchUpdates = config.get<boolean>(Configs.NPM_INFORM_PATCH_UPDATES) ?? false;
     this.npm.lockFileEnabled = config.get<boolean>(Configs.NPM_ENABLED_LOCK_FILE) ?? true;
     this.npm.silenceVersionOverflows = config.get<boolean>(Configs.NPM_SILENCE_VERSION_OVERFLOWS) ?? false;
+    this.npm.jsrEnabled = config.get<boolean>(Configs.NPM_JSR_ENABLED) ?? true;
+    this.npm.jsrIndex = config.get<string>(Configs.NPM_JSR_INDEX_SERVER_URL) || "https://jsr.io";
 
     this.php.enabled = config.get<boolean>(Configs.PHP_ENABLED) ?? true;
     this.php.index = config.get<string>(Configs.PHP_INDEX_SERVER_URL) || "https://repo.packagist.org";

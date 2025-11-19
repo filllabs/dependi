@@ -9,6 +9,7 @@ import { Range } from "vscode";
 export default class Item {
   key: string = "";
   value: string | undefined = "";
+  source: string | undefined = "";
   start: number = -1;
   end: number = -1;
   line: number = -1;

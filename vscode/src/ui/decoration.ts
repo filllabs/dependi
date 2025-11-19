@@ -71,7 +71,7 @@ export default function decoration(
     appendVulnerabilities(hoverMessage, vuln, version!);
 
     hoverMessage.appendMarkdown("#### Versions");
-    hoverMessage.appendMarkdown(getLinks(lang, item.key));
+    hoverMessage.appendMarkdown(getLinks(lang, item.key, item));
     hoverMessage.isTrusted = true;
     // Build markdown hover text
     appendVersions(hoverMessage, versions, item, maxSatisfying ?? "", vuln, decorationPreferences, lang);
@@ -148,7 +148,7 @@ function getContentText(decorationPreferences: DecorationPreferences, type: stri
   }
   return contentText;
 }
-function getLinks(lang: Language, key: string): string {
+function getLinks(lang: Language, key: string, item?: Item): string {
   const cleanKey = key.replace(/"/g, "");
 
   switch (lang) {
@@ -157,6 +157,9 @@ function getLinks(lang: Language, key: string): string {
     case Language.Golang:
       return ` _([View module](https://pkg.go.dev/${cleanKey}) | [Check docs](https://pkg.go.dev/${cleanKey}#section-documentation))_`;
     case Language.JS:
+      if (item?.registry === "jsr") {
+        return ` _([View package](https://jsr.io/${cleanKey}))_`;
+      }
       return ` _([View package](https://npmjs.com/package/${cleanKey}))_`;
     case Language.PHP:
       return ` _([View package](https://packagist.org/packages/${cleanKey}))_`;
@@ -171,13 +174,16 @@ function getLinks(lang: Language, key: string): string {
   }
 }
 
-function getDocsLink(lang: Language, key: string, version: string): string {
+function getDocsLink(lang: Language, key: string, version: string, item?: Item): string {
   switch (lang) {
     case Language.Rust:
       return `[(docs)](https://docs.rs/crate/${key}/${version})`;
     case Language.Golang:
       return `[(docs)](https://pkg.go.dev/${key}@${version}#section-documentation)`;
     case Language.JS:
+      if (item?.registry === "jsr") {
+        return `[(docs)](https://jsr.io/${key}/${version})`;
+      }
       return `[(docs)](https://npmjs.com/package/${key}/v/${version})`;
     case Language.PHP:
       return `[(docs)](https://packagist.org/packages/${key}#${version})`;
@@ -219,7 +225,7 @@ function appendVersions(hoverMessage: MarkdownString, versions: string[], item: 
 
     const isCurrent = version === maxSatisfying;
     const encoded = encodeURI(JSON.stringify(data));
-    const docs = (i === 0 || isCurrent) ? (' ' + getDocsLink(lang, item.key, version)) : "";
+    const docs = (i === 0 || isCurrent) ? (' ' + getDocsLink(lang, item.key, version, item)) : "";
     const vulnText = v?.length ? decorationPreferences.vulnText.replace("${count}", `${v?.length}`) : "";
     const command = `${isCurrent ? "**" : ""}[${version}](command:${Configs.REPLACE_VERSIONS}?${encoded})${docs}${isCurrent ? "**" : ""}  ${vulnText}`;
     hoverMessage.appendMarkdown("\n * ");

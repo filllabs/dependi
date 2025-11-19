@@ -4,6 +4,10 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 ## [v0.7.19](https://github.com/filllabs/dependi/compare/v0.7.18...v0.7.19)
 
+### Improvements
+
+- Added support for JSR packages. ([Issue #246](https://github.com/filllabs/dependi/issues/246))
+
 ### New Features
 
 - Support for pnpm `workspace:` protocol and `catalog:` from `pnpm-workspace.yaml`. ([Issue #200](https://github.com/filllabs/dependi/issues/200))
