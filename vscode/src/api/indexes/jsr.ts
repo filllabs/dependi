@@ -26,7 +26,9 @@ export const versions = (name: string, currentVersion?: string) => {
           let versions: string[] = [];
           let err = "";
           if (response.versions) {
-            versions = Object.keys(response.versions);
+            versions = Object.keys(response.versions).filter(
+              (version) => !response.versions[version].yanked
+            );
           }
           info = {
             name: name,
