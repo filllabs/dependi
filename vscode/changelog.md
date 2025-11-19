@@ -2,6 +2,12 @@
 
 All notable changes to the "dependi" extension will be documented in this file.
 
+## [v0.7.19](https://github.com/filllabs/dependi/compare/v0.7.18...v0.7.19)
+
+### Improvements
+
+- Added support for JSR packages. ([Issue #246](https://github.com/filllabs/dependi/issues/246))
+
 ## [v0.7.18](https://github.com/filllabs/dependi/compare/v0.7.17...v0.7.18)
 
 ### New Features
