@@ -16,7 +16,6 @@ export default class Item {
   decoRange: Range = new Range(0, 0, 0, 0);
   lockedAt?: string;
   latestVersion?: string;
-  registry?: string;
   constructor(item?: Item) {
     if (item) {
       this.key = item.key;
