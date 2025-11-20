@@ -7,6 +7,7 @@ All notable changes to the "dependi" extension will be documented in this file.
 ### Improvements
 
 - Added support for JSR packages. ([Issue #246](https://github.com/filllabs/dependi/issues/246))
+- General performance improvements and resolved flickering issues.
 
 ### New Features
 
