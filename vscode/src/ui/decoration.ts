@@ -14,7 +14,10 @@ import { CommandData } from "../commands/replacers";
 import { Configs } from "../config";
 import Item from "../core/Item";
 import { CurrentLanguage, Language } from "../core/Language";
-import { checkVersion, convertPythonVersionToSemver } from "../semver/semverUtils";
+import {
+  checkVersion,
+  convertPythonVersionToSemver,
+} from "../semver/semverUtils";
 import DecorationPreferences from "./pref";
 
 type DecorationType = "COMP" | "PATCH" | "INCOMP" | "ERROR";
@@ -33,23 +36,29 @@ export default function decoration(
   decorationPreferences: DecorationPreferences,
   lang: Language,
   vuln: Map<string, string[]> | undefined,
-  error?: string,
+  error?: string
 ): [DecorationOptions, DecorationType] {
   // Also handle json valued dependencies
   let version = item.value?.replace(",", "");
-  let [satisfies, hasPatchUpdate, maxSatisfying] = checkVersion(version, versions, item.lockedAt);
+  let [satisfies, hasPatchUpdate, maxSatisfying] = checkVersion(
+    version,
+    versions,
+    item.lockedAt
+  );
 
   const formatError = (error: string) => {
     // Markdown does not like newlines in middle of emphasis, or spaces next to emphasis characters.
-    const error_parts = error.split('\n');
+    const error_parts = error.split("\n");
     const markdown = new MarkdownString("#### Errors ");
     markdown.appendMarkdown("\n");
     // Ignore empty strings
-    error_parts.filter(s => s).forEach(part => {
-      markdown.appendMarkdown("* ");
-      markdown.appendText(part.trim()); // Gets rid of Markdown-breaking spaces, then append text safely escaped.
-      markdown.appendMarkdown("\n"); // Put the newlines back
-    });
+    error_parts
+      .filter((s) => s)
+      .forEach((part) => {
+        markdown.appendMarkdown("* ");
+        markdown.appendText(part.trim()); // Gets rid of Markdown-breaking spaces, then append text safely escaped.
+        markdown.appendMarkdown("\n"); // Put the newlines back
+      });
     return markdown;
   };
   let hoverMessage = new MarkdownString();
@@ -58,23 +67,29 @@ export default function decoration(
   const renderOptions: DecorationInstanceRenderOptions = {
     [position]: {
       contentText: "",
-    }
+    },
   };
   let type: DecorationType = "COMP";
-
 
   if (error) {
     hoverMessage = formatError(error);
     type = "ERROR";
   } else {
-
     appendVulnerabilities(hoverMessage, vuln, version!);
 
     hoverMessage.appendMarkdown("#### Versions");
     hoverMessage.appendMarkdown(getLinks(lang, item.key, item));
     hoverMessage.isTrusted = true;
     // Build markdown hover text
-    appendVersions(hoverMessage, versions, item, maxSatisfying ?? "", vuln, decorationPreferences, lang);
+    appendVersions(
+      hoverMessage,
+      versions,
+      item,
+      maxSatisfying ?? "",
+      vuln,
+      decorationPreferences,
+      lang
+    );
 
     if (version == "?") {
       const version = versions[0];
@@ -83,7 +98,13 @@ export default function decoration(
       });
       editor.document.save();
     }
-    if (!validRange(CurrentLanguage === Language.Python ? convertPythonVersionToSemver(version!) : version!)) {
+    if (
+      !validRange(
+        CurrentLanguage === Language.Python
+          ? convertPythonVersionToSemver(version!)
+          : version!
+      )
+    ) {
       type = "ERROR";
     } else if (versions[0] !== maxSatisfying) {
       type = satisfies ? "COMP" : "INCOMP";
@@ -93,14 +114,20 @@ export default function decoration(
     }
   }
 
-
   const contentText = getContentText(decorationPreferences, type);
-  renderOptions[position]!.contentText = contentText.replace("${version}", versions[0]);
+  renderOptions[position]!.contentText = contentText.replace(
+    "${version}",
+    versions[0]
+  );
 
   const vulnerabilities = vuln?.get(item.lockedAt ?? version!);
   if (vulnerabilities && vulnerabilities.length > 0) {
-    const vulnText = decorationPreferences.vulnText.replace("${count}", `${vulnerabilities?.length}`);
-    renderOptions[position]!.contentText = renderOptions[position]!.contentText! + "\t" + vulnText;
+    const vulnText = decorationPreferences.vulnText.replace(
+      "${count}",
+      `${vulnerabilities?.length}`
+    );
+    renderOptions[position]!.contentText =
+      renderOptions[position]!.contentText! + "\t" + vulnText;
   }
 
   // if local dependency, remove the content text just add version listing
@@ -109,7 +136,10 @@ export default function decoration(
   }
 
   const deco: DecorationOptions = {
-    range: position == "after" ? item.decoRange : new Range(item.line, 0, item.line, item.endOfLine),
+    range:
+      position == "after"
+        ? item.decoRange
+        : new Range(item.line, 0, item.line, item.endOfLine),
     hoverMessage,
     renderOptions,
   };
@@ -117,10 +147,10 @@ export default function decoration(
 }
 
 function isLocal(version?: string) {
-  if (!version)
-    return false;
+  if (!version) return false;
 
-  return version.startsWith("file:") ||
+  return (
+    version.startsWith("file:") ||
     version.startsWith("path:") ||
     version.startsWith("link:") ||
     version.startsWith("git:") ||
@@ -129,11 +159,14 @@ function isLocal(version?: string) {
     version.startsWith("workspace:") ||
     version.startsWith("ssh:") ||
     version.startsWith("http:") ||
-    version.startsWith("https:");
-
+    version.startsWith("https:")
+  );
 }
 
-function getContentText(decorationPreferences: DecorationPreferences, type: string) {
+function getContentText(
+  decorationPreferences: DecorationPreferences,
+  type: string
+) {
   let contentText = decorationPreferences.compatibleText;
   switch (type) {
     case "PATCH":
@@ -170,11 +203,16 @@ function getLinks(lang: Language, key: string, item?: Item): string {
     case Language.CSharp:
       return ` _([View package](https://www.nuget.org/packages/${cleanKey}))_`;
     default:
-      return '';
+      return "";
   }
 }
 
-function getDocsLink(lang: Language, key: string, version: string, item?: Item): string {
+function getDocsLink(
+  lang: Language,
+  key: string,
+  version: string,
+  item?: Item
+): string {
   switch (lang) {
     case Language.Rust:
       return `[(docs)](https://docs.rs/crate/${key}/${version})`;
@@ -194,11 +232,15 @@ function getDocsLink(lang: Language, key: string, version: string, item?: Item):
     case Language.CSharp:
       return `[(docs)](https://www.nuget.org/packages/${key}/${version})`;
     default:
-      return '';
+      return "";
   }
 }
 
-function appendVulnerabilities(hoverMessage: MarkdownString, vuln: Map<string, string[]> | undefined, version: string) {
+function appendVulnerabilities(
+  hoverMessage: MarkdownString,
+  vuln: Map<string, string[]> | undefined,
+  version: string
+) {
   const v = vuln?.get(version);
   if (v?.length) {
     hoverMessage.appendMarkdown("#### Vulnerabilities (Current)");
@@ -211,9 +253,15 @@ function appendVulnerabilities(hoverMessage: MarkdownString, vuln: Map<string, s
   }
 }
 
-
-function appendVersions(hoverMessage: MarkdownString, versions: string[], item: Item, maxSatisfying: string, vuln: Map<string, string[]> | undefined, decorationPreferences: DecorationPreferences, lang: Language) {
-
+function appendVersions(
+  hoverMessage: MarkdownString,
+  versions: string[],
+  item: Item,
+  maxSatisfying: string,
+  vuln: Map<string, string[]> | undefined,
+  decorationPreferences: DecorationPreferences,
+  lang: Language
+) {
   for (let i = 0; i < versions.length; i++) {
     const version = versions[i];
     const v = vuln?.get(version);
@@ -225,9 +273,16 @@ function appendVersions(hoverMessage: MarkdownString, versions: string[], item: 
 
     const isCurrent = version === maxSatisfying;
     const encoded = encodeURI(JSON.stringify(data));
-    const docs = (i === 0 || isCurrent) ? (' ' + getDocsLink(lang, item.key, version, item)) : "";
-    const vulnText = v?.length ? decorationPreferences.vulnText.replace("${count}", `${v?.length}`) : "";
-    const command = `${isCurrent ? "**" : ""}[${version}](command:${Configs.REPLACE_VERSIONS}?${encoded})${docs}${isCurrent ? "**" : ""}  ${vulnText}`;
+    const docs =
+      i === 0 || isCurrent
+        ? " " + getDocsLink(lang, item.key, version, item)
+        : "";
+    const vulnText = v?.length
+      ? decorationPreferences.vulnText.replace("${count}", `${v?.length}`)
+      : "";
+    const command = `${isCurrent ? "**" : ""}[${version}](command:${
+      Configs.REPLACE_VERSIONS
+    }?${encoded})${docs}${isCurrent ? "**" : ""}  ${vulnText}`;
     hoverMessage.appendMarkdown("\n * ");
     hoverMessage.appendMarkdown(command);
   }

@@ -32,7 +32,22 @@ import { NuGetFetcher } from "../fetchers/NuGetFetcher";
 import { CsprojParser } from "../parsers/CsprojParser";
 import { CSharpListener } from "./CSharpListener";
 
+let listenerTimer: NodeJS.Timeout | undefined;
+
 export default async function listener(editor: TextEditor | undefined): Promise<void> {
+  if (listenerTimer) {
+    clearTimeout(listenerTimer);
+  }
+
+  return new Promise((resolve) => {
+    listenerTimer = setTimeout(async () => {
+      await runListener(editor);
+      resolve();
+    }, 200); // Debounce for 200ms
+  });
+}
+
+async function runListener(editor: TextEditor | undefined): Promise<void> {
   if (!editor || !editor.document || editor.document.isDirty) {
     console.debug("Editor is undefined or document is dirty", editor, editor?.document.isDirty);
     return Promise.resolve();
@@ -118,5 +133,4 @@ export default async function listener(editor: TextEditor | undefined): Promise<
       });
     }
   }
-
 }

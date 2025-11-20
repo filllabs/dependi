@@ -1,12 +1,16 @@
+import { X2jOptions, XMLParser } from "fast-xml-parser";
 import { TextDocument } from "vscode";
-import Item from "../Item";
-import { XMLParser, X2jOptions } from "fast-xml-parser";
 import compareVersions from "../../semver/compareVersions";
+import Item from "../Item";
 import { Parser } from "./parser";
 
 const xmlParserOptions: X2jOptions = {
   ignoreAttributes: false,
-  isArray: (tagName) => tagName === "Project" || tagName === "ItemGroup" || tagName === "PackageVersion" || tagName === "PackageReference"
+  isArray: (tagName: string) =>
+    tagName === "Project" ||
+    tagName === "ItemGroup" ||
+    tagName === "PackageVersion" ||
+    tagName === "PackageReference",
 };
 
 export class CsprojParser implements Parser {
@@ -15,15 +19,19 @@ export class CsprojParser implements Parser {
     const xmlObject = parser.parse(doc.getText());
 
     const projects: any[] = xmlObject["Project"] ?? [];
-    const itemGroups: any[] = projects.flatMap(p => p["ItemGroup"] ?? []);
-    const packageVersions = itemGroups.flatMap(g => g["PackageVersion"] ?? []);
-    const packageReferences = itemGroups.flatMap(g => g["PackageReference"] ?? []);
+    const itemGroups: any[] = projects.flatMap((p) => p["ItemGroup"] ?? []);
+    const packageVersions = itemGroups.flatMap(
+      (g) => g["PackageVersion"] ?? []
+    );
+    const packageReferences = itemGroups.flatMap(
+      (g) => g["PackageReference"] ?? []
+    );
 
-    const detectedPackages = 
-      packageVersions.concat(packageReferences)
-        .map(p => ({ name: p["@_Include"], version: p["@_Version"] }))
-        .filter(p => !!p.version)
-        .filter(p => compareVersions.validate(p.version));
+    const detectedPackages = packageVersions
+      .concat(packageReferences)
+      .map((p) => ({ name: p["@_Include"], version: p["@_Version"] }))
+      .filter((p) => !!p.version)
+      .filter((p) => compareVersions.validate(p.version));
 
     let items: Item[] = [];
     let packageName = "";
@@ -32,7 +40,10 @@ export class CsprojParser implements Parser {
     for (let row = 0; row < doc.lineCount; row++) {
       const line = doc.lineAt(row);
 
-      if (line.text.includes("<PackageVersion") || line.text.includes("<PackageReference")) {
+      if (
+        line.text.includes("<PackageVersion") ||
+        line.text.includes("<PackageReference")
+      ) {
         // start read next package and search for name && version
         packageName = "";
         packageVersion = "";
@@ -47,15 +58,20 @@ export class CsprojParser implements Parser {
       }
 
       if (packageName && packageVersion) {
-        if (!detectedPackages.some(p => p.name === packageName && p.version === packageVersion)) {
+        if (
+          !detectedPackages.some(
+            (p) => p.name === packageName && p.version === packageVersion
+          )
+        ) {
           continue;
         }
 
         // Find version position: search after "Version=" to avoid matching version in comments
         const versionAttrIndex = line.text.indexOf('Version="');
-        const startOfVersion = versionAttrIndex !== -1 
-          ? versionAttrIndex + 'Version="'.length 
-          : line.text.indexOf(packageVersion);
+        const startOfVersion =
+          versionAttrIndex !== -1
+            ? versionAttrIndex + 'Version="'.length
+            : line.text.indexOf(packageVersion);
         const endOfVersion = startOfVersion + packageVersion.length;
 
         const item = new Item();

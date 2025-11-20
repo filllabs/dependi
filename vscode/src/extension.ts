@@ -10,6 +10,9 @@ import {
   window,
   workspace,
 } from "vscode";
+import { disableLockFileParsing } from "./commands/lock-file/disableLockFileParsing";
+import { enableLockFileParsing } from "./commands/lock-file/enableLockFileParsing";
+import { lockFileParsed } from "./commands/lock-file/lockFileParsed";
 import { replaceVersion } from "./commands/replacers/replaceVersion";
 import { updateAll } from "./commands/replacers/updateAll";
 import { generateCurrentVulnReport } from "./commands/report-generator/generateCurrentVulnReport";
@@ -18,14 +21,11 @@ import { retry } from "./commands/retry";
 import { Settings } from "./config";
 import { CurrentLanguage, Language, setLanguage } from "./core/Language";
 import listener from "./core/listeners";
+import { DependencyCache } from "./core/listeners/listener";
 import { ChangelogPanel } from "./panels/ChangelogPanel";
 import { WelcomePagePanel } from "./panels/WelcomePanel";
 import { ExtensionStorage } from "./storage";
-import { disableLockFileParsing } from "./commands/lock-file/disableLockFileParsing";
-import { enableLockFileParsing } from "./commands/lock-file/enableLockFileParsing";
-import { lockFileParsed } from "./commands/lock-file/lockFileParsed";
-import { DependencyCache } from "./core/listeners/listener";
-
+import { reloadPref } from "./ui/pref";
 
 export var Logger: OutputChannel;
 
@@ -61,6 +61,12 @@ export function activate(context: ExtensionContext) {
         break;
       case e.affectsConfiguration("dependi.csharp.unstableFilter"):
         DependencyCache.delete(Language.CSharp);
+        break;
+      case e.affectsConfiguration("dependi.decoration"):
+        reloadPref();
+        if (window.activeTextEditor) {
+          listener(window.activeTextEditor);
+        }
         break;
       default:
         break;
