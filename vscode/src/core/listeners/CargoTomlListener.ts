@@ -11,9 +11,18 @@ import { Settings } from "../../config";
 import decorate from "../../ui/decorator";
 import { status } from "../../commands/replacers";
 import { CurrentLanguage } from "../Language";
+import { Fetcher } from "../fetchers/fetcher";
+import { Parser } from "../parsers/parser";
 
 export class CargoTomlListener extends Listener {
   alternateRegistries: AlternateRegistry[] = [];
+
+  constructor(
+    public fetcher: Fetcher,
+    public parser: Parser,
+  ) {
+    super(fetcher, parser);
+  } 
 
   async loadAlternateRegistries(editor: TextEditor) {
     // Parse credentials
@@ -70,9 +79,7 @@ export class CargoTomlListener extends Listener {
       if (foundConfig) {
         const configTomlContent = await async_fs.readFile(foundConfig, 'utf-8');
         alternateRegistries = parseAlternateRegistries(configTomlContent);
-      } else {
-        console.error('No .cargo/config.toml found');
-      }
+      } 
     } catch (error) {
       console.error(error);
     }
@@ -100,28 +107,71 @@ export class CargoTomlListener extends Listener {
       if (this.alternateRegistries.length === 0) {
         await this.loadAlternateRegistries(editor);
       }
-      // create initial fetchedDeps from dependencies
-      let dependencies = this.parse(editor);
-      const promises: Promise<Dependency[]>[] = [
-        (this.fetcher as CratesFetcher).fetchVersionsWithRegistries(dependencies, this.alternateRegistries),
-      ];
       
-      // fetch current vulnerabilities depends on check parameter.
-      if (Settings.vulnerability.enabled) {
-        promises.push(this.fetcher.vulns(dependencies));
+      const allDependencies = this.parse(editor);
+
+      // Split dependencies by registry
+      const cratesIoDependencies = allDependencies.filter(
+        (d) => !d.item.registry || d.item.registry === "crates-io"
+      );
+      const alternateDependencies = allDependencies.filter(
+        (d) => d.item.registry && d.item.registry !== "crates-io"
+      );
+
+      const promises: Promise<Dependency[]>[] = [];
+      const isCratesFetcher = this.fetcher instanceof CratesFetcher;
+
+      // Fetch crates.io dependencies
+      if (cratesIoDependencies.length > 0) {
+        if (isCratesFetcher) {
+          // Use direct CratesFetcher
+          promises.push(
+            (this.fetcher as CratesFetcher).fetchVersionsWithRegistries(
+              cratesIoDependencies,
+              this.alternateRegistries
+            )
+          );
+          if (Settings.vulnerability.enabled) {
+            promises.push(this.fetcher.vulns(cratesIoDependencies));
+          }
+        } else {
+          // Use API fetcher (DependiFetcher - handles vulnerabilities automatically)
+          promises.push(this.fetcher.versions(cratesIoDependencies));
+        }
       }
+
+      // Fetch alternate registry dependencies (always need CratesFetcher)
+      if (alternateDependencies.length > 0) {
+        // Create CratesFetcher for alternate registries if using API
+        const cratesFetcher = isCratesFetcher 
+          ? (this.fetcher as CratesFetcher)
+          : new CratesFetcher(Settings.rust.index, "");
+        
+        promises.push(
+          cratesFetcher.fetchVersionsWithRegistries(
+            alternateDependencies,
+            this.alternateRegistries
+          )
+        );
+        if (Settings.vulnerability.enabled) {
+          promises.push(cratesFetcher.vulns(alternateDependencies));
+        }
+      }
+
       await Promise.all(promises);
+
+      const dependencies = cratesIoDependencies.concat(alternateDependencies);
+
       status.updateAllData = dependencies.map((d) => ({
         key: d.item.key,
         version: this.buildVersionWithPrefix(d),
         startLine: d.item.range.start.line,
       }));
 
-      // parallel fetch vulns for current versions
       decorate(editor, dependencies, CurrentLanguage);
 
-      if (Settings.vulnerability.enabled) {
-        // fetch all vulnerabilities since current version to latest version.
+      // Fetch additional vulnerabilities for direct fetcher (not API)
+      if (Settings.vulnerability.enabled && isCratesFetcher) {
         this.fetcher.vulns(dependencies).then(() => {
           decorate(editor, dependencies, CurrentLanguage);
         });
