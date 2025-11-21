@@ -96,7 +96,9 @@ export class TomlParser implements Parser {
           pair.start,
           pair.end,
           row,
-          line.range.end.character
+          line.range.end.character,
+          undefined, // lockedAt
+          pair.registry // registry
         );
         this.addItem(state, items);
 
@@ -117,6 +119,9 @@ export class TomlParser implements Parser {
               row,
               line.range.end.character
             );
+            continue;
+          case "registry":
+            state.currentItem.registry = pair.value;
             continue;
           case "package":
             state.currentItem.copyFrom(pair.value);
@@ -171,6 +176,7 @@ export class TomlParser implements Parser {
       // json object
       parsePackage(line, item);
       parseVersion(line, item);
+      parseRegistry(line, item);
       return item.start > -1 ? item : undefined;
     }
     item.start = line.indexOf(item.value, eqIndex);
@@ -274,6 +280,40 @@ function parsePackageValue(line: string, item: Item, start: number) {
     foundAt = i;
   }
   item.key = line.substring(foundAt, i);
+}
+
+export function parseRegistry(line: string, item: Item) {
+  let i = item.start;
+  let eqIndex = line.indexOf("registry");
+  if (eqIndex == -1) {
+    return;
+  }
+  i = eqIndex + 8;
+
+  while (i < line.length) {
+    const ch = line[i];
+    if (ch === "=") {
+      parseRegistryValue(line, item, i);
+      return;
+    }
+    i++;
+  }
+}
+
+function parseRegistryValue(line: string, item: Item, start: number) {
+  let i = start;
+  let foundAt = -1;
+  while (i++ < line.length) {
+    const ch = line[i];
+    if (isWhiteSpace(ch) || isQuote(ch)) {
+      if (foundAt > -1) {
+        break;
+      }
+      continue;
+    } else if (foundAt > -1) continue;
+    foundAt = i;
+  }
+  item.registry = line.substring(foundAt, i);
 }
 
 function isWhiteSpace(ch: string) {

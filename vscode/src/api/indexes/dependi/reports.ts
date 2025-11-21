@@ -40,6 +40,7 @@ export enum Language {
   PHP,
   Dart,
   CSharp,
+  PnpmWorkspace,
 }
 
 const LanguageArray = [

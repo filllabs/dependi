@@ -22,6 +22,12 @@ export default function decorate(
 
   const errors: Array<string> = [];
   const filtered = dependencies.filter((dep: Dependency) => {
+    // Skip if the registry is not the main one, and we didn't find any versions.
+    // This avoids showing "No versions found" error for custom registries we couldn't reach.
+    if (dep.item.registry && dep.item.registry !== "crates-io" && (!dep.versions || dep.versions.length === 0)) {
+      return false;
+    }
+    
     if (dep && !dep.error && dep.versions && dep.versions.length) {
       return dep;
     } else if (!dep.error) {
