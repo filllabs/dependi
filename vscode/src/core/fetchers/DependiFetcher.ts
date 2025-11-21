@@ -38,7 +38,21 @@ export class DependiFetcher extends Fetcher {
     }
     const req: VersionsReq = {
       Language: CurrentLanguage,
-      Packages: dependencies.map((d) => d.item),
+      Packages: dependencies.map((d) => {
+        const item = d.item;
+        // Include registry and token for alternate registries
+        const pkg: any = {
+          Key: item.key,
+          Value: item.value
+        };
+        if ((item as any).registryIndex) {
+          pkg.Registry = (item as any).registryIndex;
+        }
+        if ((item as any).registryToken) {
+          pkg.Token = (item as any).registryToken;
+        }
+        return pkg;
+      }),
       Dependencies: dependencies,
       IgnoreUnstables: unstableFilter,
       VulnerabilityCheck: Settings.vulnerability.enabled,

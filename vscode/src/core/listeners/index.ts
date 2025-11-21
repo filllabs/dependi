@@ -119,9 +119,18 @@ async function runListener(editor: TextEditor | undefined): Promise<void> {
   }
   if (listener !== undefined) {
     if (Settings.api.key !== "" && Settings.api.url !== "") {
-      listener = new DependiListener(
+      const dependiListener = new DependiListener(
         new DependiFetcher(Settings.api.url, Configs.INDEX_SERVER_URL),
         listener.parser);
+      
+      // For Rust, pass alternate registries to DependiListener
+      if (CurrentLanguage === Language.Rust && listener instanceof CargoTomlListener) {
+        // Load alternate registries synchronously before wrapping
+        await listener.loadAlternateRegistries(editor);
+        dependiListener.setAlternateRegistries(listener.alternateRegistries);
+      }
+      
+      listener = dependiListener;
     }
     if (!status.inProgress) {
       status.inProgress = true;
