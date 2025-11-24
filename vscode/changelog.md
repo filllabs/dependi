@@ -2,6 +2,12 @@
 
 All notable changes to the "dependi" extension will be documented in this file.
 
+## [v0.7.20](https://github.com/filllabs/dependi/compare/v0.7.19...v0.7.20)
+
+### New Features
+
+- Alternate registry support for Rust.
+
 ## [v0.7.19](https://github.com/filllabs/dependi/compare/v0.7.18...v0.7.19)
 
 ### Improvements
