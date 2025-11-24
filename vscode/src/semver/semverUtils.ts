@@ -87,13 +87,15 @@ function versionToSemver(version: string, isCurrentVersion?: boolean): string {
 }
 
 function normalizeVersion(version: string, isCurrentVersion?: boolean): string {
-  // Extract operator prefix if present (^, ~, >=, <=, >, <, =)
+  // Extract operator prefix (^, ~, >=, <=, >, <, =) and optional 'v'/'V' prefix
   let operator = '';
+  let vPrefix = '';
   let versionPart = version;
-  const operatorMatch = version.match(/^(\^|~|>=?|<=?|=)/);
-  if (operatorMatch) {
-    operator = operatorMatch[0];
-    versionPart = version.slice(operator.length).trim();
+  const operatorMatch = version.match(/^(\^|~|>=?|<=?|=)?(v|V)?/);
+  if (operatorMatch && operatorMatch[0]) {
+    operator = operatorMatch[1] || '';
+    vPrefix = operatorMatch[2] || '';
+    versionPart = version.slice(operatorMatch[0].length).trim();
   } else if (isCurrentVersion) {
     const prefix = version.charCodeAt(0);
     if (prefix < 47 || prefix > 58) {
@@ -107,7 +109,7 @@ function normalizeVersion(version: string, isCurrentVersion?: boolean): string {
     if (versionPart[i] === '.') {
       dotCount++;
       if (dotCount > 1) {
-        return operator + versionPart;
+        return operator + vPrefix + versionPart;
       }
     }
   }
@@ -120,7 +122,7 @@ function normalizeVersion(version: string, isCurrentVersion?: boolean): string {
     normalized = `${versionPart}.0`;
   }
   
-  return operator + normalized;
+  return operator + vPrefix + normalized;
 }
 
 function convertPythonVersion(version: string): string {
@@ -137,13 +139,15 @@ function convertPythonVersion(version: string): string {
 }
 
 export function convertPythonVersionToSemver(version: string): string {
-  // Handle semver operators that may be present (=, ~, >=, <=, >, <)
+  // Handle semver operators and optional 'v'/'V' prefix (e.g., =v1.0.0, v1.0.0, =1.0.0)
   let operator = '';
+  let vPrefix = '';
   let versionPart = version;
-  const operatorMatch = version.match(/^(=|~|>=?|<=?)/);
-  if (operatorMatch) {
-    operator = operatorMatch[0];
-    versionPart = version.slice(operator.length).trim();
+  const operatorMatch = version.match(/^(=|~|>=?|<=?)?(v|V)?/);
+  if (operatorMatch && operatorMatch[0]) {
+    operator = operatorMatch[1] || '';
+    vPrefix = operatorMatch[2] || '';
+    versionPart = version.slice(operatorMatch[0].length).trim();
   }
   
   const v = convertPythonVersion(versionPart);
@@ -157,9 +161,9 @@ export function convertPythonVersionToSemver(version: string): string {
     const preRelease = match[4]? `-${match[4].slice(1)}`  :"";
 
     const normalizedVersion = `${major}.${minor}.${patch}${preRelease}`;
-    return operator + normalizedVersion;
+    return operator + vPrefix + normalizedVersion;
   } else {
-    return operator + v;
+    return operator + vPrefix + v;
   }
 }
 
