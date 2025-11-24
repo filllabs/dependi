@@ -119,9 +119,18 @@ async function runListener(editor: TextEditor | undefined): Promise<void> {
   }
   if (listener !== undefined) {
     if (Settings.api.key !== "" && Settings.api.url !== "") {
-      listener = new DependiListener(
-        new DependiFetcher(Settings.api.url, Configs.INDEX_SERVER_URL),
-        listener.parser);
+      // For Rust, use hybrid approach: API for crates.io, direct for alternate registries
+      if (CurrentLanguage === Language.Rust && listener instanceof CargoTomlListener) {
+        // Load alternate registries first
+        await listener.loadAlternateRegistries(editor);
+        // Replace fetcher with API fetcher (directFetcher still has CratesFetcher)
+        listener.fetcher = new DependiFetcher(Settings.api.url, Configs.INDEX_SERVER_URL);
+      } else {
+        // For other languages, use API backend exclusively
+        listener = new DependiListener(
+          new DependiFetcher(Settings.api.url, Configs.INDEX_SERVER_URL),
+          listener.parser);
+      }
     }
     if (!status.inProgress) {
       status.inProgress = true;

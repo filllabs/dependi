@@ -16,10 +16,12 @@ export default class Item {
   decoRange: Range = new Range(0, 0, 0, 0);
   lockedAt?: string;
   latestVersion?: string;
+  registry?: string;
   constructor(item?: Item) {
     if (item) {
       this.key = item.key;
       this.value = item.value;
+      this.registry = item.registry;
       this.start = item.start;
       this.end = item.end;
       this.line = item.line;
@@ -36,7 +38,8 @@ export default class Item {
     end?: number,
     line?: number,
     endOfLine?: number,
-    lockedAt?: string
+    lockedAt?: string, 
+    registry?: string
   ) {
     if (key) this.key = key;
     if (value) this.value = value;
@@ -45,6 +48,7 @@ export default class Item {
     if (line) this.line = line;
     if (endOfLine) this.endOfLine = endOfLine;
     if (lockedAt) this.lockedAt = lockedAt;
+    if (registry) this.registry = registry;
   }
 
   /**Create Range */
