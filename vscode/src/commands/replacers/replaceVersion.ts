@@ -32,16 +32,15 @@ export const replaceVersion = commands.registerTextEditorCommand(
         dep.item.range.end.character,
       );
       
-      // Preserve semver prefix from original version by reading from the document
+      // Preserve semver prefix and 'v' prefix from original version by reading from the document
       let newVersion = data.version;
       const currentVersionText = editor.document.getText(range);
-      const prefixMatch = currentVersionText.match(/^(\^|~|>=?|<=?|=)/);
-      if (prefixMatch) {
-        // Check if the new version doesn't already have a prefix
-        const newVersionHasPrefix = /^(\^|~|>=?|<=?|=)/.test(newVersion);
-        if (!newVersionHasPrefix) {
-          newVersion = prefixMatch[0] + newVersion;
-        }
+      const prefixMatch = currentVersionText.match(/^(\^|~|>=?|<=?|=)?(v|V)?/);
+      if (prefixMatch && prefixMatch[0]) {
+        const operator = prefixMatch[1] || '';
+        const vPrefix = prefixMatch[2] || '';
+        const cleanVersion = newVersion.replace(/^(\^|~|>=?|<=?|=)?(v|V)?/, '');
+        newVersion = operator + vPrefix + cleanVersion;
       }
       
       edit.replace(range, newVersion);
