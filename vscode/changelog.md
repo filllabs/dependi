@@ -2,6 +2,12 @@
 
 All notable changes to the "dependi" extension will be documented in this file.
 
+## [v0.7.21](https://github.com/filllabs/dependi/compare/v0.7.20...v0.7.21)
+
+### Improvements
+
+- Supporting package versions that start with 'v'
+
 ## [v0.7.20](https://github.com/filllabs/dependi/compare/v0.7.19...v0.7.20)
 
 ### New Features
