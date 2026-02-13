@@ -56,7 +56,7 @@ export function setLanguage(file?: string) {
         case "directory.packages.props":
             return setLanguageConfig(Language.CSharp, "csharp", filename, OCVEnvironment.Nuget); 
         default:
-            if (fileExtension === ".csproj") {
+            if (fileExtension === ".csproj" || fileExtension === ".cs") {
                 return setLanguageConfig(Language.CSharp, "csharp", filename, OCVEnvironment.Nuget);
             }
             if ((fileExtension === ".txt" || fileExtension === ".in") && filename.toLowerCase().startsWith("requirement")) {

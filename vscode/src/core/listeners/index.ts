@@ -29,7 +29,7 @@ import { PubspecListener } from "./PubspecListener";
 import { PubDevFetcher } from "../fetchers/PubDevFetcher";
 import { PubspecParser } from "../parsers/PubspecParser";
 import { NuGetFetcher } from "../fetchers/NuGetFetcher";
-import { CsprojParser } from "../parsers/CsprojParser";
+import { CsParser } from "../parsers/CsParser";
 import { CSharpListener } from "./CSharpListener";
 
 let listenerTimer: NodeJS.Timeout | undefined;
@@ -114,7 +114,7 @@ async function runListener(editor: TextEditor | undefined): Promise<void> {
         return;
       listener = new CSharpListener(
         new NuGetFetcher(Settings.csharp.index, Configs.CSHARP_INDEX_SERVER_URL),
-        new CsprojParser());
+        new CsParser());
       break;
   }
   if (listener !== undefined) {
