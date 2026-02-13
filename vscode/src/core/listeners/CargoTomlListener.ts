@@ -14,6 +14,7 @@ import { CurrentLanguage } from "../Language";
 import { Fetcher } from "../fetchers/fetcher";
 import { Parser } from "../parsers/parser";
 import { parseAlternateRegistries } from "../parsers/CargoTomlParser";
+import { env } from "process";
 
 export class CargoTomlListener extends Listener {
   alternateRegistries: AlternateRegistry[] = [];
@@ -26,10 +27,15 @@ export class CargoTomlListener extends Listener {
   } 
 
   async loadAlternateRegistries(editor: TextEditor) {
+    if(env.CARGO_HOME){
+      const cargo_home = path.parse(env.CARGO_HOME);
+    }else{
+      const cargo_home = path.join(homedir(), '.cargo');
+    }
     // Parse credentials
     let credentialTokens: AlternateRegistry[] | undefined = undefined;
     try {
-      const file = path.join(homedir(), '.cargo', 'credentials.toml');
+      const file = path.join(cargo_home, 'credentials.toml');
       if (fs.existsSync(file)) {
         const credentialsTomlContent = await async_fs.readFile(file, 'utf-8');
         credentialTokens = parseAlternateRegistries(credentialsTomlContent);
@@ -47,8 +53,8 @@ export class CargoTomlListener extends Listener {
       
       // Search up to 5 levels up
       for (let i = 0; i < 5; i++) {
-        const candidateConfig = path.join(currentDir, '.cargo', 'config.toml');
-        const candidateLegacy = path.join(currentDir, '.cargo', 'config');
+        const candidateConfig = path.join(cargo_home, 'config.toml');
+        const candidateLegacy = path.join(cargo_home, 'config');
         
         if (fs.existsSync(candidateConfig)) {
           foundConfig = candidateConfig;
@@ -67,8 +73,8 @@ export class CargoTomlListener extends Listener {
       
       // Fallback to home directory
       if (!foundConfig) {
-        const legacyFile = path.join(homedir(), '.cargo', 'config');
-        const file = path.join(homedir(), '.cargo', 'config.toml');
+        const legacyFile = path.join(cargo_home, 'config');
+        const file = path.join(cargo_home, 'config.toml');
         
         if (fs.existsSync(file)) {
           foundConfig = file;
