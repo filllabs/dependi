@@ -75,7 +75,17 @@ export function activate(context: ExtensionContext) {
 
   setLanguage(window.activeTextEditor?.document.fileName);
 
-  configure(context).finally(() => listener(window.activeTextEditor));
+  // Defer initial listener to avoid race condition with NPM task detection (issue #283).
+  // Running immediately can interfere with npm's package.json parsing in monorepos.
+  configure(context).finally(() => {
+    const fileName = window.activeTextEditor?.document.fileName ?? "";
+    const isPackageJson = fileName.endsWith("package.json");
+    if (isPackageJson) {
+      setTimeout(() => listener(window.activeTextEditor), 500);
+    } else {
+      listener(window.activeTextEditor);
+    }
+  });
 
   // Add listeners
   context.subscriptions.push(
