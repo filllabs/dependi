@@ -119,7 +119,6 @@ function checkPreRelease(version: string): boolean {
     version.indexOf("-next") !== -1 ||
     version.indexOf("-nightly") !== -1 ||
     version.indexOf("-nullsafety") !== -1 ||
-    version.indexOf("-nnbd") !== -1 ||
-    version.indexOf("+") !== -1
+    version.indexOf("-nnbd") !== -1
   );
 }

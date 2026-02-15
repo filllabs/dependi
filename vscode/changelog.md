@@ -2,6 +2,14 @@
 
 All notable changes to the "dependi" extension will be documented in this file.
 
+## [v0.7.22](https://github.com/filllabs/dependi/compare/v0.7.21...v0.7.22)
+
+### Bug Fixes
+
+- Fixed NPM task detection failing to parse `package.json` files in monorepos due to activation race condition. ([Issue #283](https://github.com/filllabs/dependi/issues/283))
+- Rust: Pinned versions (`=0.X.X`) are now excluded from "Update All" to respect developer intent. ([Issue #286](https://github.com/filllabs/dependi/issues/286))
+- Fixed versions with semver build metadata (e.g. `0.9.10+spec-1.1.0`) being incorrectly filtered as unstable, causing false "outdated" indicators. ([Issue #281](https://github.com/filllabs/dependi/issues/281))
+
 ## [v0.7.21](https://github.com/filllabs/dependi/compare/v0.7.20...v0.7.21)
 
 ### Improvements

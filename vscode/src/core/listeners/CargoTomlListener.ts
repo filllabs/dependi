@@ -169,7 +169,11 @@ export class CargoTomlListener extends Listener {
 
       const dependencies = cratesIoDependencies.concat(alternateDependencies);
 
-      status.updateAllData = dependencies.map((d) => ({
+      // Exclude pinned dependencies (=version) from Update All - they are intentionally locked
+      const updatableDependencies = dependencies.filter(
+        (d) => !d.item.value?.startsWith("=")
+      );
+      status.updateAllData = updatableDependencies.map((d) => ({
         key: d.item.key,
         version: this.buildVersionWithPrefix(d),
         startLine: d.item.range.start.line,
