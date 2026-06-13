@@ -23,6 +23,7 @@ class State {
 
 export class JsonParser {
   protected state: State = new State();
+  protected commentChars: string[] | undefined;
 
   constructor(
     private keys: string[],
@@ -38,7 +39,7 @@ export class JsonParser {
         : Settings.php.ignoreLinePattern;
     for (let row = 0; row < doc.lineCount; row++) {
       let line = doc.lineAt(row);
-      if (shouldIgnoreLine(line, pattern)) {
+      if (shouldIgnoreLine(line, pattern, this.commentChars)) {
         continue;
       }
       if (this.state.bypass) {
@@ -54,6 +55,7 @@ export class JsonParser {
         // Check for nested object start (catalogs case)
         if (isNestedObjectStart(line)) {
           this.state.dependencyDepth++;
+          continue;
         }
         
         if (isBlockEnd(line)) {

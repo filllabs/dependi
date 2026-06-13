@@ -42,6 +42,9 @@ export function setLanguage(file?: string) {
             return setLanguageConfig(Language.Golang, "go", filename, OCVEnvironment.Go);
         case "package.json":
             return setLanguageConfig(Language.JS, "npm", filename, OCVEnvironment.Npm, Settings.npm.lockFileEnabled);
+        case "deno.json":
+        case "deno.jsonc":
+            return setLanguageConfig(Language.JS, "npm", filename, OCVEnvironment.Npm);
         case "pnpm-workspace.yaml":
             return setLanguageConfig(Language.PnpmWorkspace, "npm", filename, OCVEnvironment.Npm);
         case "composer.json":

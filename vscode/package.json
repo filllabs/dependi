@@ -37,6 +37,8 @@
     "pypi",
     "pip",
     "npm",
+    "deno",
+    "jsr",
     "php",
     "dart",
     "flutter",
@@ -86,7 +88,9 @@
     "onLanguage:Directory.Packages.props",
     "workspaceContains:**/Directory.Packages.props",
     "onLanguage:pubspec.yaml",
-    "workspaceContains:**/pubspec.yaml"
+    "workspaceContains:**/pubspec.yaml",
+    "workspaceContains:**/deno.json",
+    "workspaceContains:**/deno.jsonc"
   ],
   "contributes": {
     "menus": {

@@ -118,6 +118,8 @@ export function activate(context: ExtensionContext) {
     "Cargo.toml",
     "go.mod",
     "package.json",
+    "deno.json",
+    "deno.jsonc",
     "composer.json",
     "requirements.txt",
     "requirements-dev.txt",

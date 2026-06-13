@@ -37,7 +37,7 @@ export class NpmParser extends JsonParser {
   }
 }
 
-function convertAliasToPackageName(item: Item): Item {
+export function convertAliasToPackageName(item: Item): Item {
   const value = item.value;
   if (!value) {
     return item;

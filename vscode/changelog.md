@@ -9,6 +9,10 @@ All notable changes to the "dependi" extension will be documented in this file.
 - Rust: Pinned versions (`=0.X.X`) are fully respected — excluded from "Update All" and blocked from hover version updates, while still showing accurate outdated and security decorations. ([Issue #286](https://github.com/filllabs/dependi/issues/286))
 - Fixed `CARGO_HOME` scoping bug that prevented alternate registry configuration from loading when the environment variable was set.
 
+### New Features
+
+- Added support for Deno configuration files (`deno.json` / `deno.jsonc`), including JSR and npm import specifiers in `imports` and `scopes`. ([Issue #294](https://github.com/filllabs/dependi/issues/294))
+
 ## [v0.7.23](https://github.com/filllabs/dependi/compare/v0.7.22...v0.7.23)
 
 ### Bug Fixes

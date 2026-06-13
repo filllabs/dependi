@@ -13,6 +13,7 @@ import { PypiFetcher } from "../fetchers/PypiFetcher";
 import { CargoTomlParser } from "../parsers/CargoTomlParser";
 import { GoModParser } from "../parsers/GoModParser";
 import { NpmParser } from "../parsers/PackageJsonParser";
+import { DenoJsonParser } from "../parsers/DenoJsonParser";
 import { PhpParser } from "../parsers/ComposerJsonParser";
 import { PyProjectParser } from "../parsers/PyProjectParser";
 import { PypiParser } from "../parsers/PypiParser";
@@ -72,9 +73,16 @@ async function runListener(editor: TextEditor | undefined): Promise<void> {
     case Language.JS:
       if (!Settings.npm.enabled)
         return;
-      listener = new NpmListener(
-        new NpmFetcher(Settings.npm.index, Configs.NPM_INDEX_SERVER_URL),
-        new NpmParser());
+      {
+        const fileName = path.basename(editor.document.fileName).toLowerCase();
+        const parser =
+          fileName === "deno.json" || fileName === "deno.jsonc"
+            ? new DenoJsonParser()
+            : new NpmParser();
+        listener = new NpmListener(
+          new NpmFetcher(Settings.npm.index, Configs.NPM_INDEX_SERVER_URL),
+          parser);
+      }
       break;
     case Language.PnpmWorkspace:
       if (!Settings.npm.enabled)
