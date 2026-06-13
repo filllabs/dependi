@@ -13,6 +13,7 @@ import { openDeviceLimitDialog, openPaymentRequiredDialog, openSettingsDialog } 
 import { PubspecParser } from "../../core/parsers/PubspecParser";
 import { MixExsParser } from "../../core/parsers/MixExsParser";
 import { CsprojParser } from "../../core/parsers/CsprojParser";
+import { CsFileParser } from "../../core/parsers/CsFileParser";
 
 export const parserInvoker = (language: string) => {
   switch (language) {
@@ -36,7 +37,10 @@ export const parserInvoker = (language: string) => {
     case "Directory.Packages.props":
       return new CsprojParser();
     default:
-      // Check if it's a .csproj file
+      // Check either .cs or .csproj file
+      if (language.endsWith(".cs")) {
+        return new CsFileParser();
+      }
       if (language.endsWith(".csproj")) {
         return new CsprojParser();
       }
