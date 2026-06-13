@@ -14,6 +14,7 @@ import { CurrentLanguage } from "../Language";
 import { Fetcher } from "../fetchers/fetcher";
 import { Parser } from "../parsers/parser";
 import { parseAlternateRegistries } from "../parsers/CargoTomlParser";
+import { isPinnedCargoVersion } from "../cargoUtils";
 import { env } from "process";
 
 export class CargoTomlListener extends Listener {
@@ -27,11 +28,7 @@ export class CargoTomlListener extends Listener {
   } 
 
   async loadAlternateRegistries(editor: TextEditor) {
-    if(env.CARGO_HOME){
-      const cargo_home = path.parse(env.CARGO_HOME);
-    }else{
-      const cargo_home = path.join(homedir(), '.cargo');
-    }
+    const cargo_home = env.CARGO_HOME ?? path.join(homedir(), ".cargo");
     // Parse credentials
     let credentialTokens: AlternateRegistry[] | undefined = undefined;
     try {
@@ -171,7 +168,7 @@ export class CargoTomlListener extends Listener {
 
       // Exclude pinned dependencies (=version) from Update All - they are intentionally locked
       const updatableDependencies = dependencies.filter(
-        (d) => !d.item.value?.startsWith("=")
+        (d) => !isPinnedCargoVersion(d.item.value)
       );
       status.updateAllData = updatableDependencies.map((d) => ({
         key: d.item.key,

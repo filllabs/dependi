@@ -14,6 +14,7 @@ import { CommandData } from "../commands/replacers";
 import { Configs } from "../config";
 import Item from "../core/Item";
 import { CurrentLanguage, Language } from "../core/Language";
+import { isPinnedCargoVersion } from "../core/cargoUtils";
 import {
   checkVersion,
   convertPythonVersionToSemver,
@@ -40,6 +41,8 @@ export default function decoration(
 ): [DecorationOptions, DecorationType] {
   // Also handle json valued dependencies
   let version = item.value?.replace(",", "");
+  const pinnedCargoVersion =
+    lang === Language.Rust && isPinnedCargoVersion(version);
   let [satisfies, hasPatchUpdate, maxSatisfying] = checkVersion(
     version,
     versions,
@@ -88,7 +91,8 @@ export default function decoration(
       maxSatisfying ?? "",
       vuln,
       decorationPreferences,
-      lang
+      lang,
+      !pinnedCargoVersion
     );
 
     if (version == "?") {
@@ -260,7 +264,8 @@ function appendVersions(
   maxSatisfying: string,
   vuln: Map<string, string[]> | undefined,
   decorationPreferences: DecorationPreferences,
-  lang: Language
+  lang: Language,
+  allowVersionUpdates: boolean = true
 ) {
   for (let i = 0; i < versions.length; i++) {
     const version = versions[i];
@@ -280,9 +285,11 @@ function appendVersions(
     const vulnText = v?.length
       ? decorationPreferences.vulnText.replace("${count}", `${v?.length}`)
       : "";
-    const command = `${isCurrent ? "**" : ""}[${version}](command:${
-      Configs.REPLACE_VERSIONS
-    }?${encoded})${docs}${isCurrent ? "**" : ""}  ${vulnText}`;
+    const command = allowVersionUpdates
+      ? `${isCurrent ? "**" : ""}[${version}](command:${
+          Configs.REPLACE_VERSIONS
+        }?${encoded})${docs}${isCurrent ? "**" : ""}  ${vulnText}`
+      : `${isCurrent ? "**" : ""}${version}${docs}${isCurrent ? "**" : ""}  ${vulnText}`;
     hoverMessage.appendMarkdown("\n * ");
     hoverMessage.appendMarkdown(command);
   }

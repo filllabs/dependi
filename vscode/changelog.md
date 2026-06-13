@@ -2,6 +2,13 @@
 
 All notable changes to the "dependi" extension will be documented in this file.
 
+## [v0.7.24](https://github.com/filllabs/dependi/compare/v0.7.23...v0.7.24)
+
+### Bug Fixes
+
+- Rust: Pinned versions (`=0.X.X`) are fully respected — excluded from "Update All" and blocked from hover version updates, while still showing accurate outdated and security decorations. ([Issue #286](https://github.com/filllabs/dependi/issues/286))
+- Fixed `CARGO_HOME` scoping bug that prevented alternate registry configuration from loading when the environment variable was set.
+
 ## [v0.7.23](https://github.com/filllabs/dependi/compare/v0.7.22...v0.7.23)
 
 ### Bug Fixes

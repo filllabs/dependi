@@ -2,7 +2,8 @@ import { Range, TextEditor, TextEditorEdit, commands, workspace } from "vscode";
 import { CommandData, status } from ".";
 import { Configs } from "../../config";
 import Dependency from "../../core/Dependency";
-import { CurrentLanguage } from "../../core/Language";
+import { isPinnedCargoVersion } from "../../core/cargoUtils";
+import { CurrentLanguage, Language } from "../../core/Language";
 import { DependencyCache } from "../../core/listeners/listener";
 import { Logger } from "../../extension";
 
@@ -31,10 +32,18 @@ export const replaceVersion = commands.registerTextEditorCommand(
         dep.item.range.end.line,
         dep.item.range.end.character,
       );
-      
+
+      const currentVersionText = editor.document.getText(range);
+      if (
+        CurrentLanguage === Language.Rust &&
+        isPinnedCargoVersion(currentVersionText.trim())
+      ) {
+        status.inProgress = false;
+        return;
+      }
+
       // Preserve semver prefix and 'v' prefix from original version by reading from the document
       let newVersion = data.version;
-      const currentVersionText = editor.document.getText(range);
       const prefixMatch = currentVersionText.match(/^(\^|~|>=?|<=?|=)?(v|V)?/);
       if (prefixMatch && prefixMatch[0]) {
         const operator = prefixMatch[1] || '';
