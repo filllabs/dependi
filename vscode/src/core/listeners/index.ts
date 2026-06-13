@@ -32,6 +32,9 @@ import { PubspecParser } from "../parsers/PubspecParser";
 import { NuGetFetcher } from "../fetchers/NuGetFetcher";
 import { CsprojParser } from "../parsers/CsprojParser";
 import { CSharpListener } from "./CSharpListener";
+import { MixExsListener } from "./MixExsListener";
+import { HexFetcher } from "../fetchers/HexFetcher";
+import { MixExsParser } from "../parsers/MixExsParser";
 
 let listenerTimer: NodeJS.Timeout | undefined;
 
@@ -123,6 +126,13 @@ async function runListener(editor: TextEditor | undefined): Promise<void> {
       listener = new CSharpListener(
         new NuGetFetcher(Settings.csharp.index, Configs.CSHARP_INDEX_SERVER_URL),
         new CsprojParser());
+      break;
+    case Language.Elixir:
+      if (!Settings.elixir.enabled)
+        return;
+      listener = new MixExsListener(
+        new HexFetcher(Settings.elixir.index, Configs.ELIXIR_INDEX_SERVER_URL),
+        new MixExsParser());
       break;
   }
   if (listener !== undefined) {

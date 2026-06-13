@@ -11,6 +11,7 @@ import { PypiParser } from "../../core/parsers/PypiParser";
 import { PyProjectParser } from "../../core/parsers/PyProjectParser";
 import { openDeviceLimitDialog, openPaymentRequiredDialog, openSettingsDialog } from "../../ui/dialogs";
 import { PubspecParser } from "../../core/parsers/PubspecParser";
+import { MixExsParser } from "../../core/parsers/MixExsParser";
 import { CsprojParser } from "../../core/parsers/CsprojParser";
 
 export const parserInvoker = (language: string) => {
@@ -29,6 +30,8 @@ export const parserInvoker = (language: string) => {
       return new PyProjectParser();
     case "pubspec.yaml":
       return new PubspecParser();
+    case "mix.exs":
+      return new MixExsParser();
     case "Directory.Build.props":
     case "Directory.Packages.props":
       return new CsprojParser();

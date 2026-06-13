@@ -41,6 +41,7 @@ export enum Language {
   Dart,
   CSharp,
   PnpmWorkspace,
+  Elixir,
 }
 
 const LanguageArray = [
@@ -50,6 +51,7 @@ const LanguageArray = [
   { ID: Language.PHP, Name: "composer.json" },
   { ID: Language.Python, Name: "requirements.txt" },
   { ID: Language.Dart, Name: "pubspec.yaml" },
+  { ID: Language.Elixir, Name: "mix.exs" },
   { ID: Language.CSharp, Name: "directory.build.props" },
   { ID: Language.CSharp, Name: "directory.packages.props" },
 ];

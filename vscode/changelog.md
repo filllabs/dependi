@@ -2,6 +2,18 @@
 
 All notable changes to the "dependi" extension will be documented in this file.
 
+## [v0.7.25](https://github.com/filllabs/dependi/compare/v0.7.24...v0.7.25)
+
+### New Features
+
+- Added support for Elixir/Hex dependency management in `mix.exs` files, including `mix.lock` integration and Hex.pm version lookups. ([Issue #243](https://github.com/filllabs/dependi/issues/243))
+
+### Bug Fixes
+
+- Elixir: Fixed `mix.exs` parsing for `defp deps()` definitions, compound version constraints (`~> 1.0 or ~> 2.0`), and dependencies declared in helper functions.
+- Elixir: Fixed compound version constraints incorrectly showing as errors due to invalid semver range conversion.
+- Elixir: Added support for the `~X.Y.Z` shorthand (equivalent to `~> X.Y.Z`).
+
 ## [v0.7.24](https://github.com/filllabs/dependi/compare/v0.7.23...v0.7.24)
 
 ### Bug Fixes

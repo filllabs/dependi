@@ -35,6 +35,9 @@ export class DependiFetcher extends Fetcher {
       case Language.CSharp:
         unstableFilter = Settings.csharp.unstableFilter;
         break;
+      case Language.Elixir:
+        unstableFilter = Settings.elixir.unstableFilter;
+        break;
     }
     const req: VersionsReq = {
       Language: CurrentLanguage,

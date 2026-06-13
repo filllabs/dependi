@@ -51,6 +51,9 @@ export function checkVersion(version: string = "0.0.0", versions: string[], lock
     case Language.CSharp:
       shouldPatchBeChecked = Settings.csharp.informPatchUpdates;
       break;
+    case Language.Elixir:
+      shouldPatchBeChecked = Settings.elixir.informPatchUpdates;
+      break;
   }
   const pathUpdated = shouldPatchBeChecked ? compare(max, minVersion(v) ?? '0.0.0') === 1 : false;
   const maxSatisfyingVersion = maxSatisfying(semverVersions, v);
@@ -83,7 +86,13 @@ function checkLockedVersion(lockedAt: string, version: string, semverVersions: s
 }
 
 function versionToSemver(version: string, isCurrentVersion?: boolean): string {
-  return CurrentLanguage === Language.Python ? convertPythonVersionToSemver(version) : normalizeVersion(version, isCurrentVersion);
+  if (CurrentLanguage === Language.Python) {
+    return convertPythonVersionToSemver(version);
+  }
+  if (CurrentLanguage === Language.Elixir) {
+    return convertElixirVersionToSemver(version);
+  }
+  return normalizeVersion(version, isCurrentVersion);
 }
 
 function normalizeVersion(version: string, isCurrentVersion?: boolean): string {
@@ -183,6 +192,66 @@ function treatAsUpToDate(): boolean {
       return Settings.dart.silenceVersionOverflows;
     case Language.CSharp:
       return Settings.csharp.silenceVersionOverflows;
+    case Language.Elixir:
+      return Settings.elixir.silenceVersionOverflows;
   }
   return false;
+}
+
+export function convertElixirVersionToSemver(version: string): string {
+  const constraints = version.split(/\s+or\s+/i).map((part) => part.trim());
+  if (constraints.length > 1) {
+    return constraints
+      .map((constraint) => convertSingleElixirVersion(constraint))
+      .join(" || ");
+  }
+  return convertSingleElixirVersion(version);
+}
+
+function convertSingleElixirVersion(version: string): string {
+  const trimmed = normalizeElixirRequirement(version);
+
+  const tildeMatch = trimmed.match(/^~>\s*(\d+(?:\.\d+)*)/);
+  if (tildeMatch) {
+    const parts = tildeMatch[1].split(".").map((part) => parseInt(part, 10) || 0);
+    const lowerParts = [...parts];
+    while (lowerParts.length < 3) {
+      lowerParts.push(0);
+    }
+    const upperParts = [...parts];
+    const incrementIndex = parts.length >= 3 ? 1 : 0;
+    upperParts[incrementIndex] = (upperParts[incrementIndex] || 0) + 1;
+    for (let i = incrementIndex + 1; i < upperParts.length; i++) {
+      upperParts[i] = 0;
+    }
+    while (upperParts.length < 3) {
+      upperParts.push(0);
+    }
+    return `>=${lowerParts.slice(0, 3).join(".")} <${upperParts.slice(0, 3).join(".")}`;
+  }
+
+  const gteMatch = trimmed.match(/^>=\s*(.+)/);
+  if (gteMatch) {
+    return `>=${normalizeVersion(gteMatch[1].trim())}`;
+  }
+
+  const gtMatch = trimmed.match(/^>\s*(.+)/);
+  if (gtMatch) {
+    return `>${normalizeVersion(gtMatch[1].trim())}`;
+  }
+
+  const eqMatch = trimmed.match(/^==?\s*(.+)/);
+  if (eqMatch) {
+    return normalizeVersion(eqMatch[1].trim());
+  }
+
+  if (/^\d/.test(trimmed)) {
+    return normalizeVersion(trimmed);
+  }
+
+  return trimmed;
+}
+
+function normalizeElixirRequirement(version: string): string {
+  return version.trim().replace(/^~(?=\d)/, '~> ');
 }

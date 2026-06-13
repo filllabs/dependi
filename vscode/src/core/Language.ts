@@ -13,6 +13,7 @@ export enum Language {
     Dart = 6,
     CSharp = 7,
     PnpmWorkspace = 8,
+    Elixir = 9,
 }
 
 export enum OCVEnvironment {
@@ -23,6 +24,7 @@ export enum OCVEnvironment {
     Go = "Go",
     Dart = "Pub",
     Nuget = "NuGet",
+    Hex = "Hex",
 }
 export var CurrentLanguage: Language = Language.None;
 export var CurrentLanguageConfig: string = "";
@@ -55,6 +57,8 @@ export function setLanguage(file?: string) {
             return setLanguageConfig(Language.Python, "python", filename, OCVEnvironment.Pypi, Settings.python.lockFileEnabled);
         case "pubspec.yaml":
             return setLanguageConfig(Language.Dart, "dart", filename, OCVEnvironment.Dart);
+        case "mix.exs":
+            return setLanguageConfig(Language.Elixir, "elixir", filename, OCVEnvironment.Hex, Settings.elixir.lockFileEnabled);
         case "directory.build.props":
         case "directory.packages.props":
             return setLanguageConfig(Language.CSharp, "csharp", filename, OCVEnvironment.Nuget); 

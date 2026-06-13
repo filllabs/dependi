@@ -18,6 +18,7 @@ import { isPinnedCargoVersion } from "../core/cargoUtils";
 import {
   checkVersion,
   convertPythonVersionToSemver,
+  convertElixirVersionToSemver,
 } from "../semver/semverUtils";
 import DecorationPreferences from "./pref";
 
@@ -106,7 +107,9 @@ export default function decoration(
       !validRange(
         CurrentLanguage === Language.Python
           ? convertPythonVersionToSemver(version!)
-          : version!
+          : CurrentLanguage === Language.Elixir
+            ? convertElixirVersionToSemver(version!)
+            : version!
       )
     ) {
       type = "ERROR";
@@ -206,6 +209,8 @@ function getLinks(lang: Language, key: string, item?: Item): string {
       return ` _([View package](https://pub.dev/packages/${cleanKey}))_`;
     case Language.CSharp:
       return ` _([View package](https://www.nuget.org/packages/${cleanKey}))_`;
+    case Language.Elixir:
+      return ` _([View package](https://hex.pm/packages/${cleanKey}))_`;
     default:
       return "";
   }
@@ -235,6 +240,8 @@ function getDocsLink(
       return `[(docs)](https://pub.dev/packages/${key}/versions/${version})`;
     case Language.CSharp:
       return `[(docs)](https://www.nuget.org/packages/${key}/${version})`;
+    case Language.Elixir:
+      return `[(docs)](https://hexdocs.pm/${key}/${version})`;
     default:
       return "";
   }

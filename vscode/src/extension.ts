@@ -62,6 +62,9 @@ export function activate(context: ExtensionContext) {
       case e.affectsConfiguration("dependi.csharp.unstableFilter"):
         DependencyCache.delete(Language.CSharp);
         break;
+      case e.affectsConfiguration("dependi.elixir.unstableFilter"):
+        DependencyCache.delete(Language.Elixir);
+        break;
       case e.affectsConfiguration("dependi.decoration"):
         reloadPref();
         if (window.activeTextEditor) {
@@ -125,6 +128,7 @@ export function activate(context: ExtensionContext) {
     "requirements-dev.txt",
     "pyproject.toml",
     "pubspec.yaml",
+    "mix.exs",
     "directory.build.props",
     "directory.packages.props",
   ]);

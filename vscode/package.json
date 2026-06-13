@@ -1,8 +1,8 @@
 {
   "name": "dependi",
   "displayName": "Dependi",
-  "description": "Empowers developers to efficiently manage dependencies and address vulnerabilities in Rust, Go, JavaScript, Typescript, PHP and Python projects.",
-  "version": "0.7.24",
+  "description": "Empowers developers to efficiently manage dependencies and address vulnerabilities in Rust, Go, JavaScript, Typescript, PHP, Python, Dart, C#, and Elixir projects.",
+  "version": "0.7.25",
   "publisher": "fill-labs",
   "author": {
     "name": "Fill Labs",
@@ -47,6 +47,10 @@
     "composer",
     "cargo",
     "nuget",
+    "elixir",
+    "hex",
+    "mix",
+    "phoenix",
     "package",
     "dependi",
     "requirements",
@@ -90,7 +94,9 @@
     "onLanguage:pubspec.yaml",
     "workspaceContains:**/pubspec.yaml",
     "workspaceContains:**/deno.json",
-    "workspaceContains:**/deno.jsonc"
+    "workspaceContains:**/deno.jsonc",
+    "onLanguage:elixir",
+    "workspaceContains:**/mix.exs"
   ],
   "contributes": {
     "menus": {
@@ -690,6 +696,72 @@
         }
       },
       {
+        "title": "Elixir Settings",
+        "properties": {
+          "dependi.elixir.enabled": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": true,
+            "description": "Enable checking for Elixir dependencies.",
+            "order": 56
+          },
+          "dependi.elixir.indexServerURL": {
+            "type": "string",
+            "scope": "resource",
+            "description": "The URL for the Elixir package index server.",
+            "format": "url",
+            "pattern": "^https?://(?!.*//)([^/]+/)*[^/]+$",
+            "default": "https://hex.pm",
+            "order": 57
+          },
+          "dependi.elixir.unstableFilter": {
+            "type": "string",
+            "enum": [
+              "Exclude",
+              "IncludeAlways",
+              "IncludeIfUnstable"
+            ],
+            "default": "Exclude",
+            "scope": "resource",
+            "enumDescriptions": [
+              "Exclude them (default)",
+              "Include them and always consider as latest",
+              "Include if the current version is already unstable"
+            ],
+            "description": "Filter unstable versions: Exclude, Include Always, or Include If Unstable.",
+            "order": 58
+          },
+          "dependi.elixir.ignoreLinePatterns": {
+            "type": "string",
+            "scope": "resource",
+            "default": "",
+            "markdownDescription": "Matches lines based on `*` position: `text*`, `*text`, `*text*`. Multiple patterns can be used, separated by commas.",
+            "order": 59
+          },
+          "dependi.elixir.informPatchUpdates": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": false,
+            "description": "Inform about available patch updates for Elixir packages via decoration.",
+            "order": 60
+          },
+          "dependi.elixir.lockFileEnabled": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": true,
+            "description": "Enable checking for Elixir dependencies in lockfiles.",
+            "order": 61
+          },
+          "dependi.elixir.silenceVersionOverflows": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": false,
+            "description": "Consider non-registry packages as up-to-date if their version exceeds the max.",
+            "order": 62
+          }
+        }
+      },
+      {
         "title": "Vulnerability Settings",
         "properties": {
           "dependi.vulnerability.enabled": {
@@ -697,14 +769,14 @@
             "scope": "resource",
             "default": true,
             "description": "Enable checking for vulnerabilities in dependencies.",
-            "order": 56
+            "order": 63
           },
           "dependi.vulnerability.ghsa.enabled": {
             "type": "boolean",
             "scope": "resource",
             "default": false,
             "description": "Include GitHub Security Advisory vulnerabilities in checks.",
-            "order": 57
+            "order": 64
           },
           "dependi.vulnerability.osvQueryURL.batch": {
             "type": "string",
@@ -713,7 +785,7 @@
             "format": "url",
             "pattern": "^https?://(?!.*//)([^/]+/)*[^/]+$",
             "default": "https://api.osv.dev/v1/querybatch",
-            "order": 58
+            "order": 65
           },
           "dependi.vulnerability.osvQueryURL.single": {
             "type": "string",
@@ -722,7 +794,7 @@
             "format": "url",
             "pattern": "^https?://(?!.*//)([^/]+/)*[^/]+$",
             "default": "https://api.osv.dev/v1/query",
-            "order": 59
+            "order": 66
           }
         }
       },
