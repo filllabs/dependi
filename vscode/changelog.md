@@ -2,6 +2,12 @@
 
 All notable changes to the "dependi" extension will be documented in this file.
 
+## [v0.7.23](https://github.com/filllabs/dependi/compare/v0.7.22...v0.7.23)
+
+### Bug Fixes
+
+- Fixed NuGet package references with hyphens not being recognized in `.csproj` files, and packages with paginated registration indexes (e.g. CefSharp) showing "No versions found". ([Issue #290](https://github.com/filllabs/dependi/issues/290))
+
 ## [v0.7.22](https://github.com/filllabs/dependi/compare/v0.7.21...v0.7.22)
 
 ### Bug Fixes

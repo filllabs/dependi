@@ -49,11 +49,11 @@ export class CsprojParser implements Parser {
         packageVersion = "";
       }
       if (line.text.includes("Include=")) {
-        const matches = /Include="([a-zA-z0-9.]+)"/.exec(line.text);
+        const matches = /Include="([^"]+)"/.exec(line.text);
         packageName = (matches && matches[1]) || packageName;
       }
       if (line.text.includes("Version=")) {
-        const matches = /Version="([0-9.]+)"/.exec(line.text);
+        const matches = /Version="([^"]+)"/.exec(line.text);
         packageVersion = (matches && matches[1]) || packageVersion;
       }
 
