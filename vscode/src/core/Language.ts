@@ -59,11 +59,13 @@ export function setLanguage(file?: string) {
             return setLanguageConfig(Language.Dart, "dart", filename, OCVEnvironment.Dart);
         case "mix.exs":
             return setLanguageConfig(Language.Elixir, "elixir", filename, OCVEnvironment.Hex, Settings.elixir.lockFileEnabled);
-        case "directory.build.props":
-        case "directory.packages.props":
-            return setLanguageConfig(Language.CSharp, "csharp", filename, OCVEnvironment.Nuget); 
         default:
-            if (fileExtension === ".csproj") {
+            if (
+                fileExtension === ".csproj" ||
+                fileExtension === ".proj" ||
+                fileExtension === ".props" ||
+                fileExtension === ".targets"
+            ) {
                 return setLanguageConfig(Language.CSharp, "csharp", filename, OCVEnvironment.Nuget);
             }
             if ((fileExtension === ".txt" || fileExtension === ".in") && filename.toLowerCase().startsWith("requirement")) {

@@ -10,7 +10,8 @@ const xmlParserOptions: X2jOptions = {
     tagName === "Project" ||
     tagName === "ItemGroup" ||
     tagName === "PackageVersion" ||
-    tagName === "PackageReference",
+    tagName === "PackageReference" ||
+    tagName === "GlobalPackageReference",
 };
 
 export class CsprojParser implements Parser {
@@ -26,9 +27,13 @@ export class CsprojParser implements Parser {
     const packageReferences = itemGroups.flatMap(
       (g) => g["PackageReference"] ?? []
     );
+    const globalPackageReferences = itemGroups.flatMap(
+      (g) => g["GlobalPackageReference"] ?? []
+    );
 
     const detectedPackages = packageVersions
       .concat(packageReferences)
+      .concat(globalPackageReferences)
       .map((p) => ({ name: p["@_Include"], version: p["@_Version"] }))
       .filter((p) => !!p.version)
       .filter((p) => compareVersions.validate(p.version));
@@ -42,7 +47,8 @@ export class CsprojParser implements Parser {
 
       if (
         line.text.includes("<PackageVersion") ||
-        line.text.includes("<PackageReference")
+        line.text.includes("<PackageReference") ||
+        line.text.includes("<GlobalPackageReference")
       ) {
         // start read next package and search for name && version
         packageName = "";

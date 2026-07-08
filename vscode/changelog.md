@@ -2,6 +2,12 @@
 
 All notable changes to the "dependi" extension will be documented in this file.
 
+## [v0.7.26](https://github.com/filllabs/dependi/compare/v0.7.25...v0.7.26)
+
+### New Features
+
+- C#: Added support for MSBuild `GlobalPackageReference` entries in central package management files, and broadened file detection to all `*.props`, `*.targets`, and `*.proj` files. ([Issue #298](https://github.com/filllabs/dependi/issues/298))
+
 ## [v0.7.25](https://github.com/filllabs/dependi/compare/v0.7.24...v0.7.25)
 
 ### New Features
