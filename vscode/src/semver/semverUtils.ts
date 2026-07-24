@@ -54,6 +54,9 @@ export function checkVersion(version: string = "0.0.0", versions: string[], lock
     case Language.Elixir:
       shouldPatchBeChecked = Settings.elixir.informPatchUpdates;
       break;
+    case Language.Gradle:
+      shouldPatchBeChecked = Settings.gradle.informPatchUpdates;
+      break;
   }
   const pathUpdated = shouldPatchBeChecked ? compare(max, minVersion(v) ?? '0.0.0') === 1 : false;
   const maxSatisfyingVersion = maxSatisfying(semverVersions, v);
@@ -194,6 +197,8 @@ function treatAsUpToDate(): boolean {
       return Settings.csharp.silenceVersionOverflows;
     case Language.Elixir:
       return Settings.elixir.silenceVersionOverflows;
+    case Language.Gradle:
+      return Settings.gradle.silenceVersionOverflows;
   }
   return false;
 }

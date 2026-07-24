@@ -1,8 +1,8 @@
 {
   "name": "dependi",
   "displayName": "Dependi",
-  "description": "Empowers developers to efficiently manage dependencies and address vulnerabilities in Rust, Go, JavaScript, Typescript, PHP, Python, Dart, C#, and Elixir projects.",
-  "version": "0.7.25",
+  "description": "Empowers developers to efficiently manage dependencies and address vulnerabilities in Rust, Go, JavaScript, Typescript, PHP, Python, Dart, C#, F#, Elixir, and Gradle (Java/Kotlin) projects.",
+  "version": "0.7.26",
   "publisher": "fill-labs",
   "author": {
     "name": "Fill Labs",
@@ -33,6 +33,8 @@
     "ts",
     "typescript",
     "csharp",
+    "fsharp",
+    "fsproj",
     "crates",
     "pypi",
     "pip",
@@ -51,6 +53,11 @@
     "hex",
     "mix",
     "phoenix",
+    "gradle",
+    "java",
+    "kotlin",
+    "maven",
+    "android",
     "package",
     "dependi",
     "requirements",
@@ -87,6 +94,8 @@
     "workspaceContains:**/pyproject.toml",
     "onLanguage:csproj",
     "workspaceContains:**/*.csproj",
+    "onLanguage:fsproj",
+    "workspaceContains:**/*.fsproj",
     "onLanguage:Directory.Build.props",
     "workspaceContains:**/Directory.Build.props",
     "onLanguage:Directory.Packages.props",
@@ -96,7 +105,12 @@
     "workspaceContains:**/deno.json",
     "workspaceContains:**/deno.jsonc",
     "onLanguage:elixir",
-    "workspaceContains:**/mix.exs"
+    "workspaceContains:**/mix.exs",
+    "onLanguage:gradle",
+    "workspaceContains:**/build.gradle",
+    "workspaceContains:**/build.gradle.kts",
+    "workspaceContains:**/libs.versions.toml",
+    "workspaceContains:**/gradle-wrapper.properties"
   ],
   "contributes": {
     "menus": {
@@ -636,7 +650,7 @@
             "type": "boolean",
             "scope": "resource",
             "default": true,
-            "description": "Enable checking for C# dependencies.",
+            "description": "Enable checking for C#/F# (NuGet) dependencies.",
             "order": 49
           },
           "dependi.csharp.indexServerURL": {
@@ -683,7 +697,7 @@
             "type": "boolean",
             "scope": "resource",
             "default": true,
-            "description": "Enable checking for C# dependencies in lockfiles.",
+            "description": "Enable checking for C#/F# (NuGet) dependencies in lockfiles.",
             "order": 54
           },
           "dependi.csharp.silenceVersionOverflows": {
@@ -758,6 +772,65 @@
             "default": false,
             "description": "Consider non-registry packages as up-to-date if their version exceeds the max.",
             "order": 62
+          }
+        }
+      },
+      {
+        "title": "Gradle Settings",
+        "properties": {
+          "dependi.gradle.enabled": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": true,
+            "description": "Enable checking for Gradle dependencies in build files, version catalogs, and wrapper properties.",
+            "order": 63
+          },
+          "dependi.gradle.indexServerURL": {
+            "type": "string",
+            "scope": "resource",
+            "description": "The URL for the Maven package index server.",
+            "format": "url",
+            "pattern": "^https?://(?!.*//)([^/]+/)*[^/]+$",
+            "default": "https://repo1.maven.org/maven2",
+            "order": 64
+          },
+          "dependi.gradle.unstableFilter": {
+            "type": "string",
+            "enum": [
+              "Exclude",
+              "IncludeAlways",
+              "IncludeIfUnstable"
+            ],
+            "default": "Exclude",
+            "scope": "resource",
+            "enumDescriptions": [
+              "Exclude them (default)",
+              "Include them and always consider as latest",
+              "Include if the current version is already unstable"
+            ],
+            "description": "Filter unstable versions: Exclude, Include Always, or Include If Unstable.",
+            "order": 65
+          },
+          "dependi.gradle.ignoreLinePatterns": {
+            "type": "string",
+            "scope": "resource",
+            "default": "",
+            "markdownDescription": "Matches lines based on `*` position: `text*`, `*text`, `*text*`. Multiple patterns can be used, separated by commas.",
+            "order": 66
+          },
+          "dependi.gradle.informPatchUpdates": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": false,
+            "description": "Inform about available patch updates for Gradle dependencies via decoration.",
+            "order": 67
+          },
+          "dependi.gradle.silenceVersionOverflows": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": false,
+            "description": "Consider non-registry packages as up-to-date if their version exceeds the max.",
+            "order": 68
           }
         }
       },

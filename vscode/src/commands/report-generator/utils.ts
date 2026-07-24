@@ -36,8 +36,8 @@ export const parserInvoker = (language: string) => {
     case "Directory.Packages.props":
       return new CsprojParser();
     default:
-      // Check if it's a .csproj file
-      if (language.endsWith(".csproj")) {
+      // Check if it's a .csproj or .fsproj file
+      if (language.endsWith(".csproj") || language.endsWith(".fsproj")) {
         return new CsprojParser();
       }
       throw Error("Language not supported");

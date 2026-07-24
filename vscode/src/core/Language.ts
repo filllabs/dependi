@@ -14,6 +14,7 @@ export enum Language {
     CSharp = 7,
     PnpmWorkspace = 8,
     Elixir = 9,
+    Gradle = 10,
 }
 
 export enum OCVEnvironment {
@@ -25,6 +26,7 @@ export enum OCVEnvironment {
     Dart = "Pub",
     Nuget = "NuGet",
     Hex = "Hex",
+    Maven = "Maven",
 }
 export var CurrentLanguage: Language = Language.None;
 export var CurrentLanguageConfig: string = "";
@@ -59,11 +61,16 @@ export function setLanguage(file?: string) {
             return setLanguageConfig(Language.Dart, "dart", filename, OCVEnvironment.Dart);
         case "mix.exs":
             return setLanguageConfig(Language.Elixir, "elixir", filename, OCVEnvironment.Hex, Settings.elixir.lockFileEnabled);
+        case "build.gradle":
+        case "build.gradle.kts":
+        case "libs.versions.toml":
+        case "gradle-wrapper.properties":
+            return setLanguageConfig(Language.Gradle, "gradle", filename, OCVEnvironment.Maven);
         case "directory.build.props":
         case "directory.packages.props":
             return setLanguageConfig(Language.CSharp, "csharp", filename, OCVEnvironment.Nuget); 
         default:
-            if (fileExtension === ".csproj") {
+            if (fileExtension === ".csproj" || fileExtension === ".fsproj") {
                 return setLanguageConfig(Language.CSharp, "csharp", filename, OCVEnvironment.Nuget);
             }
             if ((fileExtension === ".txt" || fileExtension === ".in") && filename.toLowerCase().startsWith("requirement")) {

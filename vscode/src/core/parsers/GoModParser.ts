@@ -26,7 +26,7 @@ export class GoModParser {
       if (state.bypass) {
         continue;
       }
-      const requireType = isRequireLine(line)
+      const requireType = isRequireLine(line);
       if (requireType === "block") {
         // from now on we are in require block read every line until we find the end of the block as dependencies
         state.inRequire = true;
@@ -42,7 +42,7 @@ export class GoModParser {
         item.createDecoRange();
         state.items.push(item);
       }
-      if (requireType === 'single' && !state.inRequire) {
+      if (requireType === "single" && !state.inRequire) {
         let item = parseDependencyLine(line);
         item.createRange();
         item.createDecoRange();
@@ -57,10 +57,12 @@ export class GoModParser {
 function isRequireLine(line: TextLine): "block" | "single" | null {
   const start = line.firstNonWhitespaceCharacterIndex;
   const text = line.text.substring(start);
-  if (text.startsWith("require (")) {
+  // require ( ... ) multi-line block
+  if (/^require\s*\(/.test(text)) {
     return "block";
   }
-  if (text.startsWith("require")) {
+  // require module/path v1.2.3
+  if (/^require\s+\S+/.test(text)) {
     return "single";
   }
   return null;
@@ -71,26 +73,36 @@ function isBlockEnd(line: TextLine): boolean {
 }
 
 function parseDependencyLine(line: TextLine): Item {
-  // parse lines like 	example.com/othermodule v1.2.3
-  let endOfName = line.text.indexOf(" ", line.firstNonWhitespaceCharacterIndex);
-  let startOfVersion = endOfName + 1;
-  let endOfVersion = line.text.indexOf(" ", startOfVersion);
-  if (endOfVersion === -1) {
-    endOfVersion = line.text.length;
-  }
-  let name = line.text.substring(
-    line.firstNonWhitespaceCharacterIndex,
-    endOfName
-  );
-  if (name.startsWith("require")) {
-    name = name.substring(7).trim();
-  }
-  let version = line.text.substring(startOfVersion, endOfVersion);
+  // parse lines like:
+  //   example.com/othermodule v1.2.3
+  //   require example.com/othermodule v1.2.3
+  //   require example.com/othermodule v1.2.3 // indirect
+  let start = line.firstNonWhitespaceCharacterIndex;
+  let text = line.text.substring(start);
 
-  if (isQuote(name[0]) && isQuote(name[name.length - 1])) {
+  const requirePrefix = text.match(/^require\s+(?!\()/);
+  if (requirePrefix) {
+    start += requirePrefix[0].length;
+    text = line.text.substring(start);
+  }
+
+  // Ignore trailing comments when locating tokens
+  const commentIdx = text.indexOf("//");
+  if (commentIdx !== -1) {
+    text = text.substring(0, commentIdx).trimEnd();
+  }
+
+  const tokens = text.match(/^(\S+)\s+(\S+)/);
+  let name = tokens?.[1] ?? "";
+  let version = tokens?.[2] ?? "";
+
+  let startOfVersion = start + (tokens ? text.indexOf(version) : 0);
+  let endOfVersion = startOfVersion + version.length;
+
+  if (name && isQuote(name[0]) && isQuote(name[name.length - 1])) {
     name = name.substring(1, name.length - 1);
   }
-  if (isQuote(version[0]) && isQuote(version[version.length - 1])) {
+  if (version && isQuote(version[0]) && isQuote(version[version.length - 1])) {
     version = version.substring(1, version.length - 1);
     startOfVersion++;
     endOfVersion--;

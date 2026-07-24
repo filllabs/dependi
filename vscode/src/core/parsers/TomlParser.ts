@@ -77,6 +77,19 @@ export class TomlParser implements Parser {
       } else if (this.isSubTable(line.text, state)) {
         state.bypass = false;
         state.isSubTable = true;
+        // Inline arrays on the opening line: dependencies = ["a>=1", "b>=2"]
+        const inlineItems = this.parseInlineDependencyArray(
+          line.text,
+          row,
+          line.range.end.character
+        );
+        if (inlineItems.length > 0) {
+          for (const item of inlineItems) {
+            state.currentItem = item;
+            this.addItem(state, items);
+          }
+          state.isSubTable = false;
+        }
         continue;
       }
       // if bypass is true, we need to skip the next line until new table is found
@@ -84,9 +97,32 @@ export class TomlParser implements Parser {
         continue;
       }
       if (state.isMultipleDepTable || state.isSubTable) {
+        // Inline group arrays: dev = ["pytest>=8.0"]
+        const inlineItems = this.parseInlineDependencyArray(
+          line.text,
+          row,
+          line.range.end.character
+        );
+        if (inlineItems.length > 0) {
+          for (const item of inlineItems) {
+            state.currentItem = item;
+            this.addItem(state, items);
+          }
+          continue;
+        }
         // if it is multiple dependency table, we need to read pairs until we find another table
         const pair = this.parsePair(line.text, row);
         if (!pair) {
+          // PEP 621 / dependency-groups quoted requirement strings
+          const req = this.parseRequirementLine(
+            line.text,
+            row,
+            line.range.end.character
+          );
+          if (req) {
+            state.currentItem = req;
+            this.addItem(state, items);
+          }
           continue;
         }
         // since it is multiple depedency table we need to add the item
@@ -187,6 +223,31 @@ export class TomlParser implements Parser {
   isSubTable(line: string, state: State): boolean {
     return false;
   }
+
+  /**
+   * Parse a quoted PEP 508 requirement string line (e.g. `"requests>=2.32.0",`).
+   * Default: unsupported. Overridden by PyProjectParser.
+   */
+  parseRequirementLine(
+    _line: string,
+    _row: number,
+    _endOfLine: number
+  ): Item | undefined {
+    return undefined;
+  }
+
+  /**
+   * Parse dependencies from an inline TOML array on one line
+   * (e.g. `dependencies = ["requests>=2.32.0", "pydantic>=2.0"]`).
+   * Default: unsupported. Overridden by PyProjectParser.
+   */
+  parseInlineDependencyArray(
+    _line: string,
+    _row: number,
+    _endOfLine: number
+  ): Item[] {
+    return [];
+  }
 }
 
 export function parseVersion(line: string, item: Item) {
@@ -209,7 +270,9 @@ export function parseVersion(line: string, item: Item) {
 }
 
 function isDependencyTable(line: string): boolean {
-  return line.includes("dependencies]");
+  const trimmed = line.trim();
+  // PEP 735 dependency groups use `[dependency-groups]` with `name = [` arrays.
+  return trimmed.includes("dependencies]") || trimmed === "[dependency-groups]";
 }
 
 function parseVersionValue(line: string, item: Item) {
@@ -359,8 +422,9 @@ function parseLockFile(item: Item[]): Item[] {
 }
 
 function containsIgnoredKeywordsInValue(value: string) {
-  const ignoredKeywords = ["git", "path"];
-  return ignoredKeywords.some((v) => value.includes(v));
+  // Match path/git as TOML keys only (e.g. path = "../foo"), not substrings in
+  // feature names like features = ["matched-path", "ws"].
+  return /\b(git|path)\s*=/.test(value);
 }
 
 function containsIgnoredKeywordsInKey(key: string) {

@@ -38,6 +38,9 @@ export class DependiFetcher extends Fetcher {
       case Language.Elixir:
         unstableFilter = Settings.elixir.unstableFilter;
         break;
+      case Language.Gradle:
+        unstableFilter = Settings.gradle.unstableFilter;
+        break;
     }
     const req: VersionsReq = {
       Language: CurrentLanguage,

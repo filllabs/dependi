@@ -35,8 +35,22 @@ import { CSharpListener } from "./CSharpListener";
 import { MixExsListener } from "./MixExsListener";
 import { HexFetcher } from "../fetchers/HexFetcher";
 import { MixExsParser } from "../parsers/MixExsParser";
+import { GradleListener } from "./GradleListener";
+import { MavenFetcher } from "../fetchers/MavenFetcher";
+import { GradleParser } from "../parsers/GradleParser";
 
 let listenerTimer: NodeJS.Timeout | undefined;
+let isListening = false;
+let pendingEditor: TextEditor | undefined;
+
+/** Cancel a debounced listener and drop any queued editor (e.g. switched to unsupported file). */
+export function cancelPendingListener(): void {
+  if (listenerTimer) {
+    clearTimeout(listenerTimer);
+    listenerTimer = undefined;
+  }
+  pendingEditor = undefined;
+}
 
 export default async function listener(editor: TextEditor | undefined): Promise<void> {
   if (listenerTimer) {
@@ -52,8 +66,16 @@ export default async function listener(editor: TextEditor | undefined): Promise<
 }
 
 async function runListener(editor: TextEditor | undefined): Promise<void> {
-  if (!editor || !editor.document || editor.document.isDirty) {
-    console.debug("Editor is undefined or document is dirty", editor, editor?.document.isDirty);
+  if (!editor || !editor.document) {
+    console.debug("Editor is undefined", editor);
+    return Promise.resolve();
+  }
+
+  // A fetch is already running — keep only the latest editor and decorate it when free.
+  // Previously we dropped these, so switching tabs mid-fetch often skipped decorations.
+  if (isListening) {
+    pendingEditor = editor;
+    console.debug("Listener busy, queueing", editor.document.fileName);
     return Promise.resolve();
   }
 
@@ -102,7 +124,6 @@ async function runListener(editor: TextEditor | undefined): Promise<void> {
         new PhpParser());
       break;
     case Language.Python:
-      console.log("Python");
       if (!Settings.python.enabled)
         return;
       const fileName = path.basename(editor.document.fileName);
@@ -134,30 +155,46 @@ async function runListener(editor: TextEditor | undefined): Promise<void> {
         new HexFetcher(Settings.elixir.index, Configs.ELIXIR_INDEX_SERVER_URL),
         new MixExsParser());
       break;
+    case Language.Gradle:
+      if (!Settings.gradle.enabled)
+        return;
+      listener = new GradleListener(
+        new MavenFetcher(Settings.gradle.index, Configs.GRADLE_INDEX_SERVER_URL),
+        new GradleParser());
+      break;
   }
   if (listener !== undefined) {
-    if (Settings.api.key !== "" && Settings.api.url !== "") {
-      // For Rust, use hybrid approach: API for crates.io, direct for alternate registries
-      if (CurrentLanguage === Language.Rust && listener instanceof CargoTomlListener) {
-        // Load alternate registries first
-        await listener.loadAlternateRegistries(editor);
-        // Replace fetcher with API fetcher (directFetcher still has CratesFetcher)
-        listener.fetcher = new DependiFetcher(Settings.api.url, Configs.INDEX_SERVER_URL);
-      } else {
-        // For other languages, use API backend exclusively
-        listener = new DependiListener(
-          new DependiFetcher(Settings.api.url, Configs.INDEX_SERVER_URL),
-          listener.parser);
-      }
-    }
-    if (!status.inProgress) {
-      status.inProgress = true;
-      StatusBar.fetching("");
-      StatusBar.show();
+    isListening = true;
+    status.inProgress = true;
+    StatusBar.fetching("");
+    StatusBar.show();
 
-      return listener?.parseAndDecorate(editor).finally(() => {
-        status.inProgress = false;
-      });
+    try {
+      if (Settings.api.key !== "" && Settings.api.url !== "") {
+        // For Rust, use hybrid approach: API for crates.io, direct for alternate registries
+        if (CurrentLanguage === Language.Rust && listener instanceof CargoTomlListener) {
+          // Load alternate registries first
+          await listener.loadAlternateRegistries(editor);
+          // Replace fetcher with API fetcher (directFetcher still has CratesFetcher)
+          listener.fetcher = new DependiFetcher(Settings.api.url, Configs.INDEX_SERVER_URL);
+        } else {
+          // For other languages, use API backend exclusively
+          listener = new DependiListener(
+            new DependiFetcher(Settings.api.url, Configs.INDEX_SERVER_URL),
+            listener.parser);
+        }
+      }
+
+      await listener.parseAndDecorate(editor);
+    } finally {
+      isListening = false;
+      status.inProgress = false;
+
+      const next = pendingEditor;
+      pendingEditor = undefined;
+      if (next) {
+        void runListener(next);
+      }
     }
   }
 }

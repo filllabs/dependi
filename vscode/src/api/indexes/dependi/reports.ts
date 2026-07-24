@@ -42,6 +42,7 @@ export enum Language {
   CSharp,
   PnpmWorkspace,
   Elixir,
+  Gradle,
 }
 
 const LanguageArray = [
@@ -54,6 +55,10 @@ const LanguageArray = [
   { ID: Language.Elixir, Name: "mix.exs" },
   { ID: Language.CSharp, Name: "directory.build.props" },
   { ID: Language.CSharp, Name: "directory.packages.props" },
+  { ID: Language.Gradle, Name: "build.gradle" },
+  { ID: Language.Gradle, Name: "build.gradle.kts" },
+  { ID: Language.Gradle, Name: "libs.versions.toml" },
+  { ID: Language.Gradle, Name: "gradle-wrapper.properties" },
 ];
 
 export const getLangIdFromName = (name: string): Language => {
@@ -61,7 +66,7 @@ export const getLangIdFromName = (name: string): Language => {
   if (exactMatch) {
     return exactMatch.ID;
   }
-  if (name.toLowerCase().endsWith(".csproj")) {
+  if (name.toLowerCase().endsWith(".csproj") || name.toLowerCase().endsWith(".fsproj")) {
     return Language.CSharp;
   }
   return Language.None;

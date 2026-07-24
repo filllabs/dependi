@@ -1,12 +1,12 @@
 # Dependi: Your Ultimate Dependency Management Tool
 
-Dependi is a comprehensive dependency management extension that helps developers write code faster and smarter by efficiently managing project dependencies. Formerly known as Crates the most loved and used dependency management extension for Rust. Dependi now supports multiple languages including Rust, Go, JavaScript, TypeScript, Python, PHP, Dart, C#, and Elixir.
+Dependi is a comprehensive dependency management extension that helps developers write code faster and smarter by efficiently managing project dependencies. Formerly known as Crates the most loved and used dependency management extension for Rust. Dependi now supports multiple languages including Rust, Go, JavaScript, TypeScript, Python, PHP, Dart, C#, F#, and Elixir.
 
 [Install](https://www.dependi.io/download) Dependi via VSCode or [Dependi.io](https://www.dependi.io)
 
 When you install Dependi in Visual Studio Code, 2 options are available :
 
-- Dependi Core: Provides essential dependency management for Rust, Go, JavaScript, TypeScript, Python, PHP, Dart, C#, and Elixir projects. Free to use with no subscription required.
+- Dependi Core: Provides essential dependency management for Rust, Go, JavaScript, TypeScript, Python, PHP, Dart, C#, F#, and Elixir projects. Free to use with no subscription required.
 
 - [Dependi Pro:](https://www.dependi.io) Offers many advanced features like detailed vulnerability reports, private repository support, and priority support... Easy subscription packages and [free trials](https://www.dependi.io/#pricing) are available.
 
@@ -41,7 +41,7 @@ Dependi simplifies dependency management in Visual Studio Code, helping you to:
   - **Dart / Flutter**:
     - Documentation: [https://dart.dev/docs](https://dart.dev/guides)
     - Package Repository (pub.dev): [https://pub.dev](https://pub.dev)
-  - **C#**
+  - **C# / F#**
     - Documentation: [https://dot.net/docs](https://dot.net/docs)
     - Package Repository (NuGet): [https://www.nuget.org/](https://www.nuget.org/)
   - **Elixir**
@@ -54,7 +54,7 @@ Dependi simplifies dependency management in Visual Studio Code, helping you to:
 - **Vulnerability Reports**: Generate comprehensive reports detailing the vulnerabilities in your dependencies, helping you maintain secure codebases.
   ![Vulnerability Reports](https://www.dependi.io/screenshots/report.png)
 
-- **Supported Languages and Frameworks**: Dependi works with a variety of languages including Rust, Go, JavaScript, TypeScript, Python, PHP, Dart, C#, and Elixir. It is designed to support most popular languages and frameworks, making it a versatile tool for developers.
+- **Supported Languages and Frameworks**: Dependi works with a variety of languages including Rust, Go, JavaScript, TypeScript, Python, PHP, Dart, C#, F#, and Elixir. It is designed to support most popular languages and frameworks, making it a versatile tool for developers.
 
 For more information about the feature set [visit here](https://www.dependi.io/#features).
 
@@ -117,9 +117,9 @@ While Dependi works out-of-the-box without any configuration, we also offer a fe
 - `dependi.dart.unstableFilter`: Filter unstable versions: Exclude, Include Always, or Include If Unstable.
 - `dependi.dart.ignoreLinePattern`: Matches lines based on `*` position: `text*`, `*text`, `*text*`. Multiple patterns can be used, separated by commas.
 - `dependi.dart.silenceVersionOverflows`: Consider non-registry versions of packages as up-to-date if their version exceeds the registry version.
-- `dependi.csharp.enabled`: Enable C# package management.
-- `dependi.csharp.lockFileEnabled`: Enable checking for C# dependencies in lockfiles.
-- `dependi.csharp.indexServerURL`: The URL for the C# package index server.
+- `dependi.csharp.enabled`: Enable C#/F# (NuGet) package management.
+- `dependi.csharp.lockFileEnabled`: Enable checking for C#/F# dependencies in lockfiles.
+- `dependi.csharp.indexServerURL`: The URL for the NuGet package index server.
 - `dependi.csharp.unstableFilter`: Filter unstable versions: Exclude, Include Always, or Include If Unstable.
 - `dependi.csharp.ignoreLinePattern`: Matches lines based on `*` position: `text*`, `*text`, `*text*`. Multiple patterns can be used, separated by commas.
 - `dependi.csharp.silenceVersionOverflows`: Consider non-registry versions of packages as up-to-date if their version exceeds the registry version.

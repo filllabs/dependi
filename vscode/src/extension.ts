@@ -20,7 +20,7 @@ import { generateVulnerabilityReport } from "./commands/report-generator/generat
 import { retry } from "./commands/retry";
 import { Settings } from "./config";
 import { CurrentLanguage, Language, setLanguage } from "./core/Language";
-import listener from "./core/listeners";
+import listener, { cancelPendingListener } from "./core/listeners";
 import { DependencyCache } from "./core/listeners/listener";
 import { ChangelogPanel } from "./panels/ChangelogPanel";
 import { WelcomePagePanel } from "./panels/WelcomePanel";
@@ -65,6 +65,9 @@ export function activate(context: ExtensionContext) {
       case e.affectsConfiguration("dependi.elixir.unstableFilter"):
         DependencyCache.delete(Language.Elixir);
         break;
+      case e.affectsConfiguration("dependi.gradle.unstableFilter"):
+        DependencyCache.delete(Language.Gradle);
+        break;
       case e.affectsConfiguration("dependi.decoration"):
         reloadPref();
         if (window.activeTextEditor) {
@@ -94,8 +97,10 @@ export function activate(context: ExtensionContext) {
   context.subscriptions.push(
     // Add active text editor listener and run once on start.
     window.onDidChangeActiveTextEditor((e) => {
-      setLanguage(window.activeTextEditor?.document.fileName);
+      setLanguage(e?.document.fileName);
       if (CurrentLanguage === Language.None) {
+        // Drop any pending decorate for the previous supported file.
+        cancelPendingListener();
         return;
       }
       console.debug("Active text editor changed", CurrentLanguage);
@@ -131,6 +136,10 @@ export function activate(context: ExtensionContext) {
     "mix.exs",
     "directory.build.props",
     "directory.packages.props",
+    "build.gradle",
+    "build.gradle.kts",
+    "libs.versions.toml",
+    "gradle-wrapper.properties",
   ]);
 
   console.debug("Adding commands");

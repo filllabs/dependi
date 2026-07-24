@@ -76,6 +76,13 @@ export enum Configs {
   ELIXIR_ENABLED_LOCK_FILE = `elixir.lockFileEnabled`,
   ELIXIR_SILENCE_VERSION_OVERFLOWS = `elixir.silenceVersionOverflows`,
 
+  GRADLE_ENABLED = `gradle.enabled`,
+  GRADLE_INDEX_SERVER_URL = `gradle.indexServerURL`,
+  GRADLE_UNSTABLE_FILTER = `gradle.unstableFilter`,
+  GRADLE_IGNORE_LINE_PATTERN = `gradle.ignoreLinePattern`,
+  GRADLE_INFORM_PATCH_UPDATES = `gradle.informPatchUpdates`,
+  GRADLE_SILENCE_VERSION_OVERFLOWS = `gradle.silenceVersionOverflows`,
+
   VULS_ENABLED = `vulnerability.enabled`,
   VULS_GHSA_ENABLED = `vulnerability.ghsa.enabled`,
   VULS_OSV_BATCH_URL = `vulnerability.osvQueryURL.batch`,
@@ -199,6 +206,14 @@ export const Settings = {
     lockFileEnabled: true,
     silenceVersionOverflows: false
   },
+  gradle: {
+    enabled: true,
+    index: "",
+    unstableFilter: UnstableFilter.Exclude,
+    ignoreLinePattern: "",
+    informPatchUpdates: false,
+    silenceVersionOverflows: false
+  },
   vulnerability: {
     enabled: false,
     ghsa: false,
@@ -306,6 +321,13 @@ export const Settings = {
     this.elixir.informPatchUpdates = config.get<boolean>(Configs.ELIXIR_INFORM_PATCH_UPDATES) ?? false;
     this.elixir.lockFileEnabled = config.get<boolean>(Configs.ELIXIR_ENABLED_LOCK_FILE) ?? true;
     this.elixir.silenceVersionOverflows = config.get<boolean>(Configs.ELIXIR_SILENCE_VERSION_OVERFLOWS) ?? false;
+
+    this.gradle.enabled = config.get<boolean>(Configs.GRADLE_ENABLED) ?? true;
+    this.gradle.index = config.get<string>(Configs.GRADLE_INDEX_SERVER_URL) || "https://repo1.maven.org/maven2";
+    this.gradle.unstableFilter = UnstableFilter[config.get<string>(Configs.GRADLE_UNSTABLE_FILTER) as keyof typeof UnstableFilter] || UnstableFilter.Exclude;
+    this.gradle.ignoreLinePattern = config.get<string>(Configs.GRADLE_IGNORE_LINE_PATTERN) || "";
+    this.gradle.informPatchUpdates = config.get<boolean>(Configs.GRADLE_INFORM_PATCH_UPDATES) ?? false;
+    this.gradle.silenceVersionOverflows = config.get<boolean>(Configs.GRADLE_SILENCE_VERSION_OVERFLOWS) ?? false;
 
     this.vulnerability.enabled = config.get<boolean>(Configs.VULS_ENABLED) ?? true;
     this.vulnerability.ghsa = config.get<boolean>(Configs.VULS_GHSA_ENABLED) ?? false;

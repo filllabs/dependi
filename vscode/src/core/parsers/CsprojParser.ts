@@ -4,14 +4,23 @@ import compareVersions from "../../semver/compareVersions";
 import Item from "../Item";
 import { Parser } from "./parser";
 
+const PACKAGE_TAGS = [
+  "PackageVersion",
+  "PackageReference",
+  "GlobalPackageReference",
+] as const;
+
 const xmlParserOptions: X2jOptions = {
   ignoreAttributes: false,
   isArray: (tagName: string) =>
     tagName === "Project" ||
     tagName === "ItemGroup" ||
-    tagName === "PackageVersion" ||
-    tagName === "PackageReference",
+    PACKAGE_TAGS.includes(tagName as (typeof PACKAGE_TAGS)[number]),
 };
+
+function isPackageTagStart(line: string): boolean {
+  return PACKAGE_TAGS.some((tag) => line.includes(`<${tag}`));
+}
 
 export class CsprojParser implements Parser {
   parse(doc: TextDocument): Item[] {
@@ -20,15 +29,9 @@ export class CsprojParser implements Parser {
 
     const projects: any[] = xmlObject["Project"] ?? [];
     const itemGroups: any[] = projects.flatMap((p) => p["ItemGroup"] ?? []);
-    const packageVersions = itemGroups.flatMap(
-      (g) => g["PackageVersion"] ?? []
-    );
-    const packageReferences = itemGroups.flatMap(
-      (g) => g["PackageReference"] ?? []
-    );
-
-    const detectedPackages = packageVersions
-      .concat(packageReferences)
+    const detectedPackages = PACKAGE_TAGS.flatMap((tag) =>
+      itemGroups.flatMap((g) => g[tag] ?? [])
+    )
       .map((p) => ({ name: p["@_Include"], version: p["@_Version"] }))
       .filter((p) => !!p.version)
       .filter((p) => compareVersions.validate(p.version));
@@ -40,10 +43,7 @@ export class CsprojParser implements Parser {
     for (let row = 0; row < doc.lineCount; row++) {
       const line = doc.lineAt(row);
 
-      if (
-        line.text.includes("<PackageVersion") ||
-        line.text.includes("<PackageReference")
-      ) {
+      if (isPackageTagStart(line.text)) {
         // start read next package and search for name && version
         packageName = "";
         packageVersion = "";

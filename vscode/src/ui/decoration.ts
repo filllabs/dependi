@@ -211,6 +211,17 @@ function getLinks(lang: Language, key: string, item?: Item): string {
       return ` _([View package](https://www.nuget.org/packages/${cleanKey}))_`;
     case Language.Elixir:
       return ` _([View package](https://hex.pm/packages/${cleanKey}))_`;
+    case Language.Gradle:
+      if (item?.source === "gradle-wrapper" || cleanKey === "gradle") {
+        return ` _([View releases](https://gradle.org/releases/))_`;
+      }
+      {
+        const [group, artifact] = cleanKey.split(":");
+        if (group && artifact) {
+          return ` _([View artifact](https://central.sonatype.com/artifact/${group}/${artifact}))_`;
+        }
+      }
+      return "";
     default:
       return "";
   }
@@ -242,6 +253,17 @@ function getDocsLink(
       return `[(docs)](https://www.nuget.org/packages/${key}/${version})`;
     case Language.Elixir:
       return `[(docs)](https://hexdocs.pm/${key}/${version})`;
+    case Language.Gradle:
+      if (item?.source === "gradle-wrapper" || key === "gradle") {
+        return `[(release notes)](https://docs.gradle.org/${version}/release-notes.html)`;
+      }
+      {
+        const [group, artifact] = key.split(":");
+        if (group && artifact) {
+          return `[(docs)](https://central.sonatype.com/artifact/${group}/${artifact}/${version})`;
+        }
+      }
+      return "";
     default:
       return "";
   }

@@ -2,6 +2,19 @@
 
 All notable changes to the "dependi" extension will be documented in this file.
 
+## [v0.7.26](https://github.com/filllabs/dependi/compare/v0.7.25...v0.7.26)
+
+### New Features
+
+- Added support for Gradle (Java/Kotlin) dependency management in `build.gradle`, `build.gradle.kts`, `libs.versions.toml`, and `gradle-wrapper.properties`, including Maven Central version lookups.
+- Added NuGet dependency support for F# `.fsproj` files (same MSBuild/PackageReference format as `.csproj`). ([Issue #302](https://github.com/filllabs/dependi/issues/302))
+- Added support for MSBuild `GlobalPackageReference` in NuGet Central Package Management files. ([Issue #298](https://github.com/filllabs/dependi/issues/298))
+
+### Bug Fixes
+
+- Python: Fixed `[tool.*]` config blocks in `pyproject.toml` (e.g. `[tool.pytest]`) being incorrectly parsed as dependencies. ([Issue #303](https://github.com/filllabs/dependi/issues/303))
+- Go: Fixed single-line `require module version` statements in `go.mod` not being parsed (only parenthesized `require (` blocks worked). ([Issue #301](https://github.com/filllabs/dependi/issues/301))
+
 ## [v0.7.25](https://github.com/filllabs/dependi/compare/v0.7.24...v0.7.25)
 
 ### New Features
