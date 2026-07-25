@@ -2,6 +2,12 @@
 
 All notable changes to the "dependi" extension will be documented in this file.
 
+## [v0.7.27](https://github.com/filllabs/dependi/compare/v0.7.26...v0.7.27)
+
+### New Features
+
+- Added support for Terraform module version management in `.tf` files, including Terraform Registry lookups for modules in `namespace/name/provider` format. ([Issue #235](https://github.com/filllabs/dependi/issues/235))
+
 ## [v0.7.26](https://github.com/filllabs/dependi/compare/v0.7.25...v0.7.26)
 
 ### New Features
