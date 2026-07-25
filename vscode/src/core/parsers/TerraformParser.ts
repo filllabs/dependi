@@ -101,8 +101,11 @@ export class TerraformParser {
 
           // Exit module block when all braces are closed
           if (state.braceDepth <= 0) {
-            this.resetModuleState(state, false, 0);
             state.inModule = false;
+            state.inModuleBlock = false;
+            state.moduleSource = "";
+            state.pendingVersionLine = null;
+            state.braceDepth = 0;
           }
         }
       }
