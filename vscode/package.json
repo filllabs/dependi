@@ -1,7 +1,7 @@
 {
   "name": "dependi",
   "displayName": "Dependi",
-  "description": "Empowers developers to efficiently manage dependencies and address vulnerabilities in Rust, Go, JavaScript, Typescript, PHP, Python, Dart, C#, F#, Elixir, and Gradle (Java/Kotlin) projects.",
+  "description": "Empowers developers to efficiently manage dependencies and address vulnerabilities in Rust, Go, JavaScript, Typescript, PHP, Python, Dart, C#, F#, Elixir, Gradle (Java/Kotlin), and Terraform projects.",
   "version": "0.7.26",
   "publisher": "fill-labs",
   "author": {
@@ -58,6 +58,10 @@
     "kotlin",
     "maven",
     "android",
+    "terraform",
+    "hcl",
+    "infrastructure",
+    "iac",
     "package",
     "dependi",
     "requirements",
@@ -110,7 +114,9 @@
     "workspaceContains:**/build.gradle",
     "workspaceContains:**/build.gradle.kts",
     "workspaceContains:**/libs.versions.toml",
-    "workspaceContains:**/gradle-wrapper.properties"
+    "workspaceContains:**/gradle-wrapper.properties",
+    "onLanguage:terraform",
+    "workspaceContains:**/*.tf"
   ],
   "contributes": {
     "menus": {
@@ -831,6 +837,60 @@
             "default": false,
             "description": "Consider non-registry packages as up-to-date if their version exceeds the max.",
             "order": 68
+          },
+          "dependi.terraform.enabled": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": true,
+            "description": "Enable checking for Terraform module versions in .tf files.",
+            "order": 69
+          },
+          "dependi.terraform.indexServerURL": {
+            "type": "string",
+            "scope": "resource",
+            "description": "The URL for the Terraform Registry API server.",
+            "format": "url",
+            "pattern": "^https?://(?!.*//)([^/]+/)*[^/]+$",
+            "default": "https://registry.terraform.io",
+            "order": 70
+          },
+          "dependi.terraform.unstableFilter": {
+            "type": "string",
+            "enum": [
+              "Exclude",
+              "IncludeAlways",
+              "IncludeIfUnstable"
+            ],
+            "default": "Exclude",
+            "scope": "resource",
+            "enumDescriptions": [
+              "Exclude them (default)",
+              "Include them and always consider as latest",
+              "Include if the current version is already unstable"
+            ],
+            "description": "Filter unstable versions: Exclude, Include Always, or Include If Unstable.",
+            "order": 71
+          },
+          "dependi.terraform.ignoreLinePatterns": {
+            "type": "string",
+            "scope": "resource",
+            "default": "",
+            "markdownDescription": "Matches lines based on `*` position: `text*`, `*text`, `*text*`. Multiple patterns can be used, separated by commas.",
+            "order": 72
+          },
+          "dependi.terraform.informPatchUpdates": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": false,
+            "description": "Inform about available patch updates for Terraform modules via decoration.",
+            "order": 73
+          },
+          "dependi.terraform.silenceVersionOverflows": {
+            "type": "boolean",
+            "scope": "resource",
+            "default": false,
+            "description": "Consider non-registry modules as up-to-date if their version exceeds the max.",
+            "order": 74
           }
         }
       },
