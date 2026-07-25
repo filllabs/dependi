@@ -7,10 +7,11 @@ import { makeRequest } from './request';
 
 export const versions = (name: string) => {
   return new Promise<DependencyInfo>(function (resolve, reject) {
-    // name format: "namespace/name/provider" or "terraform-aws-modules/vpc/aws"
+    // name format: "namespace/name/provider" (e.g. terraform-aws-modules/vpc/aws)
     const parts = name.split('/');
-    if (parts.length !== 3) {
-      return reject(new Error(`Invalid Terraform module name format: ${name}. Expected format: namespace/name/provider`));
+    if (parts.length !== 3 || parts.some((part) => part.length === 0)) {
+      // Non-registry sources (local paths, git, etc.) are skipped by the parser.
+      return resolve({ name, versions: [] });
     }
 
     const [namespace, moduleName, provider] = parts;
@@ -27,16 +28,15 @@ export const versions = (name: string) => {
         try {
           const bodyString = Buffer.concat(body).toString();
           const json = JSON.parse(bodyString);
-          
+
           if (!json.modules || !json.modules[0] || !json.modules[0].versions) {
             return reject(
               new Error(`Invalid response from Terraform Registry: no versions found for ${name}`)
             );
           }
 
-          // Extract version strings from the response
-          const versionList = json.modules[0].versions.map((v: any) => v.version);
-          
+          const versionList = json.modules[0].versions.map((v: { version: string }) => v.version);
+
           info = {
             name: name,
             versions: versionList,

@@ -837,7 +837,12 @@
             "default": false,
             "description": "Consider non-registry packages as up-to-date if their version exceeds the max.",
             "order": 68
-          },
+          }
+        }
+      },
+      {
+        "title": "Terraform Settings",
+        "properties": {
           "dependi.terraform.enabled": {
             "type": "boolean",
             "scope": "resource",

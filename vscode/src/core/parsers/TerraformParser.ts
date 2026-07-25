@@ -1,22 +1,36 @@
 import { TextDocument, TextLine } from "vscode";
 import Item from "../Item";
-import { isQuote, shouldIgnoreLine } from "./utils";
+import { shouldIgnoreLine } from "./utils";
 import { Settings } from "../../config";
 
 class State {
   inModule: boolean;
   inModuleBlock: boolean;
-  currentModule: string;
+  moduleSource: string;
+  pendingVersionLine: TextLine | null;
   items: Item[];
   braceDepth: number;
 
   constructor() {
     this.inModule = false;
     this.inModuleBlock = false;
-    this.currentModule = "";
+    this.moduleSource = "";
+    this.pendingVersionLine = null;
     this.items = [] as Item[];
     this.braceDepth = 0;
   }
+}
+
+/** Registry modules use namespace/name/provider (exactly 3 path segments). */
+export function isTerraformRegistryModule(source: string): boolean {
+  if (!source || source.includes("://") || source.startsWith(".") || source.startsWith("/")) {
+    return false;
+  }
+  if (source.startsWith("git::") || source.startsWith("hg::") || source.startsWith("s3::") || source.startsWith("gcs::")) {
+    return false;
+  }
+  const parts = source.split("/");
+  return parts.length === 3 && parts.every((part) => part.length > 0);
 }
 
 export class TerraformParser {
@@ -34,18 +48,14 @@ export class TerraformParser {
       // Check for module block start
       const moduleMatch = text.match(/^module\s+"([^"]+)"\s*\{/);
       if (moduleMatch) {
-        state.inModule = true;
-        state.inModuleBlock = true;
-        state.currentModule = moduleMatch[1];
-        state.braceDepth = 1;
+        this.resetModuleState(state, true, 1);
         continue;
       }
 
       // Handle module block that starts without opening brace on same line
       const moduleMatchNoBrace = text.match(/^module\s+"([^"]+)"\s*$/);
       if (moduleMatchNoBrace) {
-        state.inModule = true;
-        state.currentModule = moduleMatchNoBrace[1];
+        this.resetModuleState(state, false, 0);
         continue;
       }
 
@@ -54,7 +64,8 @@ export class TerraformParser {
         // Check for opening brace if we haven't entered the block yet
         if (!state.inModuleBlock && text.includes("{")) {
           state.inModuleBlock = true;
-          state.braceDepth = 1;
+          // Count braces on this line only once (do not pre-set then re-count).
+          state.braceDepth = 0;
         }
 
         if (state.inModuleBlock) {
@@ -62,28 +73,36 @@ export class TerraformParser {
           state.braceDepth += (text.match(/{/g) || []).length;
           state.braceDepth -= (text.match(/}/g) || []).length;
 
-          // Parse source and version lines
           if (text.includes("source")) {
-            // source = "namespace/name/provider" or source = "..."
             const sourceMatch = text.match(/source\s*=\s*"([^"]+)"/);
             if (sourceMatch) {
-              state.currentModule = sourceMatch[1];
+              state.moduleSource = sourceMatch[1];
+              if (state.pendingVersionLine && isTerraformRegistryModule(state.moduleSource)) {
+                const item = this.parseVersionLine(state.pendingVersionLine, state.moduleSource);
+                if (item) {
+                  state.items.push(item);
+                }
+                state.pendingVersionLine = null;
+              }
             }
           }
 
           if (text.includes("version")) {
-            // version = "1.0.0" or version = ">= 1.0.0"
-            const item = this.parseVersionLine(line, state.currentModule);
-            if (item) {
-              state.items.push(item);
+            if (isTerraformRegistryModule(state.moduleSource)) {
+              const item = this.parseVersionLine(line, state.moduleSource);
+              if (item) {
+                state.items.push(item);
+              }
+            } else {
+              // source may appear after version in the block
+              state.pendingVersionLine = line;
             }
           }
 
           // Exit module block when all braces are closed
           if (state.braceDepth <= 0) {
+            this.resetModuleState(state, false, 0);
             state.inModule = false;
-            state.inModuleBlock = false;
-            state.currentModule = "";
           }
         }
       }
@@ -92,26 +111,33 @@ export class TerraformParser {
     return state.items;
   }
 
-  private parseVersionLine(line: TextLine, moduleName: string): Item | null {
-    const text = line.text;
-    const start = line.firstNonWhitespaceCharacterIndex;
+  private resetModuleState(state: State, inModuleBlock: boolean, braceDepth: number) {
+    state.inModule = true;
+    state.inModuleBlock = inModuleBlock;
+    state.moduleSource = "";
+    state.pendingVersionLine = null;
+    state.braceDepth = braceDepth;
+  }
 
-    // Match: version = "1.0.0" or version = ">= 1.0.0"
+  private parseVersionLine(line: TextLine, moduleSource: string): Item | null {
+    const text = line.text;
+
+    // Match: version = "1.0.0" or version = ">= 1.0.0" / "~> 5.0"
     const versionMatch = text.match(/version\s*=\s*"([^"]+)"/);
     if (!versionMatch) {
       return null;
     }
 
-    let version = versionMatch[1];
+    const rawVersion = versionMatch[1];
     const versionStart = text.indexOf('"', text.indexOf("version")) + 1;
-    const versionEnd = versionStart + version.length;
+    const versionEnd = versionStart + rawVersion.length;
 
-    // Remove version constraint operators if present
-    version = version.replace(/^[~><=\s]+/, "").trim();
+    // Normalize for comparison while keeping decoration range over the full quoted value.
+    const version = rawVersion.replace(/^[~><=\s]+/, "").trim();
 
     const item = new Item();
     item.copyFrom(
-      moduleName,
+      moduleSource,
       version,
       versionStart,
       versionEnd,
