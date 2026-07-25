@@ -1,12 +1,12 @@
 # Dependi: Your Ultimate Dependency Management Tool
 
-Dependi is a comprehensive dependency management extension that helps developers write code faster and smarter by efficiently managing project dependencies. Formerly known as Crates the most loved and used dependency management extension for Rust. Dependi now supports multiple languages including Rust, Go, JavaScript, TypeScript, Python, PHP, Dart, C#, F#, and Elixir.
+Dependi is a comprehensive dependency management extension that helps developers write code faster and smarter by efficiently managing project dependencies. Formerly known as Crates the most loved and used dependency management extension for Rust. Dependi now supports multiple languages including Rust, Go, JavaScript, TypeScript, Python, PHP, Dart, C#, F#, Elixir, Gradle (Java/Kotlin), and Terraform.
 
 [Install](https://www.dependi.io/download) Dependi via VSCode or [Dependi.io](https://www.dependi.io)
 
 When you install Dependi in Visual Studio Code, 2 options are available :
 
-- Dependi Core: Provides essential dependency management for Rust, Go, JavaScript, TypeScript, Python, PHP, Dart, C#, F#, and Elixir projects. Free to use with no subscription required.
+- Dependi Core: Provides essential dependency management for Rust, Go, JavaScript, TypeScript, Python, PHP, Dart, C#, F#, Elixir, Gradle (Java/Kotlin), and Terraform projects. Free to use with no subscription required.
 
 - [Dependi Pro:](https://www.dependi.io) Offers many advanced features like detailed vulnerability reports, private repository support, and priority support... Easy subscription packages and [free trials](https://www.dependi.io/#pricing) are available.
 
@@ -47,6 +47,12 @@ Dependi simplifies dependency management in Visual Studio Code, helping you to:
   - **Elixir**
     - Documentation: [https://elixir-lang.org/docs.html](https://elixir-lang.org/docs.html)
     - Package Repository (Hex): [https://hex.pm](https://hex.pm)
+  - **Gradle (Java / Kotlin)**:
+    - Documentation: [https://docs.gradle.org](https://docs.gradle.org)
+    - Package Repository (Maven Central): [https://repo1.maven.org/maven2](https://repo1.maven.org/maven2)
+  - **Terraform**:
+    - Documentation: [https://developer.hashicorp.com/terraform/docs](https://developer.hashicorp.com/terraform/docs)
+    - Module Registry: [https://registry.terraform.io](https://registry.terraform.io)
 
 - **Vulnerabilities at a Glance**: Quickly identify vulnerabilities in your project dependencies and take action to mitigate risks.
   ![Vulnerabilities at a Glance](https://www.dependi.io/screenshots/vuln.png)
@@ -54,7 +60,7 @@ Dependi simplifies dependency management in Visual Studio Code, helping you to:
 - **Vulnerability Reports**: Generate comprehensive reports detailing the vulnerabilities in your dependencies, helping you maintain secure codebases.
   ![Vulnerability Reports](https://www.dependi.io/screenshots/report.png)
 
-- **Supported Languages and Frameworks**: Dependi works with a variety of languages including Rust, Go, JavaScript, TypeScript, Python, PHP, Dart, C#, F#, and Elixir. It is designed to support most popular languages and frameworks, making it a versatile tool for developers.
+- **Supported Languages and Frameworks**: Dependi works with a variety of languages including Rust, Go, JavaScript, TypeScript, Python, PHP, Dart, C#, F#, Elixir, Gradle (Java/Kotlin), and Terraform. It is designed to support most popular languages and frameworks, making it a versatile tool for developers.
 
 For more information about the feature set [visit here](https://www.dependi.io/#features).
 
@@ -129,6 +135,18 @@ While Dependi works out-of-the-box without any configuration, we also offer a fe
 - `dependi.elixir.unstableFilter`: Filter unstable versions: Exclude, Include Always, or Include If Unstable.
 - `dependi.elixir.ignoreLinePattern`: Matches lines based on `*` position: `text*`, `*text`, `*text*`. Multiple patterns can be used, separated by commas.
 - `dependi.elixir.silenceVersionOverflows`: Consider non-registry versions of packages as up-to-date if their version exceeds the registry version.
+- `dependi.gradle.enabled`: Enable Gradle (Java/Kotlin) package management.
+- `dependi.gradle.indexServerURL`: The URL for the Gradle package index server.
+- `dependi.gradle.unstableFilter`: Filter unstable versions: Exclude, Include Always, or Include If Unstable.
+- `dependi.gradle.ignoreLinePattern`: Matches lines based on `*` position: `text*`, `*text`, `*text*`. Multiple patterns can be used, separated by commas.
+- `dependi.gradle.informPatchUpdates`: Inform about patch updates for Gradle dependencies.
+- `dependi.gradle.silenceVersionOverflows`: Consider non-registry versions of packages as up-to-date if their version exceeds the registry version.
+- `dependi.terraform.enabled`: Enable Terraform module management.
+- `dependi.terraform.indexServerURL`: The URL for the Terraform Registry server.
+- `dependi.terraform.unstableFilter`: Filter unstable versions: Exclude, Include Always, or Include If Unstable.
+- `dependi.terraform.ignoreLinePattern`: Matches lines based on `*` position: `text*`, `*text`, `*text*`. Multiple patterns can be used, separated by commas.
+- `dependi.terraform.informPatchUpdates`: Inform about patch updates for Terraform modules.
+- `dependi.terraform.silenceVersionOverflows`: Consider non-registry versions of modules as up-to-date if their version exceeds the registry version.
 - `dependi.vulnerability.enabled`: Enable checking for vulnerabilities in dependencies.
 - `dependi.vulnerability.ghsa.enabled`: Include GitHub Security Advisory vulnerabilities in checks.
 - `dependi.vulnerability.osvQueryURL.batch`: The URL for batch querying vulnerabilities via OSV.
@@ -149,7 +167,7 @@ While Dependi works out-of-the-box without any configuration, we also offer a fe
 
 - `dependi.extras.silenceUpdateMessages`: This setting hides informational update messages when enabled (true).
 
-### Cargo.toml, go.mod, package.json and requirements.txt
+### Cargo.toml, go.mod, package.json, requirements.txt, build.gradle, and .tf files
 
 - `# dependi: disable-check`: Disable version check for this specific dependency.
 
