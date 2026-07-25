@@ -38,6 +38,9 @@ import { MixExsParser } from "../parsers/MixExsParser";
 import { GradleListener } from "./GradleListener";
 import { MavenFetcher } from "../fetchers/MavenFetcher";
 import { GradleParser } from "../parsers/GradleParser";
+import { TerraformListener } from "./TerraformListener";
+import { TerraformFetcher } from "../fetchers/TerraformFetcher";
+import { TerraformParser } from "../parsers/TerraformParser";
 
 let listenerTimer: NodeJS.Timeout | undefined;
 let isListening = false;
@@ -161,6 +164,13 @@ async function runListener(editor: TextEditor | undefined): Promise<void> {
       listener = new GradleListener(
         new MavenFetcher(Settings.gradle.index, Configs.GRADLE_INDEX_SERVER_URL),
         new GradleParser());
+      break;
+    case Language.Terraform:
+      if (!Settings.terraform.enabled)
+        return;
+      listener = new TerraformListener(
+        new TerraformFetcher(Settings.terraform.index, Configs.TERRAFORM_INDEX_SERVER_URL),
+        new TerraformParser());
       break;
   }
   if (listener !== undefined) {

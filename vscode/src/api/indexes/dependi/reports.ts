@@ -43,6 +43,7 @@ export enum Language {
   PnpmWorkspace,
   Elixir,
   Gradle,
+  Terraform,
 }
 
 const LanguageArray = [
@@ -59,6 +60,7 @@ const LanguageArray = [
   { ID: Language.Gradle, Name: "build.gradle.kts" },
   { ID: Language.Gradle, Name: "libs.versions.toml" },
   { ID: Language.Gradle, Name: "gradle-wrapper.properties" },
+  { ID: Language.Terraform, Name: "main.tf" },
 ];
 
 export const getLangIdFromName = (name: string): Language => {
@@ -68,6 +70,9 @@ export const getLangIdFromName = (name: string): Language => {
   }
   if (name.toLowerCase().endsWith(".csproj") || name.toLowerCase().endsWith(".fsproj")) {
     return Language.CSharp;
+  }
+  if (name.toLowerCase().endsWith(".tf")) {
+    return Language.Terraform;
   }
   return Language.None;
 };

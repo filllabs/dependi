@@ -15,6 +15,7 @@ export enum Language {
     PnpmWorkspace = 8,
     Elixir = 9,
     Gradle = 10,
+    Terraform = 11,
 }
 
 export enum OCVEnvironment {
@@ -27,6 +28,7 @@ export enum OCVEnvironment {
     Nuget = "NuGet",
     Hex = "Hex",
     Maven = "Maven",
+    Terraform = "Terraform",
 }
 export var CurrentLanguage: Language = Language.None;
 export var CurrentLanguageConfig: string = "";
@@ -68,8 +70,11 @@ export function setLanguage(file?: string) {
             return setLanguageConfig(Language.Gradle, "gradle", filename, OCVEnvironment.Maven);
         case "directory.build.props":
         case "directory.packages.props":
-            return setLanguageConfig(Language.CSharp, "csharp", filename, OCVEnvironment.Nuget); 
+            return setLanguageConfig(Language.CSharp, "csharp", filename, OCVEnvironment.Nuget);
         default:
+            if (fileExtension === ".tf") {
+                return setLanguageConfig(Language.Terraform, "terraform", filename, OCVEnvironment.Terraform);
+            }
             if (fileExtension === ".csproj" || fileExtension === ".fsproj") {
                 return setLanguageConfig(Language.CSharp, "csharp", filename, OCVEnvironment.Nuget);
             }

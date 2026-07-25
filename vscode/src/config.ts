@@ -83,6 +83,13 @@ export enum Configs {
   GRADLE_INFORM_PATCH_UPDATES = `gradle.informPatchUpdates`,
   GRADLE_SILENCE_VERSION_OVERFLOWS = `gradle.silenceVersionOverflows`,
 
+  TERRAFORM_ENABLED = `terraform.enabled`,
+  TERRAFORM_INDEX_SERVER_URL = `terraform.indexServerURL`,
+  TERRAFORM_UNSTABLE_FILTER = `terraform.unstableFilter`,
+  TERRAFORM_IGNORE_LINE_PATTERN = `terraform.ignoreLinePattern`,
+  TERRAFORM_INFORM_PATCH_UPDATES = `terraform.informPatchUpdates`,
+  TERRAFORM_SILENCE_VERSION_OVERFLOWS = `terraform.silenceVersionOverflows`,
+
   VULS_ENABLED = `vulnerability.enabled`,
   VULS_GHSA_ENABLED = `vulnerability.ghsa.enabled`,
   VULS_OSV_BATCH_URL = `vulnerability.osvQueryURL.batch`,
@@ -214,6 +221,14 @@ export const Settings = {
     informPatchUpdates: false,
     silenceVersionOverflows: false
   },
+  terraform: {
+    enabled: true,
+    index: "",
+    unstableFilter: UnstableFilter.Exclude,
+    ignoreLinePattern: "",
+    informPatchUpdates: false,
+    silenceVersionOverflows: false
+  },
   vulnerability: {
     enabled: false,
     ghsa: false,
@@ -328,6 +343,13 @@ export const Settings = {
     this.gradle.ignoreLinePattern = config.get<string>(Configs.GRADLE_IGNORE_LINE_PATTERN) || "";
     this.gradle.informPatchUpdates = config.get<boolean>(Configs.GRADLE_INFORM_PATCH_UPDATES) ?? false;
     this.gradle.silenceVersionOverflows = config.get<boolean>(Configs.GRADLE_SILENCE_VERSION_OVERFLOWS) ?? false;
+
+    this.terraform.enabled = config.get<boolean>(Configs.TERRAFORM_ENABLED) ?? true;
+    this.terraform.index = config.get<string>(Configs.TERRAFORM_INDEX_SERVER_URL) || "https://registry.terraform.io";
+    this.terraform.unstableFilter = UnstableFilter[config.get<string>(Configs.TERRAFORM_UNSTABLE_FILTER) as keyof typeof UnstableFilter] || UnstableFilter.Exclude;
+    this.terraform.ignoreLinePattern = config.get<string>(Configs.TERRAFORM_IGNORE_LINE_PATTERN) || "";
+    this.terraform.informPatchUpdates = config.get<boolean>(Configs.TERRAFORM_INFORM_PATCH_UPDATES) ?? false;
+    this.terraform.silenceVersionOverflows = config.get<boolean>(Configs.TERRAFORM_SILENCE_VERSION_OVERFLOWS) ?? false;
 
     this.vulnerability.enabled = config.get<boolean>(Configs.VULS_ENABLED) ?? true;
     this.vulnerability.ghsa = config.get<boolean>(Configs.VULS_GHSA_ENABLED) ?? false;
