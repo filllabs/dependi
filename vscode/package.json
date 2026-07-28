@@ -1285,12 +1285,11 @@
     "typescript": "5.5.4"
   },
   "dependencies": {
-    "@neuralegion/cvss": "1.2.2",
+    "@neuralegion/cvss": "1.3.0",
     "fast-toml": "0.5.4",
-    "fast-xml-parser": "5.2.5",
+    "fast-xml-parser": "5.10.1",
     "node-cache": "5.1.2",
-    "release-please": "16.12.0",
-    "semver": "7.6.3"
+    "semver": "7.8.5"
   },
   "extensionDependencies": [
     "vscode.git"
