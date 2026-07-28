@@ -13,7 +13,9 @@ export class ComposerLockParser extends JsonLockParser {
       let pkg = allPackages[i];
       state.dependency = pkg.name;
       if (isPackagePresent(items, state.dependency)) {
-        state.lockedValue = pkg.version;
+        // Packagist allows tags with or without a leading "v"; normalize so
+        // locked versions match the stripped versions from the Packagist index.
+        state.lockedValue = String(pkg.version).replace(/^v/i, "");
         setLockValue(state, items);
       }
     }

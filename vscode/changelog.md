@@ -8,6 +8,10 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 - Added support for Terraform module version management in `.tf` files, including Terraform Registry lookups for modules in `namespace/name/provider` format. ([Issue #235](https://github.com/filllabs/dependi/issues/235))
 
+### Bug Fixes
+
+- PHP: Fixed false outdated indicators for packages whose `composer.lock` versions include a leading `v` (e.g. `v3.89.1`). ([Issue #252](https://github.com/filllabs/dependi/issues/252))
+
 ## [v0.7.26](https://github.com/filllabs/dependi/compare/v0.7.25...v0.7.26)
 
 ### New Features
