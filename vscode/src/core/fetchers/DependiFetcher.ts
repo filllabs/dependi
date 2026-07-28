@@ -41,6 +41,9 @@ export class DependiFetcher extends Fetcher {
       case Language.Gradle:
         unstableFilter = Settings.gradle.unstableFilter;
         break;
+      case Language.Terraform:
+        unstableFilter = Settings.terraform.unstableFilter;
+        break;
     }
     const req: VersionsReq = {
       Language: CurrentLanguage,
