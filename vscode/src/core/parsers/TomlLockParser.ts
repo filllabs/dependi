@@ -14,23 +14,31 @@ export class TomlLockFileParser {
   constructor() {}
 
   parse(fileContent: string, items: Item[]): Item[] {
-    const doc = fileContent.split("\n");
+    const doc = fileContent.split(/\r?\n/);
     const state = new State();
     for (let row = 0; row < doc.length; row++) {
-      let line = doc[row];
+      const line = doc[row].trim();
       if (this.isTableSection(line)) {
-        line = doc[++row];
-        if (line.startsWith("name")) {
-          state.dependency = this.getPackageName(line);
-          if (isPackagePresent(items, state.dependency)) {
-            line = doc[++row];
-            if (line.startsWith("version")) {
-              state.lockedValue = this.getParsedVersion(line);
-              setLockValue(state, items);
-              row++;
-            }
-          }
-        }
+        state.dependency = "";
+        state.lockedValue = "";
+        continue;
+      }
+      if (line.startsWith("[")) {
+        state.dependency = "";
+        state.lockedValue = "";
+        continue;
+      }
+      if (/^name\s*=/.test(line)) {
+        state.dependency = this.getPackageName(line);
+        continue;
+      }
+      if (
+        /^version\s*=/.test(line) &&
+        state.dependency &&
+        isPackagePresent(items, state.dependency)
+      ) {
+        state.lockedValue = this.getParsedVersion(line);
+        setLockValue(state, items);
       }
     }
 
@@ -38,18 +46,22 @@ export class TomlLockFileParser {
   }
 
   isTableSection(line: string): boolean {
-    return line.startsWith("[[") && line.endsWith("]]");
+    const trimmed = line.trim();
+    return trimmed.startsWith("[[") && trimmed.endsWith("]]");
   }
 
   getPackageName(line: string): string {
-    let packageName = line.split(" = ")[1];
-    return clearText(packageName);
+    return clearText(extractTomlString(line));
   }
 
   getParsedVersion(line: string): string {
-    let packageVersion = line.split("version = ")[1];
-    return clearText(packageVersion);
+    return clearText(extractTomlString(line));
   }
+}
+
+function extractTomlString(line: string): string {
+  const eqIndex = line.indexOf("=");
+  return eqIndex === -1 ? line : line.substring(eqIndex + 1);
 }
 
 export function isPackagePresent(items: Item[], packageName: string): boolean {
@@ -61,13 +73,24 @@ export function clearText(text: string) {
 
 export function setLockValue(state: State, items: Item[]): void {
   let foundItem = items.find((item) => item.key === state.dependency);
-  if (
-    foundItem &&
-    (!foundItem.lockedAt ||
-      (foundItem.value && satisfies(state.lockedValue, foundItem.value)))
-  ) {
+  if (foundItem && shouldApplyLock(foundItem, state.lockedValue)) {
     foundItem.lockedAt = state.lockedValue;
   }
   state.lockedValue = "";
   state.dependency = "";
+}
+
+function shouldApplyLock(item: Item, lockedValue: string): boolean {
+  if (!item.lockedAt) {
+    return true;
+  }
+  if (!item.value) {
+    return false;
+  }
+  try {
+    const constraint = item.value.replace(/^==/, "=");
+    return satisfies(lockedValue, constraint);
+  } catch {
+    return false;
+  }
 }

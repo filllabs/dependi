@@ -1,6 +1,5 @@
 import { versions } from "../../api/indexes/crates";
 import { Settings } from "../../config";
-import compareVersions from "../../semver/compareVersions";
 import { fetcherCatch } from "../../utils/errors";
 import Dependency from "../Dependency";
 import { Fetcher } from "./fetcher";
@@ -31,12 +30,11 @@ export class CratesFetcher extends Fetcher {
       }
       return versions(dep.item.key, thisCrateRegistry, thisCrateToken)
         .then((crate) => {
-          const versions = crate.versions
-            .filter((i: string) => i !== "" && i !== undefined && !base.checkUnstables(Settings.rust.unstableFilter, i, dep.item.value!))
-            .sort(compareVersions)
-            .reverse();
-
-          dep.versions = versions;
+          dep.versions = base.filterAndSortVersions(
+            crate.versions,
+            dep.item.value,
+            Settings.rust.unstableFilter
+          );
           return dep;
         })
         .catch(fetcherCatch(dep));

@@ -6,6 +6,9 @@ export class PypiListener extends Listener {
 
 
   modifyDependecy(dep: Dependency): void {
+    if (dep.item.lockedAt) {
+      return;
+    }
     const constrains = splitByComma(dep.item.value ?? "");
     const currVersion = possibleLatestVersion(constrains, dep.versions ?? []);
     dep.item.value = currVersion ? currVersion : dep.item.value;

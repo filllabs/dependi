@@ -1,5 +1,6 @@
 import { queryMultiplePackageVulns } from "../../api/osv/vulnerability-service";
 import { UnstableFilter } from "../../config";
+import compareVersions from "../../semver/compareVersions";
 import { openSettingsDialog } from "../../ui/dialogs";
 import { StatusBar } from "../../ui/status-bar";
 import Dependency from "../Dependency";
@@ -78,6 +79,62 @@ export abstract class Fetcher {
     if (unstableFilter === UnstableFilter.IncludeAlways) return false;
     if (unstableFilter === UnstableFilter.IncludeIfUnstable && checkPreRelease(currentVersion)) return false;
     return checkPreRelease(version);
+  }
+
+  /**
+   * Apply the unstable-version setting, with two extra rules:
+   * - If a package only publishes pre-releases, keep them (Issue #282).
+   * - If the current version is already unstable, keep only pre-releases
+   *   newer than the latest stable (older betas are noise).
+   */
+  filterVersions(
+    versions: string[],
+    currentVersion: string | undefined,
+    unstableFilter: UnstableFilter
+  ): string[] {
+    const valid = versions.filter((v) => v !== "" && v !== undefined);
+    const filtered = valid.filter(
+      (v) => !this.checkUnstables(unstableFilter, v, currentVersion ?? "")
+    );
+    if (filtered.length === 0) {
+      return valid;
+    }
+
+    const isUnstable = (v: string) =>
+      this.checkUnstables(UnstableFilter.Exclude, v, "");
+    if (
+      unstableFilter === UnstableFilter.IncludeIfUnstable &&
+      currentVersion &&
+      isUnstable(currentVersion)
+    ) {
+      const stables = filtered.filter((v) => !isUnstable(v));
+      if (stables.length === 0) {
+        return filtered;
+      }
+      const latestStable = [...stables].sort(compareVersions).pop()!;
+      return filtered.filter((v) => {
+        if (!isUnstable(v)) {
+          return true;
+        }
+        try {
+          return compareVersions(v, latestStable) > 0;
+        } catch {
+          return false;
+        }
+      });
+    }
+
+    return filtered;
+  }
+
+  filterAndSortVersions(
+    versions: string[],
+    currentVersion: string | undefined,
+    unstableFilter: UnstableFilter
+  ): string[] {
+    return this.filterVersions(versions, currentVersion, unstableFilter)
+      .sort(compareVersions)
+      .reverse();
   }
 }
 function chunkDataArray(data: Dependency[], chunkSize: number) {

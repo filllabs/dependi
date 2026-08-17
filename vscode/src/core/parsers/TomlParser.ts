@@ -15,6 +15,7 @@ export class State {
   currentItem: Item;
   bypass: boolean;
   isSubTable: boolean;
+  skipInlineTable: boolean;
   constructor() {
     this.inInlineTable = false;
     this.inArray = false;
@@ -24,6 +25,7 @@ export class State {
     this.currentItem = new Item();
     this.bypass = false;
     this.isSubTable = false;
+    this.skipInlineTable = false;
   }
 }
 
@@ -44,6 +46,11 @@ export class TomlParser implements Parser {
       // if it is table  check if it is dependency table and its type, single or multiple
       if (isTable(line)) {
         state.bypass = false;
+        if (state.inInlineTable) {
+          this.addItem(state, items);
+          state.inInlineTable = false;
+          state.skipInlineTable = false;
+        }
         // in new table if an single dependency is in process, push it to items and reset the state
         if (state.isSingle) {
           this.addItem(state, items);
@@ -97,6 +104,24 @@ export class TomlParser implements Parser {
         continue;
       }
       if (state.isMultipleDepTable || state.isSubTable) {
+        if (state.inInlineTable) {
+          this.consumeInlineTableLine(line.text, row, line.range.end.character, state, items);
+          continue;
+        }
+        // TOML 1.1 multiline inline tables: crate = { \n version = "1.0" \n }
+        if (isUnclosedInlineTable(line.text)) {
+          if (containsIgnoredKeywordsInValue(line.text)) {
+            state.inInlineTable = true;
+            state.skipInlineTable = true;
+            continue;
+          }
+          const inlineStart = this.parseInlineTableStart(line.text, row);
+          if (inlineStart) {
+            state.inInlineTable = true;
+            state.currentItem = inlineStart;
+            continue;
+          }
+        }
         // Inline group arrays: dev = ["pytest>=8.0"]
         const inlineItems = this.parseInlineDependencyArray(
           line.text,
@@ -162,9 +187,14 @@ export class TomlParser implements Parser {
           case "package":
             state.currentItem.copyFrom(pair.value);
             continue;
+          case "git":
+          case "path":
+            // Git/path crates are not registry packages (Issue #183)
+            state.currentItem = new Item();
+            state.bypass = true;
+            continue;
           case "features":
           case "default-features":
-          case "path":
           case "workspace":
             continue;
           default:
@@ -247,6 +277,74 @@ export class TomlParser implements Parser {
     _endOfLine: number
   ): Item[] {
     return [];
+  }
+
+  /**
+   * Detect `crate = {` that is not closed on the same line (TOML 1.1 multiline
+   * inline tables). Version may be on this line or a following one.
+   */
+  parseInlineTableStart(line: string, row: number): Item | undefined {
+    const eqIndex = line.indexOf("=");
+    if (eqIndex === -1) {
+      return undefined;
+    }
+    const commentIndex = line.indexOf("#");
+    const code = (
+      commentIndex > -1 ? line.substring(0, commentIndex) : line
+    ).trimEnd();
+    const braceIndex = code.indexOf("{", eqIndex);
+    if (braceIndex === -1) {
+      return undefined;
+    }
+    if (code.indexOf("}", braceIndex) !== -1) {
+      return undefined;
+    }
+
+    const item = new Item();
+    item.key = clearText(line.substring(0, eqIndex));
+    if (!item.key) {
+      return undefined;
+    }
+    parseVersion(line, item);
+    parseRegistry(line, item);
+    if (item.start > -1) {
+      item.line = row;
+      item.endOfLine = line.length;
+    }
+    return item;
+  }
+
+  consumeInlineTableLine(
+    line: string,
+    row: number,
+    endOfLine: number,
+    state: State,
+    items: Item[]
+  ) {
+    if (state.skipInlineTable || containsIgnoredKeywordsInValue(line)) {
+      state.skipInlineTable = true;
+      state.currentItem = new Item();
+      if (lineClosesInlineTable(line)) {
+        state.inInlineTable = false;
+        state.skipInlineTable = false;
+      }
+      return;
+    }
+    if (state.currentItem.start < 0) {
+      parseVersion(line, state.currentItem);
+      parseRegistry(line, state.currentItem);
+      if (state.currentItem.start > -1) {
+        state.currentItem.line = row;
+        state.currentItem.endOfLine = endOfLine;
+      }
+    } else {
+      parseRegistry(line, state.currentItem);
+    }
+    if (lineClosesInlineTable(line)) {
+      this.addItem(state, items);
+      state.inInlineTable = false;
+      state.skipInlineTable = false;
+    }
   }
 }
 
@@ -398,6 +496,25 @@ function isTable(line: TextLine) {
   let column = line.firstNonWhitespaceCharacterIndex;
   const firstChar = line.text[column];
   return firstChar === "[";
+}
+
+function lineClosesInlineTable(line: string): boolean {
+  const commentIndex = line.indexOf("#");
+  const code = commentIndex > -1 ? line.substring(0, commentIndex) : line;
+  return code.includes("}");
+}
+
+function isUnclosedInlineTable(line: string): boolean {
+  const commentIndex = line.indexOf("#");
+  const code = (
+    commentIndex > -1 ? line.substring(0, commentIndex) : line
+  ).trimEnd();
+  const eqIndex = code.indexOf("=");
+  if (eqIndex === -1) {
+    return false;
+  }
+  const braceIndex = code.indexOf("{", eqIndex);
+  return braceIndex !== -1 && code.indexOf("}", braceIndex) === -1;
 }
 
 function parseLockFile(item: Item[]): Item[] {

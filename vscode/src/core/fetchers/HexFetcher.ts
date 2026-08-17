@@ -1,7 +1,6 @@
 
 import { versions } from "../../api/indexes/hex";
 import { Settings } from "../../config";
-import compareVersions from "../../semver/compareVersions";
 import { fetcherCatch } from "../../utils/errors";
 import Dependency from "../Dependency";
 import { Fetcher } from "./fetcher";
@@ -12,9 +11,11 @@ export class HexFetcher extends Fetcher {
     const base = this;
     return async function (dep: Dependency): Promise<Dependency> {
       return versions(dep.item.key).then((mod) => {
-        const versions = mod.versions
-          .filter((i: string) => i !== "" && i !== undefined && !base.checkUnstables(Settings.elixir.unstableFilter, i, dep.item.value!))
-          .sort(compareVersions).reverse();
+        const versions = base.filterAndSortVersions(
+          mod.versions,
+          dep.item.value,
+          Settings.elixir.unstableFilter
+        );
         dep.versions = versions;
         return dep;
       }).catch(fetcherCatch(dep));

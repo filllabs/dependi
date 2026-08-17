@@ -60,13 +60,54 @@ export class DependiFetcher extends Fetcher {
       Logger.appendLine("DeviceID is empty");
     }
 
-    let versions = await Indexes.getVersions(req, {
-      headers: {
-        Authorization: Settings.api.key,
-        "X-Device-ID": Settings.api.deviceID,
-        "Content-Type": "application/json",
-      },
+    const headers = {
+      Authorization: Settings.api.key,
+      "X-Device-ID": Settings.api.deviceID,
+      "Content-Type": "application/json",
+    };
+    let versions = await Indexes.getVersions(req, { headers });
+
+    // Retry packages that vanished after excluding unstables — they may only
+    // publish pre-releases (Issue #282).
+    if (unstableFilter === UnstableFilter.Exclude) {
+      const missing = versions.filter(
+        (d) => !d.error && (!d.versions || d.versions.length === 0)
+      );
+      if (missing.length > 0) {
+        const retry = await Indexes.getVersions(
+          {
+            ...req,
+            IgnoreUnstables: UnstableFilter.IncludeAlways,
+            Packages: missing.map((d) => d.item),
+            Dependencies: missing,
+          },
+          { headers }
+        );
+        const retryByKey = new Map(retry.map((d) => [d.item.key, d]));
+        versions = versions.map((d) => retryByKey.get(d.item.key) ?? d);
+      }
+    }
+
+    versions = versions.map((dep) => {
+      if (dep.versions) {
+        dep.versions = this.filterAndSortVersions(
+          dep.versions,
+          dep.item.value,
+          unstableFilter
+        );
+        if (
+          CurrentLanguage === Language.JS &&
+          dep.item.latestVersion &&
+          !dep.versions.includes(dep.item.latestVersion)
+        ) {
+          dep.versions = [dep.item.latestVersion, ...dep.versions]
+            .sort(compareVersions)
+            .reverse();
+        }
+      }
+      return dep;
     });
+
     if (CurrentLanguage === Language.Python) {
       const mappedVersions = versions.map((v) => {
         return this.mapVersions(v);
@@ -89,17 +130,21 @@ export class DependiFetcher extends Fetcher {
       .sort(compareVersions)
       .reverse();
     if (item) {
-      const constrains = splitByComma(item.value ?? "");
-      const currVersion = possibleLatestVersion(constrains, versions);
-      item.value = currVersion ? currVersion : item.value;
+      if (!item.lockedAt) {
+        const constrains = splitByComma(item.value ?? "");
+        const currVersion = possibleLatestVersion(constrains, versions);
+        item.value = currVersion ? currVersion : item.value;
+      }
       return {
         item,
         versions,
       };
     }
-    const constrains = splitByComma(dep.item.value ?? "");
-    const currVersion = possibleLatestVersion(constrains, versions);
-    dep.item.value = currVersion ? currVersion : dep.item.value;
+    if (!dep.item.lockedAt) {
+      const constrains = splitByComma(dep.item.value ?? "");
+      const currVersion = possibleLatestVersion(constrains, versions);
+      dep.item.value = currVersion ? currVersion : dep.item.value;
+    }
     dep.versions = versions;
     return dep;
   }

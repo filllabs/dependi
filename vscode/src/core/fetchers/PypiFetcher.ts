@@ -1,7 +1,6 @@
 import { DependencyInfo } from "../../api/DepencencyInfo";
 import { versions } from "../../api/indexes/pypi";
 import { Settings, UnstableFilter } from "../../config";
-import compareVersions from "../../semver/compareVersions";
 import { fetcherCatch } from "../../utils/errors";
 import Dependency from "../Dependency";
 import { possibleLatestVersion, splitByComma } from "../parsers/PypiParser";
@@ -27,15 +26,16 @@ export class PypiFetcher extends Fetcher {
   }
 
   mapVersions(di: DependencyInfo, dep: Dependency): Dependency {
-    const versions = di
-      .versions!
-      .filter((i: string) => i !== "" && i !== undefined && !this.checkUnstables(Settings.python.unstableFilter, i, dep.item.value!))
-      .sort(compareVersions)
-      .reverse();
-    // if (dep) {
-    const constrains = splitByComma(dep.item.value ?? "");
-    const currVersion = possibleLatestVersion(constrains, versions);
-    dep.item.value = currVersion ? currVersion : dep.item.value;
+    const versions = this.filterAndSortVersions(
+      di.versions!,
+      dep.item.value,
+      Settings.python.unstableFilter
+    );
+    if (!dep.item.lockedAt) {
+      const constrains = splitByComma(dep.item.value ?? "");
+      const currVersion = possibleLatestVersion(constrains, versions);
+      dep.item.value = currVersion ? currVersion : dep.item.value;
+    }
     dep.versions = versions;
     return dep;
     // }

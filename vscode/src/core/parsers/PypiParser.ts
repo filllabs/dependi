@@ -184,8 +184,8 @@ export function possibleLatestVersion(
         )
         : null;
     }
-    // Return with = prefix to indicate exact match (semver compatible)
-    return exactVersionConstraint.slice(2).trim();
+    // Return with = prefix so semver treats this as an exact pin, not ^x.y.z
+    return `=${exactVersionConstraint.replace(/^==?\s*/, "").trim()}`;
   } else if (constraints.some((constraint) => constraint.includes("*"))) {
     let majorVersion = constraints
       .find((constraint) => constraint.trim().startsWith("=="))

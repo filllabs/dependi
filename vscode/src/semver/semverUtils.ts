@@ -155,11 +155,16 @@ export function convertPythonVersionToSemver(version: string): string {
   let operator = '';
   let vPrefix = '';
   let versionPart = version;
-  const operatorMatch = version.match(/^(=|~|>=?|<=?)?(v|V)?/);
+  const operatorMatch = version.match(/^(==|>=|<=|~=|!=|\^|~|>|<|=)?(v|V)?/);
   if (operatorMatch && operatorMatch[0]) {
     operator = operatorMatch[1] || '';
     vPrefix = operatorMatch[2] || '';
     versionPart = version.slice(operatorMatch[0].length).trim();
+  }
+
+  // Node semver understands `=1.2.3`, not PEP 440 `==1.2.3`
+  if (operator === '==') {
+    operator = '=';
   }
   
   const v = convertPythonVersion(versionPart);

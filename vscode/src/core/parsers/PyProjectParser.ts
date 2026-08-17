@@ -40,9 +40,11 @@ export class PyProjectParser extends TomlParser {
 
     const valueItem = line.substring(eqIndex + 1, commentIndex > -1 ? commentIndex : line.length)
     const lastIndexOf = valueItem.indexOf(",");
-    item.value = clearText(lastIndexOf > -1 ? valueItem.substring(0, lastIndexOf) : valueItem);
+    const rawValue = (lastIndexOf > -1 ? valueItem.substring(0, lastIndexOf) : valueItem).trim();
+    // Keep PEP 440 / Poetry operators (==, ^, ~=, >=, ...) so exact pins stay exact.
+    item.value = rawValue.replace(/^["']|["']$/g, "").trim();
 
-    if (isBoolean(item.value) || item.value.includes("path")) {
+    if (isBoolean(item.value) || item.value.includes("path") || /\bgit\s*=/.test(line)) {
       return undefined;
     }
     if (line.indexOf("{") > -1) {

@@ -2,7 +2,7 @@
   "name": "dependi",
   "displayName": "Dependi",
   "description": "Empowers developers to efficiently manage dependencies and address vulnerabilities in Rust, Go, JavaScript, Typescript, PHP, Python, Dart, C#, F#, Elixir, Gradle (Java/Kotlin), and Terraform projects.",
-  "version": "0.7.27",
+  "version": "0.7.28",
   "publisher": "fill-labs",
   "author": {
     "name": "Fill Labs",

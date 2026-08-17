@@ -1,7 +1,6 @@
 import { versions as mavenVersions } from "../../api/indexes/maven";
 import { gradleVersions } from "../../api/indexes/gradle";
 import { Settings } from "../../config";
-import compareVersions from "../../semver/compareVersions";
 import { fetcherCatch } from "../../utils/errors";
 import Dependency from "../Dependency";
 import { Fetcher } from "./fetcher";
@@ -23,21 +22,11 @@ export class MavenFetcher extends Fetcher {
 
       return fetchPromise
         .then((pkg) => {
-          const versions = pkg.versions
-            .filter(
-              (version: string) =>
-                version !== "" &&
-                version !== undefined &&
-                !base.checkUnstables(
-                  Settings.gradle.unstableFilter,
-                  version,
-                  dep.item.value!
-                )
-            )
-            .sort(compareVersions)
-            .reverse();
-
-          dep.versions = versions;
+          dep.versions = base.filterAndSortVersions(
+            pkg.versions,
+            dep.item.value,
+            Settings.gradle.unstableFilter
+          );
           return dep;
         })
         .catch(fetcherCatch(dep));

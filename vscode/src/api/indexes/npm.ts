@@ -63,6 +63,23 @@ const setVersions = (response: any, versions: string[]) => {
           err = value.deprecated;
         }
       });
+      // Packages that only publish pre-releases (e.g. @typescript/native-preview)
+      if (versions.length === 0) {
+        versionData.forEach(([key, value]: [string, any]) => {
+          if (!value.deprecated) {
+            versions.push(key);
+          }
+        });
+      }
+      const latestTag = response["dist-tags"]?.latest;
+      if (
+        latestTag &&
+        !versions.includes(latestTag) &&
+        response.versions[latestTag] &&
+        !response.versions[latestTag].deprecated
+      ) {
+        versions.push(latestTag);
+      }
     }
   }
   if (versions.length > 0) {
