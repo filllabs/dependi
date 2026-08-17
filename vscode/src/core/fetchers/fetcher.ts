@@ -75,10 +75,14 @@ export abstract class Fetcher {
     return Promise.all(responses);
   }
 
+  isPreRelease(version: string): boolean {
+    return checkPreRelease(version);
+  }
+
   checkUnstables(unstableFilter: UnstableFilter, version: string, currentVersion: string): boolean {
     if (unstableFilter === UnstableFilter.IncludeAlways) return false;
-    if (unstableFilter === UnstableFilter.IncludeIfUnstable && checkPreRelease(currentVersion)) return false;
-    return checkPreRelease(version);
+    if (unstableFilter === UnstableFilter.IncludeIfUnstable && this.isPreRelease(currentVersion)) return false;
+    return this.isPreRelease(version);
   }
 
   /**

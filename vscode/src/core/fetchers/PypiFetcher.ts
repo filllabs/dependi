@@ -1,6 +1,6 @@
 import { DependencyInfo } from "../../api/DepencencyInfo";
 import { versions } from "../../api/indexes/pypi";
-import { Settings, UnstableFilter } from "../../config";
+import { Settings } from "../../config";
 import { fetcherCatch } from "../../utils/errors";
 import Dependency from "../Dependency";
 import { possibleLatestVersion, splitByComma } from "../parsers/PypiParser";
@@ -19,10 +19,8 @@ export class PypiFetcher extends Fetcher {
     };
   }
 
-  checkUnstables(unstableFilter: UnstableFilter, version: string, currentVersion: string): boolean {
-    if (unstableFilter === UnstableFilter.IncludeAlways) return false;
-    if (unstableFilter === UnstableFilter.IncludeIfUnstable && checkPreRelease(currentVersion)) return false;
-    return checkPreRelease(version);
+  isPreRelease(version: string): boolean {
+    return isPythonPreRelease(version);
   }
 
   mapVersions(di: DependencyInfo, dep: Dependency): Dependency {
@@ -47,7 +45,7 @@ export class PypiFetcher extends Fetcher {
   }
 }
 
-function checkPreRelease(version: string): boolean {
+export function isPythonPreRelease(version: string): boolean {
   const aORb = /\..*a|b.*/;
   return (
     version.indexOf(".alpha") !== -1 ||

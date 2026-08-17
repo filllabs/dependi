@@ -13,6 +13,7 @@ All notable changes to the "dependi" extension will be documented in this file.
 - NPM: Packages that only publish pre-release versions (e.g. `@typescript/native-preview`) are no longer shown as errors. When a pre-release is already installed, only pre-releases newer than the latest stable are listed. npm `dist-tags.latest` is respected even when it points at a pre-release. ([Issue #282](https://github.com/filllabs/dependi/issues/282))
 - Rust: Git and path dependencies are ignored for crates.io lookups in table form (`[dependencies.foo]`) and multiline inline tables, not only single-line `{ git = "..." }` entries. ([Issue #183](https://github.com/filllabs/dependi/issues/183))
 - Python: Exact pins (`==0.11.5`) and `poetry.lock` / `uv.lock` installed versions are no longer treated as caret ranges, so Dependi shows the pinned/locked version instead of a newer matching release. ([Issue #223](https://github.com/filllabs/dependi/issues/223))
+- Python: Unstable-version filtering on the Dependi API path now uses PEP 440 pre-release detection (e.g. `1.0.0rc1`, `1.0.0.dev0`), matching local PyPI lookups.
 
 ## [v0.7.27](https://github.com/filllabs/dependi/compare/v0.7.26...v0.7.27)
 

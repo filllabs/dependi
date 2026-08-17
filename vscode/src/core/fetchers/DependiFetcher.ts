@@ -7,9 +7,15 @@ import Item from "../Item";
 import { CurrentLanguage, Language } from "../Language";
 import { possibleLatestVersion, splitByComma } from "../parsers/PypiParser";
 import { Fetcher } from "./fetcher";
-
+import { isPythonPreRelease } from "./PypiFetcher";
 
 export class DependiFetcher extends Fetcher {
+  isPreRelease(version: string): boolean {
+    if (CurrentLanguage === Language.Python) {
+      return isPythonPreRelease(version);
+    }
+    return super.isPreRelease(version);
+  }
 
   async versions(dependencies: Dependency[]): Promise<Dependency[]> {
     let unstableFilter = UnstableFilter.Exclude;
