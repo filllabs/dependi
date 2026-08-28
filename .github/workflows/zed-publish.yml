@@ -1,0 +1,142 @@
+name: Publish Zed Extension
+on:
+  push:
+    tags:
+      - zed-v*
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  zed-extension-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Require license and bundled language server
+        run: |
+          test -f zed/LICENSE
+          git ls-files --error-unmatch zed/bin/dependi-language-server.js
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Build language server
+        working-directory: ./zed/server
+        run: |
+          npm ci
+          npm run build
+          test -f ../bin/dependi-language-server.js
+
+      - name: Require committed language server to match build
+        run: git diff --exit-code -- zed/bin/dependi-language-server.js
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-wasip2
+
+      - name: Compile Wasm extension
+        working-directory: ./zed
+        run: cargo build --target wasm32-wasip2 --release
+
+  zed-extension-publish:
+    needs: zed-extension-build
+    runs-on: ubuntu-latest
+    outputs:
+      pr_url: ${{ steps.publish.outputs.pr_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Publish to Zed extensions registry
+        id: publish
+        env:
+          GH_TOKEN: ${{ secrets.ZED_EXTENSIONS_TOKEN }}
+          ZED_EXTENSIONS_FORK: ${{ vars.ZED_EXTENSIONS_FORK }}
+        run: |
+          set -euo pipefail
+          if [ -z "${GH_TOKEN:-}" ]; then
+            echo "Missing secret ZED_EXTENSIONS_TOKEN (PAT with repo + workflow scopes)."
+            echo "Fork zed-industries/extensions (default filllabs/extensions) and set ZED_EXTENSIONS_FORK if the fork name differs."
+            exit 1
+          fi
+
+          VERSION=$(sed -n 's/^version = "\(.*\)"/\1/p' zed/extension.toml | head -1)
+          EXTENSION_ID=$(sed -n 's/^id = "\(.*\)"/\1/p' zed/extension.toml | head -1)
+          SHA="${GITHUB_SHA}"
+          FORK="${ZED_EXTENSIONS_FORK:-filllabs/extensions}"
+          SOURCE_REPO="${GITHUB_REPOSITORY}"
+          SOURCE_URL="https://github.com/${SOURCE_REPO}.git"
+          BRANCH="bump-${EXTENSION_ID}-${VERSION}"
+          FORK_OWNER="${FORK%%/*}"
+
+          if [ "${GITHUB_REF_TYPE}" = "tag" ] && [ "${GITHUB_REF_NAME}" != "zed-v${VERSION}" ]; then
+            echo "Tag ${GITHUB_REF_NAME} does not match zed/extension.toml version ${VERSION} (expected zed-v${VERSION})."
+            exit 1
+          fi
+
+          echo "Publishing ${EXTENSION_ID} ${VERSION} at ${SHA} via ${FORK}"
+
+          git clone --depth 1 https://github.com/zed-industries/extensions.git "${RUNNER_TEMP}/extensions-repo"
+          cd "${RUNNER_TEMP}/extensions-repo"
+          git checkout -B "${BRANCH}"
+
+          python3 "${GITHUB_WORKSPACE}/.github/scripts/publish-zed-extension.py" \
+            "${EXTENSION_ID}" "${VERSION}" "${SOURCE_URL}" "${SHA}"
+
+          git add extensions.toml .gitmodules
+          git add "extensions/${EXTENSION_ID}" || true
+
+          if git diff --cached --quiet; then
+            echo "No Zed registry changes to commit."
+          else
+            git -c user.name="github-actions[bot]" \
+              -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+              commit -m "Update ${EXTENSION_ID} to ${VERSION}
+
+          Source: ${SOURCE_URL}
+          Commit: ${SHA}
+          Path: zed"
+          fi
+
+          git remote add fork "https://x-access-token:${GH_TOKEN}@github.com/${FORK}.git"
+          git push -u fork "${BRANCH}" --force
+
+          {
+            echo "## Summary"
+            echo "- Publish official Dependi Zed extension \`${EXTENSION_ID}\` \`${VERSION}\`"
+            echo "- Submodule: \`${SOURCE_REPO}\` @ \`${SHA}\`"
+            echo "- Extension path: \`zed\`"
+            echo ""
+            echo "The registry currently lists a third-party \`dependi\` submodule. This PR retargets it to \`${SOURCE_REPO}\` at path \`zed\`."
+            echo ""
+            echo "Built by GitHub Actions: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          } > "${RUNNER_TEMP}/zed-pr-body.md"
+
+          PR_URL=$(gh pr list --repo zed-industries/extensions --head "${FORK_OWNER}:${BRANCH}" --json url --jq '.[0].url // empty')
+          if [ -z "${PR_URL}" ]; then
+            PR_URL=$(gh pr create \
+              --repo zed-industries/extensions \
+              --head "${FORK_OWNER}:${BRANCH}" \
+              --title "Update ${EXTENSION_ID} to ${VERSION}" \
+              --body-file "${RUNNER_TEMP}/zed-pr-body.md")
+          fi
+
+          echo "Opened ${PR_URL}"
+          echo "pr_url=${PR_URL}" >> "${GITHUB_OUTPUT}"
+
+      - name: Send status to Slack
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          payload: |
+            {
+              "text": "Zed extension publish PR opened: ${{ steps.publish.outputs.pr_url }}"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

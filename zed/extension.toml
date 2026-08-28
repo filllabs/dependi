@@ -1,0 +1,50 @@
+id = "dependi"
+name = "Dependi"
+version = "0.1.5"
+schema_version = 1
+authors = ["Fill Labs <info@dependi.io>"]
+description = "Manage dependency versions and vulnerabilities for Rust, Go, JavaScript, Python, PHP, Dart, C#, Elixir, Gradle, and Terraform."
+repository = "https://github.com/filllabs/dependi"
+
+[language_servers.dependi]
+name = "Dependi"
+languages = [
+  "TOML",
+  "JSON",
+  "JSONC",
+  "YAML",
+  "XML",
+  "C#",
+  "CSharp",
+  "Go Mod",
+  "Elixir",
+  "Dart",
+  "Terraform",
+  "HCL",
+  "Groovy",
+  "Kotlin",
+  "Java",
+  "Python",
+  "Properties",
+  "INI",
+]
+
+[language_servers.dependi.language_ids]
+"TOML" = "toml"
+"JSON" = "json"
+"JSONC" = "jsonc"
+"YAML" = "yaml"
+"XML" = "xml"
+"Go Mod" = "gomod"
+"C#" = "csharp"
+"CSharp" = "csharp"
+"Elixir" = "elixir"
+"Dart" = "dart"
+"Terraform" = "terraform"
+"HCL" = "hcl"
+"Groovy" = "groovy"
+"Kotlin" = "kotlin"
+"Java" = "java"
+"Python" = "python"
+"Properties" = "properties"
+"INI" = "ini"
