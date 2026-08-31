@@ -24810,7 +24810,7 @@ function applyLspSettings(settings) {
   const raw = settings ?? {};
   const scoped = raw.dependi && typeof raw.dependi === "object" && !Array.isArray(raw.dependi) ? raw.dependi : raw;
   setWorkspaceConfig(scoped);
-  Settings.version = "0.7.28";
+  Settings.version = "1.50.0";
   if (!Settings.api.deviceID) {
     Settings.api.deviceID = loadDeviceId();
   }

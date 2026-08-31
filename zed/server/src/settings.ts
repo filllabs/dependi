@@ -34,7 +34,7 @@ export function applyLspSettings(settings: Record<string, unknown> | undefined):
       ? (raw.dependi as Record<string, unknown>)
       : raw;
   setWorkspaceConfig(scoped);
-  Settings.version = "0.7.28";
+  Settings.version = "1.50.0";
   if (!Settings.api.deviceID) {
     Settings.api.deviceID = loadDeviceId();
   }

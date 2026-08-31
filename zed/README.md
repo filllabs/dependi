@@ -107,8 +107,8 @@ Vulnerability reports are saved as HTML and opened if the editor supports it. Lo
 
 - If the language server does not start or files are not decorated, rebuild `zed/server` (`npm run build`) and **reinstall** the dev extension. The JS is embedded in the Wasm, so copying files into the work dir is not enough.
 - Zed has no VS Code-style gutter decorations. Versions appear as **inlay hints** (✅ / ❌ / ⚠️) at the end of the dependency line. Hover a version string for details; use code actions to update.
-- `go.mod` requires Zed's **Go Mod** language. Gradle / Terraform / Elixir files require those language extensions so Zed can attach Dependi to them.
-- `requirements.txt` is treated as Python. If Zed opens it as plain text, add `"file_types": { "Python": ["requirements.txt", "requirements.in"] }`.
+- Dependi attaches to Zed's built-in languages (TOML, JSON, YAML, Plain Text) and ships fallback languages (`Dependi Manifest`, `Pip Requirements`) so `go.mod`, `mix.exs`, Gradle, Terraform, `*.csproj` / `*.fsproj` / `*.props`, and `requirements.*` work without extra extensions. Installing Go / Elixir / Gradle / Terraform still improves highlighting; Dependi attaches either way.
+- To highlight `requirements.txt` as Python (this can also start Pyright), add `"file_types": { "Python": ["**/requirements*.txt", "**/requirements*.in"] }`.
 
 ## Publishing
 
@@ -118,12 +118,12 @@ Zed ships extensions from [zed-industries/extensions](https://github.com/zed-ind
 2. Keep `zed/LICENSE` (MIT). Zed only accepts licenses in the extension path, not the repo root.
 3. Add repo secret `ZED_EXTENSIONS_TOKEN` — a PAT with `repo` and `workflow` scopes that can push to the extensions fork.
 4. Fork [zed-industries/extensions](https://github.com/zed-industries/extensions) to `filllabs/extensions`, or set Actions variable `ZED_EXTENSIONS_FORK` to `owner/repo`.
-5. Set `zed/extension.toml` / `zed/Cargo.toml` to a version **greater than `1.10.0`**. The marketplace already lists a third-party `dependi` at that version, and Zed CI rejects decreases.
-6. Tag a Zed release and push it (do not reuse VS Code `v*` tags). The tag must match the manifest, e.g. version `2.0.0` → `zed-v2.0.0`:
+5. This release is `1.50.0` (greater than the marketplace third-party `dependi` at `1.10.0`; Zed CI rejects decreases).
+6. Tag a Zed release and push it (do not reuse VS Code `v*` tags). The tag must match the manifest, e.g. version `1.50.0` → `zed-v1.50.0`:
 
 ```sh
-git tag zed-v2.0.0
-git push origin zed-v2.0.0
+git tag zed-v1.50.0
+git push origin zed-v1.50.0
 ```
 
 The workflow also runs from **Actions → Publish Zed Extension → Run workflow**. The PR updates submodule `extensions/dependi` to this repository at path `zed` and retargets it away from the current third-party listing. Zed staff may need to approve that ownership change.

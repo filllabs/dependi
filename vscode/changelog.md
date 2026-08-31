@@ -2,6 +2,12 @@
 
 All notable changes to the "dependi" extension will be documented in this file.
 
+## [v1.50.0](https://github.com/filllabs/dependi/compare/v0.7.28...v1.50.0)
+
+### New Features
+
+- Version aligned with Dependi for Zed **1.50.0**. Same analysis engine on both editors. See [zed/changelog.md](../zed/changelog.md).
+
 ## [v0.7.28](https://github.com/filllabs/dependi/compare/v0.7.27...v0.7.28)
 
 ### New Features

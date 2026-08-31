@@ -1,6 +1,6 @@
 id = "dependi"
 name = "Dependi"
-version = "0.1.5"
+version = "1.50.0"
 schema_version = 1
 authors = ["Fill Labs <info@dependi.io>"]
 description = "Manage dependency versions and vulnerabilities for Rust, Go, JavaScript, Python, PHP, Dart, C#, Elixir, Gradle, and Terraform."
@@ -8,6 +8,8 @@ repository = "https://github.com/filllabs/dependi"
 
 [language_servers.dependi]
 name = "Dependi"
+# Official names (when those extensions are installed) plus bundled fallbacks
+# so every VS Code manifest attaches without extra language extensions.
 languages = [
   "TOML",
   "JSON",
@@ -16,17 +18,25 @@ languages = [
   "XML",
   "C#",
   "CSharp",
+  "F#",
+  "FSharp",
+  "Go",
   "Go Mod",
   "Elixir",
   "Dart",
   "Terraform",
+  "OpenTofu",
   "HCL",
   "Groovy",
   "Kotlin",
   "Java",
   "Python",
+  "Pip Requirements",
+  "Plain Text",
   "Properties",
+  "Java Properties",
   "INI",
+  "Dependi Manifest",
 ]
 
 [language_servers.dependi.language_ids]
@@ -35,16 +45,24 @@ languages = [
 "JSONC" = "jsonc"
 "YAML" = "yaml"
 "XML" = "xml"
+"Go" = "go"
 "Go Mod" = "gomod"
 "C#" = "csharp"
 "CSharp" = "csharp"
+"F#" = "fsharp"
+"FSharp" = "fsharp"
 "Elixir" = "elixir"
 "Dart" = "dart"
 "Terraform" = "terraform"
+"OpenTofu" = "opentofu"
 "HCL" = "hcl"
 "Groovy" = "groovy"
 "Kotlin" = "kotlin"
 "Java" = "java"
 "Python" = "python"
+"Pip Requirements" = "pip-requirements"
+"Plain Text" = "plaintext"
 "Properties" = "properties"
+"Java Properties" = "properties"
 "INI" = "ini"
+"Dependi Manifest" = "dependi-manifest"

@@ -1,0 +1,18 @@
+name = "Pip Requirements"
+path_suffixes = [
+  "requirements.in",
+  "requirements-dev.in",
+  "requirements_dev.in",
+  "requirements-test.in",
+  "requirements.txt",
+  "requirements-dev.txt",
+  "requirements_dev.txt",
+  "requirements-test.txt",
+]
+line_comments = ["# "]
+brackets = [
+  { start = "[", end = "]", close = true, newline = false },
+  { start = "(", end = ")", close = true, newline = false },
+  { start = "\"", end = "\"", close = true, newline = false },
+  { start = "'", end = "'", close = true, newline = false },
+]
