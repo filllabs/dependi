@@ -2,6 +2,7 @@ name: Publish Zed Extension
 on:
   push:
     tags:
+      - v*
       - zed-v*
   workflow_dispatch:
 concurrency:
@@ -76,9 +77,14 @@ jobs:
           BRANCH="bump-${EXTENSION_ID}-${VERSION}"
           FORK_OWNER="${FORK%%/*}"
 
-          if [ "${GITHUB_REF_TYPE}" = "tag" ] && [ "${GITHUB_REF_NAME}" != "zed-v${VERSION}" ]; then
-            echo "Tag ${GITHUB_REF_NAME} does not match zed/extension.toml version ${VERSION} (expected zed-v${VERSION})."
-            exit 1
+          if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
+            case "${GITHUB_REF_NAME}" in
+              "v${VERSION}"|"zed-v${VERSION}") ;;
+              *)
+                echo "Tag ${GITHUB_REF_NAME} does not match zed/extension.toml version ${VERSION} (expected v${VERSION} or zed-v${VERSION})."
+                exit 1
+                ;;
+            esac
           fi
 
           echo "Publishing ${EXTENSION_ID} ${VERSION} at ${SHA} via ${FORK}"
@@ -94,16 +100,18 @@ jobs:
           git add "extensions/${EXTENSION_ID}" || true
 
           if git diff --cached --quiet; then
-            echo "No Zed registry changes to commit."
-          else
-            git -c user.name="github-actions[bot]" \
-              -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
-              commit -m "Update ${EXTENSION_ID} to ${VERSION}
+            echo "No Zed registry changes to commit. Skipping push and PR."
+            echo "pr_url=" >> "${GITHUB_OUTPUT}"
+            exit 0
+          fi
+
+          git -c user.name="github-actions[bot]" \
+            -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -m "Update ${EXTENSION_ID} to ${VERSION}
 
           Source: ${SOURCE_URL}
           Commit: ${SHA}
           Path: zed"
-          fi
 
           git remote add fork "https://x-access-token:${GH_TOKEN}@github.com/${FORK}.git"
           git push -u fork "${BRANCH}" --force
@@ -132,6 +140,7 @@ jobs:
           echo "pr_url=${PR_URL}" >> "${GITHUB_OUTPUT}"
 
       - name: Send status to Slack
+        if: steps.publish.outputs.pr_url != ''
         uses: slackapi/slack-github-action@v1.26.0
         with:
           payload: |

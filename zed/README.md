@@ -112,18 +112,27 @@ Vulnerability reports are saved as HTML and opened if the editor supports it. Lo
 
 ## Publishing
 
-Zed ships extensions from [zed-industries/extensions](https://github.com/zed-industries/extensions). This repo opens a PR there; it does not upload a package to a registry.
+VS Code and Zed share one semver (`1.50.0` in `vscode/package.json` and `zed/extension.toml`). Analysis lives in `vscode/src`; the Zed language server bundles it, so analysis changes should ship on both editors.
 
-1. Commit `zed/bin/dependi-language-server.js` (produced by `cd zed/server && npm ci && npm run build`). Zed compiles Wasm from git and embeds that file.
+**Aligned release (usual path — analysis, parsers, both editors):**
+
+```sh
+./scripts/bump-version.sh 1.50.1   # keeps all manifests in sync and rebuilds zed/bin
+# edit vscode/changelog.md and zed/changelog.md
+git tag v1.50.1
+git push origin v1.50.1
+```
+
+`v*` publishes VS Marketplace, OpenVSX, and the Zed registry PR. `zed-v*` is not a VS Code tag (`v*` does not match `zed-v…`).
+
+**Zed-only** (extension host, languages, publish workflow): tag `zed-v1.50.1` (same number as the manifests) or run **Actions → Publish Zed Extension**.
+
+Zed ships from [zed-industries/extensions](https://github.com/zed-industries/extensions). This repo opens a PR there; it does not upload a package to a registry.
+
+1. Commit `zed/bin/dependi-language-server.js` (produced by `cd zed/server && npm ci && npm run build`, or by the bump script).
 2. Keep `zed/LICENSE` (MIT). Zed only accepts licenses in the extension path, not the repo root.
 3. Add repo secret `ZED_EXTENSIONS_TOKEN` — a PAT with `repo` and `workflow` scopes that can push to the extensions fork.
 4. Fork [zed-industries/extensions](https://github.com/zed-industries/extensions) to `filllabs/extensions`, or set Actions variable `ZED_EXTENSIONS_FORK` to `owner/repo`.
-5. This release is `1.50.0` (greater than the marketplace third-party `dependi` at `1.10.0`; Zed CI rejects decreases).
-6. Tag a Zed release and push it (do not reuse VS Code `v*` tags). The tag must match the manifest, e.g. version `1.50.0` → `zed-v1.50.0`:
+5. Version must stay **greater than `1.10.0`**. The marketplace already lists a third-party `dependi` at that version, and Zed CI rejects decreases.
 
-```sh
-git tag zed-v1.50.0
-git push origin zed-v1.50.0
-```
-
-The workflow also runs from **Actions → Publish Zed Extension → Run workflow**. The PR updates submodule `extensions/dependi` to this repository at path `zed` and retargets it away from the current third-party listing. Zed staff may need to approve that ownership change.
+The PR updates submodule `extensions/dependi` to this repository at path `zed` and retargets it away from the current third-party listing. Zed staff may need to approve that ownership change.

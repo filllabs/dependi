@@ -21,6 +21,14 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 22
+      - name: Require tag to match package.json
+        if: github.ref_type == 'tag'
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          if [ "${GITHUB_REF_NAME}" != "v${VERSION}" ]; then
+            echo "Tag ${GITHUB_REF_NAME} does not match vscode/package.json version ${VERSION} (expected v${VERSION})."
+            exit 1
+          fi
       - name: Install Dependencies
         run: npm install --save-exact --save-dev esbuild
       - name: Publish to OpenVSX

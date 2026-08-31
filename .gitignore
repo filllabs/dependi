@@ -11,3 +11,4 @@ tmp
 builds
 samples
 .cursor
+**/__pycache__/
