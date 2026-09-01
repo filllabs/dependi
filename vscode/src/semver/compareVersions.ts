@@ -14,7 +14,7 @@ function lastIndexOrEnd(str: string, q: string) {
 }
 
 function split(v: string) {
-  const c = v.replace(/^v/, "").replace(/\+.*$/, "");
+  const c = v.replace(/^v/i, "").replace(/\+.*$/, "");
 
   const patchIndex =
     CurrentLanguage === Language.Python

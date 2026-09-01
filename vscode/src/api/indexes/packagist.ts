@@ -23,7 +23,7 @@ export const versions = (name: string) => {
         try {
           info = {
             name: name,
-            versions: response.packages[name].map((version: any) => version.version.replace(/^v/, '')),
+            versions: response.packages[name].map((version: any) => version.version.replace(/^v/i, '')),
           };
         } catch (e) {
           reject(e);

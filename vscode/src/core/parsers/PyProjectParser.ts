@@ -75,8 +75,12 @@ export class PyProjectParser extends TomlParser {
     if (line.trim() === "]") {
       state.isSubTable = false;
       state.isSingle = false;
-      state.isMultipleDepTable = false;
-      state.bypass = true;
+      // `[dependency-groups]` and `[project.optional-dependencies]` contain
+      // multiple `name = [` blocks; only leave single-array sections like
+      // `[project]` `dependencies = [` once their array closes.
+      if (!state.isMultipleDepTable) {
+        state.bypass = true;
+      }
       return false;
     }
     const trimmed = line.trimEnd();

@@ -2,6 +2,13 @@
 
 All notable changes to the "dependi" extension will be documented in this file.
 
+## [Unreleased]
+
+### Bug Fixes
+
+- Python: All groups in `[dependency-groups]` and `[project.optional-dependencies]` are now scanned, not just the first. ([Issue #307](https://github.com/filllabs/dependi/issues/307))
+- PHP: Versions prefixed with uppercase `V` (e.g. `V4.0.0`) are now sorted by semantic version and normalized like lowercase `v` prefixes. ([Issue #308](https://github.com/filllabs/dependi/issues/308))
+
 ## [v0.7.28](https://github.com/filllabs/dependi/compare/v0.7.27...v0.7.28)
 
 ### New Features
