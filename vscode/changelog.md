@@ -4,6 +4,10 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 ## [Unreleased]
 
+### Bug Fixes
+
+- Rust/lockfiles: Versions higher than any published release now respect `silenceVersionOverflows` even when a lockfile pins the real latest — with the setting off (default) they show as incompatible; with it on they stay up-to-date. ([Issue #221](https://github.com/filllabs/dependi/issues/221))
+
 ### New Features
 
 - Go: When `dependi.go.indexServerURL` is unset, the first HTTP(S) entry from the `GOPROXY` environment variable is used. Modules matching `GOPRIVATE` / `GONOPROXY` are skipped so they no longer produce public-proxy 404 errors. ([Issue #18](https://github.com/filllabs/dependi/issues/18))

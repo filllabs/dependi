@@ -13,18 +13,22 @@ export function checkVersion(version: string = "0.0.0", versions: string[], lock
 
   const max = semverVersions[0];
 
+  // Version higher than anything published ("overflow").
+  // silenceVersionOverflows → treat as up-to-date; otherwise report incompatible
+  // (including when a lockfile pins the real latest, which used to hide this).
+  if (max) {
+    const minV = minVersion(v)?.toString() ?? "0.0.0";
+    if (gt(minV, max)) {
+      if (treatAsUpToDate()) {
+        return [true, false, version];
+      }
+      return [false, false, null];
+    }
+  }
+
   if (lockedAt) {
     const result = checkLockedVersion(lockedAt, v, semverVersions);
     if (result) return result;
-  }
-
-  if (treatAsUpToDate()) {
-    if (max) {
-      const minV = minVersion(v)?.toString() ?? "0.0.0";
-      if (gt(minV, max)) {
-        return [true, false, version];
-      }
-    }
   }
 
   // if check patch is true, check if the patch version is the same or higher than the current version
@@ -204,6 +208,8 @@ function treatAsUpToDate(): boolean {
       return Settings.elixir.silenceVersionOverflows;
     case Language.Gradle:
       return Settings.gradle.silenceVersionOverflows;
+    case Language.Terraform:
+      return Settings.terraform.silenceVersionOverflows;
   }
   return false;
 }
