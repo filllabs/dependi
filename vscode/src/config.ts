@@ -1,4 +1,5 @@
 import { ConfigurationChangeEvent, DecorationInstanceRenderOptions, workspace } from "vscode";
+import { resolveGoIndexServerURL } from "./api/indexes/goEnv";
 import { DecorationPosition } from "./ui/pref";
 
 export const DEPENDI = "dependi.";
@@ -299,7 +300,18 @@ export const Settings = {
     this.php.silenceVersionOverflows = config.get<boolean>(Configs.PHP_SILENCE_VERSION_OVERFLOWS) ?? false;
 
     this.go.enabled = config.get<boolean>(Configs.GO_ENABLED) ?? true;
-    this.go.index = config.get<string>(Configs.GO_INDEX_SERVER_URL) || "https://proxy.golang.org";
+    {
+      const goIndexKey = Configs.GO_INDEX_SERVER_URL;
+      const goIndexInspect = config.inspect<string>(goIndexKey);
+      const hasGoIndexOverride =
+        goIndexInspect?.globalValue !== undefined ||
+        goIndexInspect?.workspaceValue !== undefined ||
+        goIndexInspect?.workspaceFolderValue !== undefined;
+      this.go.index = resolveGoIndexServerURL(
+        config.get<string>(goIndexKey),
+        hasGoIndexOverride
+      );
+    }
     this.go.unstableFilter = migrateUnstableSettings(Configs.GO_UNSTABLE_FILTER, Configs.GO_UNSTABLE_OLD);
     this.go.ignoreLinePattern = config.get<string>(Configs.GO_IGNORE_LINE_PATTERN) || "";
     this.go.informPatchUpdates = config.get<boolean>(Configs.GO_INFORM_PATCH_UPDATES) ?? false;

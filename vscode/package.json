@@ -405,7 +405,7 @@
           "dependi.go.indexServerURL": {
             "type": "string",
             "scope": "resource",
-            "description": "The URL for the Go package index server.",
+            "description": "The URL for the Go package index server. When unset, the first HTTP(S) entry from the GOPROXY environment variable is used (falling back to https://proxy.golang.org).",
             "format": "url",
             "pattern": "^https?://(?!.*//)([^/]+/)*[^/]+$",
             "default": "https://proxy.golang.org",
