@@ -29,6 +29,7 @@ Dependi simplifies dependency management in Visual Studio Code, helping you to:
   - **Go**:
     - Documentation: [https://golang.org/doc/](https://golang.org/doc/)
     - Package Repository (pkg.go.dev): [https://pkg.go.dev/](https://pkg.go.dev/)
+    - For modules whose path is `github.com/<owner>/<repo>`, the dependency hover also includes a **Releases** link to that repository's GitHub Releases page (changelog). This link is shown only for `github.com` module paths; other hosts (e.g. `gopkg.in`, `golang.org`, `gitlab.com`) are unchanged.
   - **JavaScript (NPM)**:
     - Documentation: [https://docs.npmjs.com/](https://docs.npmjs.com/)
     - Package Repository (npm): [https://www.npmjs.com/](https://www.npmjs.com/)

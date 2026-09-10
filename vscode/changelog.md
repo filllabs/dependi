@@ -11,6 +11,7 @@ All notable changes to the "dependi" extension will be documented in this file.
 ### New Features
 
 - Go: When `dependi.go.indexServerURL` is unset, the first HTTP(S) entry from the `GOPROXY` environment variable is used. Modules matching `GOPRIVATE` / `GONOPROXY` are skipped so they no longer produce public-proxy 404 errors. ([Issue #18](https://github.com/filllabs/dependi/issues/18))
+- Go: Dependency hover includes a **Releases** link for modules hosted on GitHub (`github.com/owner/repo`). The link is omitted for non-GitHub module paths. ([Issue #259](https://github.com/filllabs/dependi/issues/259))
 
 ## [v1.5.0](https://github.com/filllabs/dependi/compare/v0.7.28...v1.5.0)
 

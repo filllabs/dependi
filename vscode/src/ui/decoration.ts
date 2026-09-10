@@ -194,8 +194,18 @@ function getLinks(lang: Language, key: string, item?: Item): string {
   switch (lang) {
     case Language.Rust:
       return ` _([View crate](https://crates.io/crates/${cleanKey}) | [Check reviews](https://web.crev.dev/rust-reviews/crate/${cleanKey}))_`;
-    case Language.Golang:
-      return ` _([View module](https://pkg.go.dev/${cleanKey}) | [Check docs](https://pkg.go.dev/${cleanKey}#section-documentation))_`;
+    case Language.Golang: {
+      const links = [
+        `[View module](https://pkg.go.dev/${cleanKey})`,
+        `[Check docs](https://pkg.go.dev/${cleanKey}#section-documentation)`,
+      ];
+      // Extra Releases link only when the module path is clearly github.com/owner/repo.
+      const githubReleases = githubReleasesUrlFromGoModule(cleanKey);
+      if (githubReleases) {
+        links.push(`[Releases](${githubReleases})`);
+      }
+      return ` _(${links.join(" | ")})_`;
+    }
     case Language.JS:
       if (item?.source === "jsr") {
         return ` _([View package](https://jsr.io/${cleanKey}))_`;
@@ -225,6 +235,36 @@ function getLinks(lang: Language, key: string, item?: Item): string {
     default:
       return "";
   }
+}
+
+/**
+ * Build a GitHub Releases URL for Go modules hosted on github.com.
+ * Returns undefined unless the path is exactly github.com/<owner>/<repo>[/...].
+ * Never invents a link for gopkg.in, golang.org, gitlab.com, etc.
+ */
+export function githubReleasesUrlFromGoModule(modulePath: string): string | undefined {
+  const path = modulePath.trim().replace(/^\/+/, "").replace(/\/+$/, "");
+  if (!path.toLowerCase().startsWith("github.com/")) {
+    return undefined;
+  }
+  const segments = path.split("/").filter(Boolean);
+  // github.com / owner / repo [/ optional subpath...]
+  if (segments.length < 3) {
+    return undefined;
+  }
+  if (segments[0].toLowerCase() !== "github.com") {
+    return undefined;
+  }
+  const owner = segments[1];
+  const repo = segments[2];
+  // Reject empty or path-traversal-like segments
+  if (!owner || !repo || owner === "." || owner === ".." || repo === "." || repo === "..") {
+    return undefined;
+  }
+  if (owner.includes(":") || repo.includes(":")) {
+    return undefined;
+  }
+  return `https://github.com/${owner}/${repo}/releases`;
 }
 
 function getDocsLink(
