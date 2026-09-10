@@ -4,6 +4,8 @@ All notable changes to the "dependi" extension will be documented in this file.
 
 ## [Unreleased]
 
+## [v1.5.0](https://github.com/filllabs/dependi/compare/v0.7.28...v1.5.0)
+
 ### Bug Fixes
 
 - Python: All groups in `[dependency-groups]` and `[project.optional-dependencies]` are now scanned, not just the first. ([Issue #307](https://github.com/filllabs/dependi/issues/307))
