@@ -112,7 +112,11 @@ Vulnerability reports are saved as HTML and opened if the editor supports it. Lo
 
 ## Publishing
 
-VS Code and Zed share one semver (`vscode/package.json` and `zed/extension.toml`). Analysis lives in `vscode/src`; the Zed language server bundles it, so analysis changes should ship on both editors.
+Follow [Zed CONTRIBUTING](https://github.com/zed-industries/extensions/blob/main/CONTRIBUTING.md) and the [publishing guide](https://zed.dev/docs/extensions/publishing/publishing-guide) before opening a registry PR: one extension per PR, `git submodule add` (HTTPS), `pnpm sort-extensions`, CLA signed, MIT `zed/LICENSE`, and test as a dev extension at the submodule commit.
+
+The language server is **not** embedded in the Wasm (Zed prerequisite). At runtime it prefers `dependi-language-server` on `PATH`, otherwise downloads `zed/bin/dependi-language-server.js` from the matching `v<version>` tag. Keep that file committed and rebuild it on every version bump.
+
+VS Code and Zed share one semver (`vscode/package.json` and `zed/extension.toml`). Analysis lives in `vscode/src`; the Zed language server packages it, so analysis changes should ship on both editors.
 
 **Aligned release (usual path — analysis, parsers, both editors):**
 
@@ -129,7 +133,7 @@ git push origin v1.20.1
 
 Zed ships from [zed-industries/extensions](https://github.com/zed-industries/extensions). This repo opens a PR there; it does not upload a package to a registry.
 
-1. Commit `zed/bin/dependi-language-server.js` (produced by `cd zed/server && npm ci && npm run build`, or by the bump script).
+1. Commit `zed/bin/dependi-language-server.js` (produced by `cd zed/server && npm ci && npm run build`, or by the bump script) — required as the download artifact for `v<version>`.
 2. Keep `zed/LICENSE` (MIT). Zed only accepts licenses in the extension path, not the repo root.
 3. Add repo secret `ZED_EXTENSIONS_TOKEN` — a PAT with `repo` and `workflow` scopes that can push to the extensions fork.
 4. Fork [zed-industries/extensions](https://github.com/zed-industries/extensions) to `filllabs/extensions`, or set Actions variable `ZED_EXTENSIONS_FORK` to `owner/repo`.

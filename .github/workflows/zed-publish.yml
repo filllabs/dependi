@@ -94,13 +94,13 @@ jobs:
           cd "${RUNNER_TEMP}/extensions-repo"
           git checkout -B "${BRANCH}"
 
+          # Official flow: submodule add + pin SHA + extensions.toml + pnpm sort-extensions
+          # https://zed.dev/docs/extensions/publishing/publishing-guide
           python3 "${GITHUB_WORKSPACE}/.github/scripts/publish-zed-extension.py" \
             "${EXTENSION_ID}" "${VERSION}" "${SOURCE_URL}" "${SHA}"
 
-          # Stage manifests only. The script already staged the 160000 gitlink via
-          # update-index; `git add extensions/<id>` would drop it without a checkout.
-          git add extensions.toml .gitmodules
           git ls-files -s -- "extensions/${EXTENSION_ID}" | grep -q "^160000 "
+          git diff --cached --name-only | grep -q extensions.toml
 
           if git diff --cached --quiet; then
             echo "No Zed registry changes to commit. Skipping push and PR."
@@ -109,10 +109,9 @@ jobs:
           fi
 
           # Author as the actor who triggered the run (must have signed https://zed.dev/cla).
-          # Do not use github-actions[bot] — CLA bot cannot accept it.
           git -c user.name="${GITHUB_ACTOR}" \
             -c user.email="${GITHUB_ACTOR}@users.noreply.github.com" \
-            commit -m "Update ${EXTENSION_ID} to ${VERSION}
+            commit -m "Add ${EXTENSION_ID} ${VERSION}
 
           Source: ${SOURCE_URL}
           Commit: ${SHA}

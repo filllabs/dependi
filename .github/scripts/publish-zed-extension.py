@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Update a zed-industries/extensions checkout to publish Dependi."""
+"""Update a zed-industries/extensions checkout to publish Dependi.
+
+Follows https://zed.dev/docs/extensions/publishing/publishing-guide:
+  git submodule add (HTTPS), pin commit, edit extensions.toml, pnpm sort-extensions.
+"""
 
 from __future__ import annotations
 
@@ -23,34 +27,12 @@ def current_version(body: str) -> str | None:
     return match.group(1) if match else None
 
 
-def split_toml_sections(text: str) -> tuple[str, list[str]]:
-    parts = re.split(r"(?=^\[)", text, flags=re.M)
-    return parts[0], parts[1:]
-
-
-def sort_toml_sections(sections: list[str]) -> list[str]:
-    def key(section: str) -> str:
-        match = re.match(r"^\[([^\]]+)\]", section)
-        return (match.group(1) if match else section).lower()
-
-    return sorted(sections, key=key)
-
-
 def update_extensions_toml(path: Path, ext_id: str, version: str) -> str | None:
     text = path.read_text()
     previous: str | None = None
-    preamble, sections = split_toml_sections(text)
-    section_re = re.compile(rf"^\[{re.escape(ext_id)}\]\n(.*?)(?=\n\[|\Z)", re.S)
-
-    updated: list[str] = []
-    found = False
-    for section in sections:
-        match = section_re.match(section)
-        if not match:
-            updated.append(section)
-            continue
-        found = True
-        body = match.group(1)
+    match = re.search(rf"(\[{re.escape(ext_id)}\]\n)(.*?)(?=\n\[|\Z)", text, re.S)
+    if match:
+        body = match.group(2)
         previous = current_version(body)
         if previous and parse_version(version) < parse_version(previous):
             raise SystemExit(
@@ -67,93 +49,68 @@ def update_extensions_toml(path: Path, ext_id: str, version: str) -> str | None:
             body = f'submodule = "extensions/{ext_id}"\n' + body
         if not body.endswith("\n"):
             body += "\n"
-        updated.append(f"[{ext_id}]\n{body}")
-
-    if not found:
-        updated.append(
-            f"[{ext_id}]\n"
-            f'submodule = "extensions/{ext_id}"\n'
-            f'path = "zed"\n'
-            f'version = "{version}"\n'
+        text = text[: match.start()] + match.group(1) + body + text[match.end() :]
+    else:
+        text = (
+            text.rstrip()
+            + f"\n\n[{ext_id}]\n"
+            + f'submodule = "extensions/{ext_id}"\n'
+            + 'path = "zed"\n'
+            + f'version = "{version}"\n'
         )
-
-    out = preamble + "".join(sort_toml_sections(updated))
-    if not out.endswith("\n"):
-        out += "\n"
-    path.write_text(out)
+    path.write_text(text if text.endswith("\n") else text + "\n")
     tomllib.loads(path.read_text())
     return previous
 
 
-def split_gitmodules(text: str) -> tuple[str, list[str]]:
-    parts = re.split(r"(?=^\[submodule )", text, flags=re.M)
-    return parts[0], parts[1:]
-
-
-def sort_gitmodules_sections(sections: list[str]) -> list[str]:
-    def key(section: str) -> str:
-        match = re.match(r'^\[submodule "([^"]+)"\]', section)
-        return (match.group(1) if match else section).lower()
-
-    return sorted(sections, key=key)
-
-
-def update_gitmodules(path: Path, ext_id: str, source_url: str) -> None:
-    header = f'[submodule "extensions/{ext_id}"]'
-    gm = path.read_text() if path.exists() else ""
-    preamble, sections = split_gitmodules(gm)
-    updated: list[str] = []
-    found = False
-    for section in sections:
-        if not section.startswith(header):
-            updated.append(section)
-            continue
-        found = True
-        body = section[len(header) :]
-        if re.search(r"(?m)^[ \t]*url = ", body):
-            body = re.sub(r"(?m)^([ \t]*url = ).*$", rf"\1{source_url}", body, count=1)
-        else:
-            body = body.rstrip() + f"\n\turl = {source_url}\n"
-        if not re.search(r"(?m)^[ \t]*path = ", body):
-            body = body.rstrip() + f"\n\tpath = extensions/{ext_id}\n"
-        if not body.endswith("\n"):
-            body += "\n"
-        updated.append(header + body)
-
-    if not found:
-        updated.append(
-            header
-            + "\n"
-            + f"\tpath = extensions/{ext_id}\n"
-            + f"\turl = {source_url}\n"
+def ensure_submodule(ext_id: str, source_url: str, sha: str) -> None:
+    path = f"extensions/{ext_id}"
+    if Path(path).exists() or Path(".gitmodules").read_text(encoding="utf-8", errors="ignore").find(
+        f'[submodule "{path}"]'
+    ) >= 0:
+        subprocess.run(["git", "submodule", "sync", "--", path], check=False)
+        subprocess.run(
+            ["git", "submodule", "update", "--init", "--depth", "1", "--", path],
+            check=True,
+        )
+    else:
+        subprocess.run(
+            ["git", "submodule", "add", "--force", source_url, path],
+            check=True,
         )
 
-    out = preamble + "".join(sort_gitmodules_sections(updated))
-    if not out.endswith("\n"):
-        out += "\n"
-    path.write_text(out)
+    subprocess.run(["git", "-C", path, "fetch", "--depth", "1", "origin", sha], check=True)
+    subprocess.run(["git", "-C", path, "checkout", "--detach", sha], check=True)
+    # Register the gitlink at the pinned SHA.
+    subprocess.run(["git", "add", path], check=True)
 
 
-def stage_submodule_gitlink(ext_id: str, sha: str) -> None:
-    """Stage a 160000 gitlink. Do not `git add` this path afterward if the
-    worktree has no checkout — that drops the staged gitlink on some git versions.
-    """
-    path = f"extensions/{ext_id}"
-    Path("extensions").mkdir(exist_ok=True)
-    subprocess.run(
-        ["git", "update-index", "--add", "--cacheinfo", f"160000,{sha},{path}"],
-        check=True,
+def sort_extensions() -> None:
+    """Prefer the official sorter from the extensions repo."""
+    if Path("package.json").exists():
+        subprocess.run(["pnpm", "install", "--frozen-lockfile"], check=False)
+        result = subprocess.run(["pnpm", "sort-extensions"], check=False)
+        if result.returncode == 0:
+            return
+        result = subprocess.run(["npx", "--yes", "pnpm@9", "sort-extensions"], check=False)
+        if result.returncode == 0:
+            return
+    raise SystemExit(
+        "Failed to run pnpm sort-extensions. Install pnpm and retry from the extensions repo root."
     )
-    staged = subprocess.check_output(["git", "ls-files", "-s", "--", path], text=True)
-    if not staged.startswith("160000 ") or sha not in staged:
-        raise SystemExit(f"Failed to stage submodule gitlink for {path}: {staged!r}")
 
 
 def main() -> None:
     ext_id, version, source_url, sha = sys.argv[1:5]
     previous = update_extensions_toml(Path("extensions.toml"), ext_id, version)
-    update_gitmodules(Path(".gitmodules"), ext_id, source_url)
-    stage_submodule_gitlink(ext_id, sha)
+    ensure_submodule(ext_id, source_url, sha)
+    sort_extensions()
+    subprocess.run(["git", "add", "extensions.toml", ".gitmodules", f"extensions/{ext_id}"], check=True)
+    staged = subprocess.check_output(
+        ["git", "ls-files", "-s", "--", f"extensions/{ext_id}"], text=True
+    )
+    if not staged.startswith("160000 ") or sha not in staged:
+        raise SystemExit(f"Submodule gitlink missing or wrong SHA: {staged!r}")
     if previous:
         print(f"Updated {ext_id} {previous} -> {version} @ {sha}")
     else:
