@@ -30,6 +30,7 @@ jobs:
       - name: Build language server
         working-directory: ./zed/server
         run: |
+          # Bundles ../../vscode/src; deps must resolve via zed/server/node_modules (esbuild nodePaths).
           npm ci
           npm run build
           test -f ../bin/dependi-language-server.js

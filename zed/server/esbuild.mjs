@@ -15,6 +15,9 @@ await esbuild.build({
   platform: "node",
   format: "cjs",
   target: "node18",
+  // vscode/src imports resolve packages next to the importer; CI has no
+  // vscode/node_modules, so keep deps resolvable from zed/server.
+  nodePaths: [path.join(dir, "node_modules")],
   outfile: path.join(dir, "../bin/dependi-language-server.js"),
   sourcemap: false,
   banner: { js: "#!/usr/bin/env node" },
