@@ -20,8 +20,7 @@ Thanks to commit messages written according to the Conventional Commits standard
 2.  Automatically determining a semantic version bump (based on the types of commits landed).
 3.  Communicating the nature of changes to teammates, the public, and other stakeholders.
 4.  Triggering build and publish processes.
-5.  Making it easier for people to contribute to your projects, by allowing them to explore a more structured commit history.
-<br/>
+5.  Making it easier for people to contribute to your projects, by allowing them to explore a more structured commit history.<br/>
 
 **Example Conventional Commit Messages:**
 1. Fixing a Bug

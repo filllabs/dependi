@@ -2,16 +2,18 @@
 
 All notable changes to the "dependi" extension will be documented in this file.
 
-## [Unreleased]
+## [v1.20.0](https://github.com/filllabs/dependi/compare/v1.5.0...v1.20.0)
+
+### New Features
+
+- **Shared versioning with Zed:** VS Code and Zed now publish under the same semver (**1.20.0**). One analysis engine (`vscode/src`) ships to both editors; bump with `./scripts/bump-version.sh <version>`, then tag `v<version>`. See [zed/changelog.md](../zed/changelog.md).
+- Official Dependi extension for Zed (extension id `dependi`), reclaiming the marketplace slot after the third-party stub was removed ([zed-industries/extensions#7592](https://github.com/zed-industries/extensions/pull/7592)). Zed must stay above `1.11.0` because older blob-store builds exist; **1.20.0** satisfies that.
+- Go: When `dependi.go.indexServerURL` is unset, the first HTTP(S) entry from the `GOPROXY` environment variable is used. Modules matching `GOPRIVATE` / `GONOPROXY` are skipped so they no longer produce public-proxy 404 errors. ([Issue #18](https://github.com/filllabs/dependi/issues/18))
+- Go: Dependency hover includes a **Releases** link for modules hosted on GitHub (`github.com/owner/repo`). The link is omitted for non-GitHub module paths. ([Issue #259](https://github.com/filllabs/dependi/issues/259))
 
 ### Bug Fixes
 
 - Rust/lockfiles: Versions higher than any published release now respect `silenceVersionOverflows` even when a lockfile pins the real latest — with the setting off (default) they show as incompatible; with it on they stay up-to-date. ([Issue #221](https://github.com/filllabs/dependi/issues/221))
-
-### New Features
-
-- Go: When `dependi.go.indexServerURL` is unset, the first HTTP(S) entry from the `GOPROXY` environment variable is used. Modules matching `GOPRIVATE` / `GONOPROXY` are skipped so they no longer produce public-proxy 404 errors. ([Issue #18](https://github.com/filllabs/dependi/issues/18))
-- Go: Dependency hover includes a **Releases** link for modules hosted on GitHub (`github.com/owner/repo`). The link is omitted for non-GitHub module paths. ([Issue #259](https://github.com/filllabs/dependi/issues/259))
 
 ## [v1.5.0](https://github.com/filllabs/dependi/compare/v0.7.28...v1.5.0)
 

@@ -1,0 +1,6 @@
+/server/node_modules
+/server/dist
+/bin/*.js
+!/bin/dependi-language-server.js
+/target
+/extension.wasm

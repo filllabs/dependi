@@ -1,13 +1,6 @@
 out
 dist
 node_modules
-
-# Zed extension (local Rust/TS build artifacts)
-zed/target/
-zed/extension.wasm
-zed/server/dist/
-zed/server/node_modules/
-.cursor/
 .vscode-test/
 *.vsix
 .DS_Store
@@ -17,3 +10,5 @@ meta.json
 tmp
 builds
 samples
+.cursor
+**/__pycache__/

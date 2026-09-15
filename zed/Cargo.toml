@@ -1,0 +1,12 @@
+[package]
+name = "zed_dependi"
+version = "1.20.0"
+edition = "2021"
+publish = false
+
+[lib]
+path = "src/lib.rs"
+crate-type = ["cdylib"]
+
+[dependencies]
+zed_extension_api = "0.7.0"

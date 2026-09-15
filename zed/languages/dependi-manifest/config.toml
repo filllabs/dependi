@@ -1,0 +1,24 @@
+name = "Dependi Manifest"
+path_suffixes = [
+  "go.mod",
+  "mix.exs",
+  "gradle",
+  "gradle.kts",
+  "gradle-wrapper.properties",
+  "tf",
+  "csproj",
+  "fsproj",
+  "props",
+  "requirements.in",
+  "requirements-dev.in",
+  "requirements_dev.in",
+  "requirements-test.in",
+]
+line_comments = ["# "]
+brackets = [
+  { start = "{", end = "}", close = true, newline = true },
+  { start = "[", end = "]", close = true, newline = false },
+  { start = "(", end = ")", close = true, newline = false },
+  { start = "\"", end = "\"", close = true, newline = false },
+  { start = "'", end = "'", close = true, newline = false },
+]

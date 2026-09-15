@@ -2,8 +2,9 @@
 
 Dependi is a comprehensive dependency management extension that helps developers write code faster and smarter by efficiently managing project dependencies. Formerly known as Crates the most loved and used dependency management extension for Rust. Dependi now supports multiple languages including Rust, Go, JavaScript, TypeScript, Python, PHP, Dart, C#, Elixir, Gradle (Java/Kotlin), and Terraform.
 
-[Install](https://www.dependi.io/download) Dependi via VSCode or [Dependi.io](https://www.dependi.io)
+[Install](https://www.dependi.io/download) Dependi via VS Code, [Zed](./zed/README.md), or [Dependi.io](https://www.dependi.io).
 
+VS Code and Zed share one semver (`vscode/package.json` and `zed/extension.toml`). See [zed/README.md](./zed/README.md) for Zed setup, settings, and publishing.
 
 When you install Dependi in Visual Studio Code, 2 options are available :
 
