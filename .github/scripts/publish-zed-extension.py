@@ -23,12 +23,34 @@ def current_version(body: str) -> str | None:
     return match.group(1) if match else None
 
 
+def split_toml_sections(text: str) -> tuple[str, list[str]]:
+    parts = re.split(r"(?=^\[)", text, flags=re.M)
+    return parts[0], parts[1:]
+
+
+def sort_toml_sections(sections: list[str]) -> list[str]:
+    def key(section: str) -> str:
+        match = re.match(r"^\[([^\]]+)\]", section)
+        return (match.group(1) if match else section).lower()
+
+    return sorted(sections, key=key)
+
+
 def update_extensions_toml(path: Path, ext_id: str, version: str) -> str | None:
     text = path.read_text()
     previous: str | None = None
-    match = re.search(rf"(\[{re.escape(ext_id)}\]\n)(.*?)(?=\n\[|\Z)", text, re.S)
-    if match:
-        body = match.group(2)
+    preamble, sections = split_toml_sections(text)
+    section_re = re.compile(rf"^\[{re.escape(ext_id)}\]\n(.*?)(?=\n\[|\Z)", re.S)
+
+    updated: list[str] = []
+    found = False
+    for section in sections:
+        match = section_re.match(section)
+        if not match:
+            updated.append(section)
+            continue
+        found = True
+        body = match.group(1)
         previous = current_version(body)
         if previous and parse_version(version) < parse_version(previous):
             raise SystemExit(
@@ -43,44 +65,73 @@ def update_extensions_toml(path: Path, ext_id: str, version: str) -> str | None:
             body = body.rstrip() + '\npath = "zed"\n'
         if not re.search(r"^submodule = ", body, re.M):
             body = f'submodule = "extensions/{ext_id}"\n' + body
-        text = text[: match.start()] + match.group(1) + body + text[match.end() :]
-    else:
-        text = (
-            text.rstrip()
-            + f"\n[{ext_id}]\n"
-            + f'submodule = "extensions/{ext_id}"\n'
-            + 'path = "zed"\n'
-            + f'version = "{version}"\n'
+        if not body.endswith("\n"):
+            body += "\n"
+        updated.append(f"[{ext_id}]\n{body}")
+
+    if not found:
+        updated.append(
+            f"[{ext_id}]\n"
+            f'submodule = "extensions/{ext_id}"\n'
+            f'path = "zed"\n'
+            f'version = "{version}"\n'
         )
-    path.write_text(text)
+
+    out = preamble + "".join(sort_toml_sections(updated))
+    if not out.endswith("\n"):
+        out += "\n"
+    path.write_text(out)
     tomllib.loads(path.read_text())
     return previous
+
+
+def split_gitmodules(text: str) -> tuple[str, list[str]]:
+    parts = re.split(r"(?=^\[submodule )", text, flags=re.M)
+    return parts[0], parts[1:]
+
+
+def sort_gitmodules_sections(sections: list[str]) -> list[str]:
+    def key(section: str) -> str:
+        match = re.match(r'^\[submodule "([^"]+)"\]', section)
+        return (match.group(1) if match else section).lower()
+
+    return sorted(sections, key=key)
 
 
 def update_gitmodules(path: Path, ext_id: str, source_url: str) -> None:
     header = f'[submodule "extensions/{ext_id}"]'
     gm = path.read_text() if path.exists() else ""
-    if header in gm:
-        before, rest = gm.split(header, 1)
-        next_header = rest.find("\n[submodule ")
-        section, after = (rest[:next_header], rest[next_header:]) if next_header >= 0 else (rest, "")
-        if re.search(r"(?m)^[ \t]*url = ", section):
-            section = re.sub(r"(?m)^([ \t]*url = ).*$", rf"\1{source_url}", section, count=1)
+    preamble, sections = split_gitmodules(gm)
+    updated: list[str] = []
+    found = False
+    for section in sections:
+        if not section.startswith(header):
+            updated.append(section)
+            continue
+        found = True
+        body = section[len(header) :]
+        if re.search(r"(?m)^[ \t]*url = ", body):
+            body = re.sub(r"(?m)^([ \t]*url = ).*$", rf"\1{source_url}", body, count=1)
         else:
-            section = section.rstrip() + f"\n\turl = {source_url}\n"
-        if not re.search(r"(?m)^[ \t]*path = ", section):
-            section = section.rstrip() + f"\n\tpath = extensions/{ext_id}\n"
-        path.write_text(before + header + section + after)
-        return
+            body = body.rstrip() + f"\n\turl = {source_url}\n"
+        if not re.search(r"(?m)^[ \t]*path = ", body):
+            body = body.rstrip() + f"\n\tpath = extensions/{ext_id}\n"
+        if not body.endswith("\n"):
+            body += "\n"
+        updated.append(header + body)
 
-    path.write_text(
-        gm.rstrip()
-        + "\n"
-        + header
-        + "\n"
-        + f"\tpath = extensions/{ext_id}\n"
-        + f"\turl = {source_url}\n"
-    )
+    if not found:
+        updated.append(
+            header
+            + "\n"
+            + f"\tpath = extensions/{ext_id}\n"
+            + f"\turl = {source_url}\n"
+        )
+
+    out = preamble + "".join(sort_gitmodules_sections(updated))
+    if not out.endswith("\n"):
+        out += "\n"
+    path.write_text(out)
 
 
 def stage_submodule_gitlink(ext_id: str, sha: str) -> None:
