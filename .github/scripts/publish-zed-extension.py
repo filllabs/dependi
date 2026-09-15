@@ -83,22 +83,26 @@ def update_gitmodules(path: Path, ext_id: str, source_url: str) -> None:
     )
 
 
+def stage_submodule_gitlink(ext_id: str, sha: str) -> None:
+    """Stage a 160000 gitlink. Do not `git add` this path afterward if the
+    worktree has no checkout — that drops the staged gitlink on some git versions.
+    """
+    path = f"extensions/{ext_id}"
+    Path("extensions").mkdir(exist_ok=True)
+    subprocess.run(
+        ["git", "update-index", "--add", "--cacheinfo", f"160000,{sha},{path}"],
+        check=True,
+    )
+    staged = subprocess.check_output(["git", "ls-files", "-s", "--", path], text=True)
+    if not staged.startswith("160000 ") or sha not in staged:
+        raise SystemExit(f"Failed to stage submodule gitlink for {path}: {staged!r}")
+
+
 def main() -> None:
     ext_id, version, source_url, sha = sys.argv[1:5]
     previous = update_extensions_toml(Path("extensions.toml"), ext_id, version)
     update_gitmodules(Path(".gitmodules"), ext_id, source_url)
-    subprocess.run(
-        [
-            "git",
-            "update-index",
-            "--add",
-            "--cacheinfo",
-            "160000",
-            sha,
-            f"extensions/{ext_id}",
-        ],
-        check=True,
-    )
+    stage_submodule_gitlink(ext_id, sha)
     if previous:
         print(f"Updated {ext_id} {previous} -> {version} @ {sha}")
     else:
