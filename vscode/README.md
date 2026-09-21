@@ -108,7 +108,7 @@ While Dependi works out-of-the-box without any configuration, we also offer a fe
 - `dependi.go.silenceVersionOverflows`: Consider non-registry versions of packages as up-to-date if their version exceeds the registry version.
 - `dependi.python.enabled`: Enable Python package management.
 - `dependi.python.lockFileEnabled`: Enable checking for Python dependencies in lockfiles.
-- `dependi.python.indexServerURL`: The URL for the Python package index server.
+- `dependi.python.indexServerURL`: The URL for the Python package index server. Use the PyPI JSON base (default `https://pypi.org/pypi`) or a PEP 503 simple index URL ending in `/simple` (e.g. Azure Artifacts `https://pkgs.dev.azure.com/{org}/_packaging/{feed}/pypi/simple`). Credentials may be embedded in the URL for private feeds.
 - `dependi.python.unstableFilter`: Filter unstable versions: Exclude, Include Always, or Include If Unstable.
 - `dependi.python.ignoreLinePattern`: Matches lines based on `*` position: `text*`, `*text`, `*text*`. Multiple patterns can be used, separated by commas.
 - `dependi.python.silenceVersionOverflows`: Consider non-registry versions of packages as up-to-date if their version exceeds the registry version.

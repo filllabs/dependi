@@ -2,7 +2,7 @@
   "name": "dependi",
   "displayName": "Dependi",
   "description": "Empowers developers to efficiently manage dependencies and address vulnerabilities in Rust, Go, JavaScript, Typescript, PHP, Python, Dart, C#, F#, Elixir, Gradle (Java/Kotlin), and Terraform projects.",
-  "version": "1.20.0",
+  "version": "1.20.1",
   "publisher": "fill-labs",
   "author": {
     "name": "Fill Labs",
@@ -464,7 +464,7 @@
           "dependi.python.indexServerURL": {
             "type": "string",
             "scope": "resource",
-            "description": "The URL for the Python package index server.",
+            "description": "The URL for the Python package index server. Use the PyPI JSON base (default https://pypi.org/pypi) or a PEP 503 simple index URL ending in /simple (e.g. Azure Artifacts).",
             "format": "url",
             "pattern": "^https?://(?!.*//)([^/]+/)*[^/]+$",
             "default": "https://pypi.org/pypi",

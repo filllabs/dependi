@@ -48,6 +48,10 @@ export function getReqOptions(url: string): RequestOptions {
     },
     timeout: 1000
   };
+  // Preserve credentials embedded in the URL (e.g. Azure Artifacts PAT).
+  if (u.username || u.password) {
+    options.auth = `${decodeURIComponent(u.username)}:${decodeURIComponent(u.password)}`;
+  }
   return options;
 }
 

@@ -2,6 +2,12 @@
 
 All notable changes to the "dependi" extension will be documented in this file.
 
+## [v1.20.1](https://github.com/filllabs/dependi/compare/v1.20.0...v1.20.1)
+
+### Bug Fixes
+
+- Python: PEP 503 simple indexes (e.g. Azure Artifacts `/pypi/simple`) are supported, and HTTP 3xx redirects — including relative `Location` headers such as 307 — are followed correctly. URL-embedded credentials are preserved for private feeds. ([Issue #293](https://github.com/filllabs/dependi/issues/293))
+
 ## [v1.20.0](https://github.com/filllabs/dependi/compare/v1.5.0...v1.20.0)
 
 ### New Features

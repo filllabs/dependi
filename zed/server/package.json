@@ -1,6 +1,6 @@
 {
   "name": "dependi-language-server",
-  "version": "1.20.0",
+  "version": "1.20.1",
   "private": true,
   "description": "Language server for the Dependi Zed extension. Reuses the VS Code parsers and registry fetchers.",
   "bin": {

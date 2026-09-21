@@ -1,6 +1,6 @@
 id = "dependi"
 name = "Dependi"
-version = "1.20.0"
+version = "1.20.1"
 schema_version = 1
 authors = ["Fill Labs <info@dependi.io>"]
 description = "Manage dependency versions and vulnerabilities for Rust, Go, JavaScript, Python, PHP, Dart, C#, Elixir, Gradle, and Terraform."
