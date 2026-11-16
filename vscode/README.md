@@ -167,6 +167,7 @@ While Dependi works out-of-the-box without any configuration, we also offer a fe
 ### Extras
 
 - `dependi.extras.silenceUpdateMessages`: This setting hides informational update messages when enabled (true).
+- `dependi.extras.requestTimeout`: How long (in milliseconds) a registry request may go without receiving data before it is reported as timed out. Default `10000`, minimum `1000`.
 
 ### Cargo.toml, go.mod, package.json, requirements.txt, build.gradle, and .tf files
 

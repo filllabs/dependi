@@ -5,6 +5,21 @@ import { DecorationPosition } from "./ui/pref";
 export const DEPENDI = "dependi.";
 const WORKBENCH_ACTIONS = "workbench.action.";
 
+/**
+ * Socket idle timeout for registry requests. Large registry documents (for
+ * example npm's `next` or `typescript`) download in parallel with every other
+ * lookup, so a 1 s limit trips on ordinary latency.
+ */
+export const DEFAULT_REQUEST_TIMEOUT_MS = 10000;
+const MIN_REQUEST_TIMEOUT_MS = 1000;
+
+export function normalizeRequestTimeout(value: number | undefined): number {
+  if (typeof value !== "number" || !Number.isFinite(value)) {
+    return DEFAULT_REQUEST_TIMEOUT_MS;
+  }
+  return Math.max(MIN_REQUEST_TIMEOUT_MS, Math.round(value));
+}
+
 export enum UnstableFilter {
   Exclude,
   IncludeAlways,
@@ -125,6 +140,7 @@ export enum Configs {
 
   // Extras
   SILENCE_UPDATE_MESSAGES = `extras.silenceUpdateMessages`,
+  REQUEST_TIMEOUT = `extras.requestTimeout`,
 
 
   //Storage
@@ -266,7 +282,8 @@ export const Settings = {
     }
   },
   extras: {
-    silenceUpdateMessages: false
+    silenceUpdateMessages: false,
+    requestTimeout: DEFAULT_REQUEST_TIMEOUT_MS
   },
 
   load: function () {
@@ -383,6 +400,7 @@ export const Settings = {
     this.decorator.vulnerability.template = config.get<string>(Configs.VULNERABILITY_DECORATOR) ?? "🚨 ${count}";
 
     this.extras.silenceUpdateMessages = config.get<boolean>(Configs.SILENCE_UPDATE_MESSAGES) ?? false;
+    this.extras.requestTimeout = normalizeRequestTimeout(config.get<number>(Configs.REQUEST_TIMEOUT));
     console.debug("Settings loaded", this);
   },
   onChange: function (e: ConfigurationChangeEvent) {
