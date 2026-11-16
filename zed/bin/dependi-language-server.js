@@ -12182,6 +12182,14 @@ function matchGoPathPattern(path12, pattern) {
 
 // ../../vscode/src/config.ts
 var DEPENDI = "dependi.";
+var DEFAULT_REQUEST_TIMEOUT_MS = 1e4;
+var MIN_REQUEST_TIMEOUT_MS = 1e3;
+function normalizeRequestTimeout(value) {
+  if (typeof value !== "number" || !Number.isFinite(value)) {
+    return DEFAULT_REQUEST_TIMEOUT_MS;
+  }
+  return Math.max(MIN_REQUEST_TIMEOUT_MS, Math.round(value));
+}
 var UnstableFilter = /* @__PURE__ */ ((UnstableFilter3) => {
   UnstableFilter3[UnstableFilter3["Exclude"] = 0] = "Exclude";
   UnstableFilter3[UnstableFilter3["IncludeAlways"] = 1] = "IncludeAlways";
@@ -12283,6 +12291,7 @@ var Configs = ((Configs2) => {
   Configs2["DISABLE_LOCK_FILE_PARSING"] = `${DEPENDI}commands.disableLockFileParsing`;
   Configs2["LOCK_FILE_PARSED"] = `${DEPENDI}commands.lockFileParsed`;
   Configs2["SILENCE_UPDATE_MESSAGES"] = `extras.silenceUpdateMessages`;
+  Configs2["REQUEST_TIMEOUT"] = `extras.requestTimeout`;
   Configs2["DEVICE_ID"] = `${DEPENDI}deviceID`;
   Configs2["SHOWN_VERSION"] = `${DEPENDI}shownVersion`;
   Configs2["RUST_UNSTABLE_OLD"] = `rust.excludeUnstableVersions`;
@@ -12418,7 +12427,8 @@ var Settings = {
     }
   },
   extras: {
-    silenceUpdateMessages: false
+    silenceUpdateMessages: false,
+    requestTimeout: DEFAULT_REQUEST_TIMEOUT_MS
   },
   load: function() {
     const config = workspace.getConfiguration("dependi");
@@ -12517,6 +12527,7 @@ var Settings = {
     this.decorator.compatible.css = config.get("decoration.compatible.style" /* COMPATIBLE_DECORATOR_CSS */) || {};
     this.decorator.vulnerability.template = config.get("decoration.vulnerability.template" /* VULNERABILITY_DECORATOR */) ?? "\u{1F6A8} ${count}";
     this.extras.silenceUpdateMessages = config.get("extras.silenceUpdateMessages" /* SILENCE_UPDATE_MESSAGES */) ?? false;
+    this.extras.requestTimeout = normalizeRequestTimeout(config.get("extras.requestTimeout" /* REQUEST_TIMEOUT */));
     console.debug("Settings loaded", this);
   },
   onChange: function(e) {
@@ -12604,7 +12615,7 @@ function getReqOptions(url) {
     headers: {
       "User-Agent": UserAgent
     },
-    timeout: 1e3
+    timeout: Settings.extras.requestTimeout
   };
   return options;
 }

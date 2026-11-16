@@ -46,7 +46,7 @@ export function getReqOptions(url: string): RequestOptions {
     headers: {
       'User-Agent': UserAgent
     },
-    timeout: 1000
+    timeout: Settings.extras.requestTimeout
   };
   return options;
 }

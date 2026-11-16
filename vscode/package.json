@@ -1252,6 +1252,14 @@
             "default": false,
             "description": "Enable to silence informational update messages.",
             "order": 130
+          },
+          "dependi.extras.requestTimeout": {
+            "type": "number",
+            "scope": "resource",
+            "default": 10000,
+            "minimum": 1000,
+            "markdownDescription": "How long (in milliseconds) a registry request may go without receiving data before it is reported as timed out. Raise it if large projects show `Request to <package> timed out` errors. Minimum `1000`.",
+            "order": 131
           }
         }
       }
